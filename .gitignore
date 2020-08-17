@@ -1,2 +1,7 @@
 #Ignore environment
 venv
+__pycache__/
+
+#Ignore images in scrapper
+scrapper/img/*
+!scrapper/img/README.md
