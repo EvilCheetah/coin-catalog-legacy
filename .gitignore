@@ -1,6 +1,12 @@
 #Ignore environment
-venv
+venv/
+scrapper_env/
+catalog_env/
+
+
+#Ignore compiled Py files
 __pycache__/
+
 
 #Ignore images in scrapper
 scrapper/img/*
