@@ -1,0 +1,25 @@
+<form style="padding: 10pt;" name="frm" (ngSubmit)="onSubmit()">
+    <div class="form-group" style="margin: 10pt; padding: 10pt;">
+      <label *ngIf="login.invalid && login.touched " for="login" style="color: red; margin: 5pt; padding: 5pt;">
+        Login can't be empty</label>
+      <input id="login" class="form-control" type="text" placeholder="Login" [formControl]="login"
+      required >
+      
+    </div>
+    <div class="form-group" style="margin: 10pt; padding: 10pt;">
+     
+      <label *ngIf="password.invalid  && password.touched " for="password" style="color: red; margin: 5pt; padding: 5pt;">
+        Password can't be empty</label>
+      <input id = "password" type="password" class="form-control" placeholder="Password"
+      [formControl]="password" required
+      >
+      
+    </div>
+    <div class="form-group" style="margin: 10pt; padding: 10pt;">
+     
+     
+      <button type="submit" class="btn btn-primary"  title="Login">Login</button>
+    </div>
+  </form>
+  <label for="frm" style="color: red; margin: 10pt; padding: 10pt;" *ngIf="error">Wrong login or password</label> 
+  
