@@ -1,6 +1,10 @@
 export class CoinStyle{
     id:number;
-    material:number;
-    standart:number;
+    coin_information:number;
+    name:string;
+    weight:number;
+    length:number;
+    width:number;
+    notes:string;
     
 }

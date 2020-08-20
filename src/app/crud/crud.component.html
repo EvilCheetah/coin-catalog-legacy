@@ -1,1 +1,53 @@
-<p>crud works!</p>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" >Tables</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="coins" routerLinkActive="active">Coins <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="categories" routerLinkActive="active">Categories</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="collections" routerLinkActive="active">Collections</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="authors" routerLinkActive="active">Authors</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Countries
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" routerLink="countries" routerLinkActive="active">Countries</a>
+                  <a class="dropdown-item" routerLink="regions" routerLinkActive="active">Regions</a>
+                </div>
+              </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle"  id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Coin characteristics
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" routerLink="edges" routerLinkActive="active">Edges</a>
+                  <a class="dropdown-item" routerLink="materials" routerLinkActive="active">Materials</a>
+                  <a class="dropdown-item" routerLink="qualities" routerLinkActive="active">Qualities</a>
+                  <a class="dropdown-item" routerLink="shapes" routerLinkActive="active">Shapes</a>
+                </div>
+            </li>  
+            <li class="nav-item">
+                <a class="nav-link" routerLink="users" routerLinkActive="active">Users</a>
+              </li>
+            
+          </ul>
+        </div>
+      </nav>    
+</header>
+<div style="margin: 5pt; padding:10pt">
+<router-outlet>
+  
+</router-outlet>
+</div>
