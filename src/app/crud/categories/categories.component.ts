@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import {FormControl, Validators} from '@angular/forms';
+import {CategoriesService} from './categories.service';
+import { CookieService } from 'ngx-cookie-service';
+import {Country} from 'src/app/classes/country';
+import {Category} from 'src/app/classes/category';
 
 @Component({
   selector: 'app-categories',
@@ -7,9 +12,76 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CategoriesComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service:CategoriesService, private cookies:CookieService) { }
+
+  categories:Category[]=[
+    {name:'hello', id:1, country:1},
+    {name:'hell', id:2, country:2}
+  ];
+
+  selectedCategory=new Category();
+  createMode:boolean=false;
+
+  countries:Country[]=[
+    {name:'Russia', id:1, region:1},
+    {name:'Belarus', id:2, region:2}
+  ];
+
+  countryControl=new FormControl('',[Validators.required, Validators.minLength(1)]);
+  nameControl=new FormControl('',[Validators.required, Validators.minLength(1)] );
 
   ngOnInit(): void {
+    
   }
+  
+  getCountryName(id:number):string{
+    return this.countries.find(cn=>cn.id==id).name;
+  }
+
+  selectCategory(category:Category){
+    this.countryControl.setValue(category.country);
+    this.nameControl.setValue(category.name);
+    this.selectedCategory=category;
+  }
+
+  changeCreateMode()
+  {
+    this.countryControl.setValue("");
+    this.nameControl.setValue("");
+    this.createMode=!this.createMode;
+  }
+
+  cancelEdit()
+  {
+    this.countryControl.setValue("");
+    this.nameControl.setValue(""); 
+    this.selectedCategory=new Category();
+  }
+
+  saveEdit(){
+    if (this.countryControl.valid && this.nameControl.valid)
+    {
+      this.selectedCategory.country=this.countryControl.value;
+      this.selectedCategory.name = this.countryControl.value;
+      this.service.editCategory(this.selectedCategory).subscribe(()=>this.service.getAllCategories());
+      this.cancelEdit();
+    }
+  }
+
+  createCategory(){
+    if (this.countryControl.valid && this.nameControl.valid)
+    {
+      let category = new Category();
+      category.country=this.countryControl.value;
+      category.name = this.countryControl.value;
+      this.service.createCategory(category).subscribe((data)=>this.categories.push(data));
+      this.changeCreateMode();
+    }
+  }
+
+  deleteCategory(id:number){
+    this.service.deleteCategory(id).subscribe(()=>this.service.getAllCategories());
+  }
+
 
 }
