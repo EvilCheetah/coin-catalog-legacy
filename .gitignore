@@ -8,6 +8,11 @@ catalog_env/
 __pycache__/
 
 
+#Ignore database files
+migrations/
+*.sqlite3
+
+
 #Ignore images in scrapper
 scrapper/img/*
 !scrapper/img/README.md
