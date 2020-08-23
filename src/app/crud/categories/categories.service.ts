@@ -11,20 +11,20 @@ export class CategoriesService {
 
   constructor(private http:HttpClient) { }
 
-  public getAllCategories():Observable<Category>{
-    return this.http.get<Category>("");
+  public getAllCategories():Observable<Category[]>{
+    return this.http.get<Category[]>("");
   }
 
-  public getAllCountries():Observable<Country>{
-    return this.http.get<Country>("");
+  public getAllCountries():Observable<Country[]>{
+    return this.http.get<Country[]>("");
   }
 
   public editCategory(category:Category){
     return this.http.put("",category);
   }
 
-  public createCategory(category:Category):Observable<Category>{
-    return this.http.post<Category>("",category);
+  public createCategory(category:Category){
+    return this.http.post("",category);
   }
   
   public deleteCategory(id:number){

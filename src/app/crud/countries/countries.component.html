@@ -1,1 +1,93 @@
-<p>countries works!</p>
+<ng-template [ngIf]="!createMode" [ngIfElse]="CreateTemplate">
+    <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Region</th>
+            <th scope="col">Name</th>
+            <th scope="col">Controls</th>
+            <th scope="col">
+              <input type="button" class="btn btn-success" value="Create new"
+               (click)="changeCreateMode()">
+            </th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let country of countries">
+          <ng-template [ngIf]="country!=selectedCountry" [ngIfElse]="EditTemplate">
+          <tr>
+            <td>{{getRegionName(country.region)}}</td>
+            <td>{{country.name}}</td>
+            <td>
+              <input type="button" style="margin: 2.5pt;" class="btn btn-primary" value="Edit" (click)="selectCountry(country)">
+              <input type="button" style="margin: 2.5pt;" class="btn btn-danger" value="Delete" (click)="deleteCountry(country.id)">
+            </td>
+          </tr>
+        </ng-template>
+        </tbody>
+      </table>
+</ng-template>
+
+<ng-template #CreateTemplate>
+    <div class="form-group">
+        <label for="countrySelect">Select region</label>
+        <div *ngIf="regionControl.invalid  && regionControl.touched ">
+          <div style="display:inline-block">
+            <label  for="regionSelect" class="alert alert-danger">Region can't be empty</label>
+          </div>
+        </div>
+        <div>
+          <div style="display:inline-block">
+            <select class="form-control" id="regionSelect" [formControl]="regionControl">
+              <option *ngFor="let region of regions" [ngValue]="region.id">{{region.name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <div *ngIf="nameControl.invalid  && nameControl.touched ">
+          <div style="display:inline">
+            <label  for="createName" class="alert alert-danger">Name can't be empty</label>
+          </div>
+        </div>
+        <div>
+          <div style="display:inline">
+            <input class="form-control" id="createName" placeholder="Region name"  type="text" [formControl]="nameControl">
+          </div>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <input type="button" style="margin:5pt" class="btn btn-success" value="Add" (click)="createCountry()"
+        [disabled]="nameControl.invalid || regionControl.invalid">
+        <input type="button" style="margin:5pt" class="btn btn-danger" value="Cansel" (click)="changeCreateMode()">
+      </div>
+</ng-template>
+
+<ng-template #EditTemplate>
+    <tr>
+        <td>
+        <select id="editRegion" [formControl]="regionControl" >
+        <option *ngFor="let region of regions" [ngValue]="region.id">{{region.name}}</option>
+        </select>
+        </td>
+        <td>
+          <div *ngIf="nameControl.invalid  && nameControl.touched ">
+              <div style="display:inline-block">
+                <label  for="editName" class="alert alert-danger" >
+                Name can't be empty</label>
+              </div>
+          </div>
+          <div>
+              <div style="display:inline-block">
+                <input type="text" id="editName" [formControl]="nameControl">
+              </div>
+          </div>
+        
+        </td>
+        <td>
+          <input type="button" style="margin: 2.5pt;" class="btn btn-success" value="Save" (click)="saveEdit()"
+          [disabled]="nameControl.invalid || regionControl.invalid">
+          <input type="button" style="margin: 2.5pt;" class="btn btn-danger" value="Cansel" (click)="cancelEdit()">
+        </td>
+      </tr>
+</ng-template>

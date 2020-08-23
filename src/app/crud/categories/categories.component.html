@@ -14,7 +14,7 @@
     <tbody *ngFor="let categ of categories">
       <ng-template [ngIf]="categ!=selectedCategory" [ngIfElse]="EditTemplate">
       <tr>
-        <td>{{getCountryName(categ.id)}}</td>
+        <td>{{getCountryName(categ.country)}}</td>
         <td>{{categ.name}}</td>
         <td>
           <input type="button" style="margin: 2.5pt;" class="btn btn-primary" value="Edit" (click)="selectCategory(categ)">
@@ -58,7 +58,8 @@
   </div>
 
   <div class="form-group">
-    <input type="button" style="margin:5pt" class="btn btn-success" value="Add" (click)="createCategory()">
+    <input type="button" style="margin:5pt" class="btn btn-success" value="Add" (click)="createCategory()"
+    [disabled]="nameControl.invalid || countryControl.invalid">
     <input type="button" style="margin:5pt" class="btn btn-danger" value="Cansel" (click)="changeCreateMode()">
   </div>
 
@@ -87,7 +88,8 @@
     
     </td>
     <td>
-      <input type="button" style="margin: 2.5pt;" class="btn btn-success" value="Save" (click)="saveEdit()">
+      <input type="button" style="margin: 2.5pt;" class="btn btn-success" value="Save" (click)="saveEdit()"
+      [disabled]="nameControl.invalid || countryControl.invalid">
       <input type="button" style="margin: 2.5pt;" class="btn btn-danger" value="Cansel" (click)="cancelEdit()">
     </td>
   </tr>

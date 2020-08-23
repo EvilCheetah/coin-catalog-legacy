@@ -5,7 +5,6 @@ import {CatalogComponent} from './catalog/catalog.component';
 import {ProfileComponent} from './profile/profile.component';
 import {CoinInfoComponent} from './coin-info/coin-info.component'
 import {CrudComponent} from './crud/crud.component';
-import {AuthorsComponent} from './crud/authors/authors.component';
 import {CategoriesComponent} from './crud/categories/categories.component';
 import {EdgesComponent} from './crud/characteristics/edges/edges.component';
 import {MaterialsComponent} from './crud/characteristics/materials/materials.component';
@@ -16,6 +15,8 @@ import {CollectionsComponent} from './crud/collections/collections.component';
 import {CountriesComponent} from './crud/countries/countries.component';
 import {RegionsComponent} from './crud/regions/regions.component';
 import {UsersComponent} from './crud/users/users.component';
+import { ArtistsComponent } from './crud/authors/artists/artists.component';
+import { SculptorsComponent } from './crud/authors/sculptors/sculptors.component';
 
 
 
@@ -24,7 +25,8 @@ const routes: Routes = [
   {path:"login", component:LoginComponent},
   {path:"crud", component:CrudComponent, children:
   [
-    {path:'authors', component:AuthorsComponent},
+    {path:'artists', component:ArtistsComponent},
+    {path:'sculptors', component:SculptorsComponent},
     {path:'categories', component:CategoriesComponent},
     {path:'edges', component:EdgesComponent},
     {path:'materials', component:MaterialsComponent},
