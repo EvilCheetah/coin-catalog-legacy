@@ -1,4 +1,4 @@
-export class shape{
+export class Shape{
     id:number;
     name:string;
 }

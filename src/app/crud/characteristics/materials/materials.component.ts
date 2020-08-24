@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {FormControl, Validators} from '@angular/forms';
+import {MaterialsService} from './materials.service';
+import {Material} from 'src/app/classes/material'
 
 @Component({
   selector: 'app-materials',
@@ -7,9 +10,61 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MaterialsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service:MaterialsService) { }
+
+  materials:Material[]=[
+    {name:'hello', id:1},
+    {name:'hell', id:2},
+  ];
+
+  selectedMaterial:Material=new Material();
+  nameControl= new FormControl('', [Validators.minLength(1), Validators.required]);
+  createMode:boolean=false;
 
   ngOnInit(): void {
+    //this.loadRegions();
+  }
+
+  loadMaterials(){
+    this.service.getAllMaterials();
+  }
+
+  changeCreateMode(){
+    this.cancelEdit();
+    this.createMode=!this.createMode;
+    this.nameControl= new FormControl('', [Validators.minLength(1), Validators.required]);
+  }
+
+  selectMaterial(material:Material){
+    this.selectedMaterial=material;
+    this.nameControl.setValue(material.name);
+  }
+
+  deleteMaterial(id:number){
+  this.service.deleteMaterial(id).subscribe(()=>this.loadMaterials());  
+  }
+
+  createMaterial(){
+  let material = new Material();
+  material.name = this.nameControl.value;
+  this.service.createMaterial(material).subscribe(()=>this.loadMaterials())
+  this.changeCreateMode();
+  }
+
+  saveEdit(){
+  let material = new Material();
+  material.id = this.selectedMaterial.id;
+  material.name = this.nameControl.value;
+  this.service.editMaterial(material).subscribe(()=>
+  {
+    this.loadMaterials();
+    this.cancelEdit();
+  })
+  }
+
+  cancelEdit(){
+    this.nameControl=new FormControl('', [Validators.minLength(1), Validators.required]);
+    this.selectedMaterial=new Material();
   }
 
 }

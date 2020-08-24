@@ -1,1 +1,69 @@
-<p>edges works!</p>
+<ng-template [ngIf]="!createMode" [ngIfElse]="CreateTemplate">
+    <div class="form-group">
+      <input type="button" class="btn btn-success" value="Create new"
+      (click)="changeCreateMode()">
+    </div>
+      <table class="table table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Controls</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let edge of edges">
+            <ng-template [ngIf]="edge!=selectedEdge" [ngIfElse]="EditTemplate">
+            <tr>
+              <td>{{edge.name}}</td>
+              <td>
+                <input type="button" style="margin: 2.5pt;" class="btn btn-primary" value="Edit" (click)="selectEdge(edge)">
+                <input type="button" style="margin: 2.5pt;" class="btn btn-danger" value="Delete" (click)="deleteEdge(edge.id)">
+              </td>
+            </tr>
+          </ng-template>
+          </tbody>
+        </table>    
+  </ng-template>
+  
+  <ng-template #CreateTemplate>
+          
+        <div class="form-group">
+          <div *ngIf="nameControl.invalid  && nameControl.touched ">
+            <div style="display:inline">
+              <label  for="createName" class="alert alert-danger">Name can't be empty</label>
+            </div>
+          </div>
+          <div>
+            <div style="display:inline">
+              <input class="form-control" id="createName" placeholder="Edge name"  type="text" [formControl]="nameControl">
+            </div>
+          </div>
+        </div>
+      
+        <div class="form-group">
+          <input type="button" style="margin:5pt" class="btn btn-success" value="Add" (click)="createEdge()"
+          [disabled]="nameControl.invalid">
+          <input type="button" style="margin:5pt" class="btn btn-danger" value="Cansel" (click)="changeCreateMode()">
+        </div>
+  </ng-template>
+  
+  <ng-template #EditTemplate>
+      <tr>
+          <td>
+            <div *ngIf="nameControl.invalid  && nameControl.touched ">
+                <div style="display:inline-block">
+                  <label  for="editName" class="alert alert-danger" >
+                  Name can't be empty</label>
+                </div>
+            </div>
+            <div>
+                <div style="display:inline-block">
+                  <input type="text" id="editName" [formControl]="nameControl">
+                </div>
+            </div>
+          </td>  
+          <td>
+            <input type="button" style="margin: 2.5pt;" class="btn btn-success" value="Save" (click)="saveEdit()">
+            <input type="button" style="margin: 2.5pt;" class="btn btn-danger" value="Cansel" (click)="cancelEdit()">
+          </td>
+      </tr>
+  </ng-template>

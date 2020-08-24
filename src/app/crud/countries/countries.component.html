@@ -1,14 +1,15 @@
 <ng-template [ngIf]="!createMode" [ngIfElse]="CreateTemplate">
+  <div class="form-group">
+    <input type="button" class="btn btn-success" value="Create new"
+    (click)="changeCreateMode()">
+  </div>
     <table class="table table-striped">
         <thead class="thead-dark">
           <tr>
             <th scope="col">Region</th>
             <th scope="col">Name</th>
             <th scope="col">Controls</th>
-            <th scope="col">
-              <input type="button" class="btn btn-success" value="Create new"
-               (click)="changeCreateMode()">
-            </th>
+            
           </tr>
         </thead>
         <tbody *ngFor="let country of countries">
