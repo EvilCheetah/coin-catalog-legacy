@@ -1,1 +1,94 @@
-<p>collections works!</p>
+<ng-template [ngIf]="!createMode" [ngIfElse]="CreateTemplate">
+    <div class="form-group">
+      <input type="button" class="btn btn-success" value="Create new"
+      (click)="changeCreateMode()">
+    </div>
+      <table class="table table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Category</th>
+              <th scope="col">Name</th>
+              <th scope="col">Controls</th>
+              
+            </tr>
+          </thead>
+          <tbody *ngFor="let collection of collections">
+            <ng-template [ngIf]="collection!=selectedCollection" [ngIfElse]="EditTemplate">
+            <tr>
+              <td>{{getCategoryName(collection.category)}}</td>
+              <td>{{collection.name}}</td>
+              <td>
+                <input type="button" style="margin: 2.5pt;" class="btn btn-primary" value="Edit" (click)="selectCollection(collection)">
+                <input type="button" style="margin: 2.5pt;" class="btn btn-danger" value="Delete" (click)="deleteCollection(collection.id)">
+              </td>
+            </tr>
+          </ng-template>
+          </tbody>
+        </table>
+  </ng-template>
+  
+  <ng-template #CreateTemplate>
+      <div class="form-group">
+          <label for="countrySelect">Select category</label>
+          <div *ngIf="categoryControl.invalid  && categoryControl.touched ">
+            <div style="display:inline-block">
+              <label  for="categorySelect" class="alert alert-danger">Category can't be empty</label>
+            </div>
+          </div>
+          <div>
+            <div style="display:inline-block">
+              <select class="form-control" id="categorySelect" [formControl]="categoryControl">
+                <option *ngFor="let category of categories" [ngValue]="category.id">{{category.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      
+        <div class="form-group">
+          <div *ngIf="nameControl.invalid  && nameControl.touched ">
+            <div style="display:inline">
+              <label  for="createName" class="alert alert-danger">Name can't be empty</label>
+            </div>
+          </div>
+          <div>
+            <div style="display:inline">
+              <input class="form-control" id="createName" placeholder="Collection name"  type="text" [formControl]="nameControl">
+            </div>
+          </div>
+        </div>
+      
+        <div class="form-group">
+          <input type="button" style="margin:5pt" class="btn btn-success" value="Add" (click)="createCollection()"
+          [disabled]="nameControl.invalid || categoryControl.invalid">
+          <input type="button" style="margin:5pt" class="btn btn-danger" value="Cansel" (click)="changeCreateMode()">
+        </div>
+  </ng-template>
+  
+  <ng-template #EditTemplate>
+      <tr>
+          <td>
+          <select id="editRegion" [formControl]="categoryControl" >
+          <option *ngFor="let category of categories" [ngValue]="category.id">{{category.name}}</option>
+          </select>
+          </td>
+          <td>
+            <div *ngIf="nameControl.invalid  && nameControl.touched ">
+                <div style="display:inline-block">
+                  <label  for="editName" class="alert alert-danger" >
+                  Name can't be empty</label>
+                </div>
+            </div>
+            <div>
+                <div style="display:inline-block">
+                  <input type="text" id="editName" [formControl]="nameControl">
+                </div>
+            </div>
+          
+          </td>
+          <td>
+            <input type="button" style="margin: 2.5pt;" class="btn btn-success" value="Save" (click)="saveEdit()"
+            [disabled]="nameControl.invalid || categoryControl.invalid">
+            <input type="button" style="margin: 2.5pt;" class="btn btn-danger" value="Cansel" (click)="cancelEdit()">
+          </td>
+        </tr>
+  </ng-template>
