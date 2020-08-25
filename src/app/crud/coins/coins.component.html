@@ -1,1 +1,59 @@
-<p>coins works!</p>
+<ng-template [ngIf]="!createMode" [ngIfElse]="CreateTemplate">
+    <div class="form-group">
+      <input type="button" class="btn btn-success" value="Create new"
+      (click)="changeCreateMode()">
+    </div>
+      <table class="table table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Collection</th>
+              <th scope="col">Minted by</th>
+              <th scope="col">Author</th>
+              <th scope="col">Sculptor</th>
+              <th scope="col">Controls</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let coin of coins">
+            <ng-template [ngIf]="coin!=selectedCoin" [ngIfElse]="EditTemplate">
+            <tr>
+              <td>{{coin.name}}</td>
+              <td>{{getCollectionName(coin.collection)}}</td>
+              <td>{{getMintedByName(coin.mintedBy)}}</td>
+              <td>{{getAuthorName(coin.author)}}</td>
+              <td>{{getSculptorName(coin.sculptor)}}</td>
+              <td>
+                <input type="button" style="margin: 2.5pt;" class="btn btn-primary" value="Edit" (click)="selectCoin(coin)">
+                <input type="button" style="margin: 2.5pt;" class="btn btn-danger" value="Delete" (click)="deleteCoin(coin.id)">
+              </td>
+            </tr>
+          </ng-template>
+          </tbody>
+        </table>    
+  </ng-template>
+  
+  <ng-template #CreateTemplate>
+          
+        <form class="form-group" [formGroup]="coinGroup">
+          <div *ngIf="coinGroup.controls[1].invalid  && coinGroup.controls[1].touched ">
+            <div style="display:inline">
+              <label  for="createName" class="alert alert-danger">Name can't be empty</label>
+            </div>
+          </div>
+          <div>
+            <div style="display:inline">
+              <input class="form-control" id="createName" placeholder="Minter name"  type="text" formControlName="nameControl">
+            </div>
+          </div>
+        
+      
+            <div class="form-group">
+            <input type="button" style="margin:5pt" class="btn btn-success" value="Add" 
+            >
+            <input type="button" style="margin:5pt" class="btn btn-danger" value="Cansel" (click)="changeCreateMode()">
+            </div>
+        </form>
+  </ng-template>
+
+  <ng-template #EditTemplate>
+  </ng-template>

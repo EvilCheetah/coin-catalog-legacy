@@ -1,6 +1,7 @@
 export class Image{
     id:number;
-    side:number;
+    side:string;
+    //side:number;
     coin_style:number;
     path:string;
 }

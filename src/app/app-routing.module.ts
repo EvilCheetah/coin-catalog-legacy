@@ -17,6 +17,8 @@ import {RegionsComponent} from './crud/regions/regions.component';
 import {UsersComponent} from './crud/users/users.component';
 import { ArtistsComponent } from './crud/authors/artists/artists.component';
 import { SculptorsComponent } from './crud/authors/sculptors/sculptors.component';
+import {MintedByComponent} from './crud/characteristics/minted-by/minted-by.component';
+
 
 
 
@@ -37,6 +39,7 @@ const routes: Routes = [
     {path:'coutries', component:CountriesComponent},
     {path:'regions', component:RegionsComponent},
     {path:'users', component:UsersComponent},
+    {path:'minters', component:MintedByComponent}
 
   ]},
   {path:"catalog", component:CatalogComponent},

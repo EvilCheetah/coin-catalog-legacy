@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {ArtistsService} from './artists.service';
-import {Artist} from 'src/app/classes/author'
+import {Author} from 'src/app/classes/author'
 
 @Component({
   selector: 'app-artists',
@@ -12,12 +12,12 @@ export class ArtistsComponent implements OnInit {
 
   constructor(private service:ArtistsService) { }
 
-  artists:Artist[]=[
+  artists:Author[]=[
     {name:'hello', id:1},
     {name:'hell', id:2},
   ];
 
-  selectedArtist:Artist=new Artist();
+  selectedArtist:Author=new Author();
   nameControl= new FormControl('', [Validators.minLength(1), Validators.required]);
   createMode:boolean=false;
 
@@ -35,7 +35,7 @@ export class ArtistsComponent implements OnInit {
     this.nameControl= new FormControl('', [Validators.minLength(1), Validators.required]);
   }
 
-  selectArtist(region:Artist){
+  selectArtist(region:Author){
     this.selectedArtist=region;
     this.nameControl.setValue(region.name);
   }
@@ -45,14 +45,14 @@ export class ArtistsComponent implements OnInit {
   }
 
   createArtist(){
-  let artist = new Artist();
+  let artist = new Author();
   artist.name = this.nameControl.value;
   this.service.createArtist(artist).subscribe(()=>this.loadArtists())
   this.changeCreateMode();
   }
 
   saveEdit(){
-  let artist = new Artist();
+  let artist = new Author();
   artist.id = this.selectedArtist.id;
   artist.name = this.nameControl.value;
   this.service.editArtist(artist).subscribe(()=>
@@ -64,7 +64,7 @@ export class ArtistsComponent implements OnInit {
 
   cancelEdit(){
     this.nameControl=new FormControl('', [Validators.minLength(1), Validators.required]);
-    this.selectedArtist=new Artist();
+    this.selectedArtist=new Author();
   }
 
 }
