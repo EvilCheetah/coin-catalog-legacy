@@ -62,7 +62,8 @@
             </div>
           </td>  
           <td>
-            <input type="button" style="margin: 2.5pt;" class="btn btn-success" value="Save" (click)="saveEdit()">
+            <input type="button" style="margin: 2.5pt;" class="btn btn-success" value="Save" (click)="saveEdit()"
+            [disabled]="nameControl.invalid">
             <input type="button" style="margin: 2.5pt;" class="btn btn-danger" value="Cansel" (click)="cancelEdit()">
           </td>
       </tr>

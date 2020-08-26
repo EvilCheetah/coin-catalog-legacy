@@ -41,8 +41,8 @@ export class CoinsComponent implements OnInit {
     weight:10, length:30, width:40}]
   
   shapes: Shape[]=[{id:1, name:"Shape1"}];
-  quality : Quality[]=[{id:1, name:"Quality1"}];;
-  edges : Edge[]=[{id:1, name:"Edge1"}];;
+  qualities : Quality[]=[{id:1, name:"Quality1"}];
+  edges : Edge[]=[{id:1, name:"Edge1"}];
   materials : Material[]=[{id:1, name:"Material1"}];
 
   subStyles:SubStyle[]=[{id:1, parent_coin:1, substyle_coin:2 }];
@@ -58,16 +58,35 @@ export class CoinsComponent implements OnInit {
       nameControl:new FormControl("", [Validators.minLength(1), Validators.required]),
       mintedByControl:new FormControl("", [Validators.minLength(1), Validators.required]),
       authorControl:new FormControl("", [Validators.minLength(1), Validators.required]),
-      sculptorControl:new FormControl("", [Validators.minLength(1), Validators.required])
+      sculptorControl:new FormControl("", [Validators.minLength(1), Validators.required]),
+      yearControl:new FormControl("", [Validators.minLength(1), Validators.required]),
+      shapeControl:new FormControl("", [Validators.minLength(1), Validators.required]),
+      qualityControl:new FormControl("", [Validators.minLength(1), Validators.required]),
+      edgeControl:new FormControl("", [Validators.minLength(1), Validators.required]),
+      materialControl:new FormControl("", [Validators.minLength(1), Validators.required]),
+      standartControl:new FormControl("", [Validators.minLength(1), Validators.required]),
+      denominationControl:new FormControl("", [Validators.minLength(1), Validators.required]),
+      mintageControl:new FormControl("", [Validators.minLength(1), Validators.required]),
+      additionalNameControl:new FormControl(""),
+      kmNumberControl:new FormControl(""),
+      rareControl:new FormControl(""),
+      substyleControl:new FormControl(""),
+      weightControl:new FormControl("", [Validators.minLength(1), Validators.required]),
+      lengthControl:new FormControl("", [Validators.minLength(1), Validators.required]),
+      widthControl:new FormControl("", [Validators.minLength(1), Validators.required]),
+      noteControl:new FormControl("", [Validators.minLength(1), Validators.required]),
+      frontImageControl:new FormControl("", [Validators.required]),
+      backImageControl:new FormControl(""),
+      edgeImageControl:new FormControl("")
     }
   );
   
-
   constructor(private service:CoinsService) { }
 
   ngOnInit(): void {
     this.note.id=1;
     this.note.description="This is fucking description";
+    
     
   }
 

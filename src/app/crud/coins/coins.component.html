@@ -35,24 +35,335 @@
   <ng-template #CreateTemplate>
           
         <form class="form-group" [formGroup]="coinGroup">
-          <div *ngIf="coinGroup.controls[1].invalid  && coinGroup.controls[1].touched ">
+          <div *ngIf="coinGroup.controls['nameControl'].invalid  && coinGroup.controls['nameControl'].touched ">
+            <input class="form-control is-invalid" id="createName" placeholder="Coin name"  type="text" formControlName="nameControl">
+              <label class="invalid-feedback" for="createName">
+                Name can't be empty
+              </label>
+          </div>
+          <div *ngIf="coinGroup.controls['nameControl'].valid  || coinGroup.controls['nameControl'].untouched">
             <div style="display:inline">
-              <label  for="createName" class="alert alert-danger">Name can't be empty</label>
+              <input class="form-control" id="createName" placeholder="Coin name"  type="text" formControlName="nameControl">
+            </div>
+          </div>
+
+          <div class="form-row">
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="collectionSelect">Choose the collection</label>
+                <div *ngIf="coinGroup.controls['collectionControl'].invalid  && coinGroup.controls['collectionControl'].touched">
+                  <select class="form-control is-invalid" id="collectionSelect" formControlName="collectionControl">
+                    <option *ngFor="let collection of collections"
+                    [ngValue]="collection.id">{{collection.name}}</option>
+                  </select>
+                  <label class="invalid-feedback" for="collectionSelect">
+                    Collection can't be empty
+                  </label>  
+                </div>
+                <div class="form-group">
+                  <div *ngIf="coinGroup.controls['collectionControl'].valid  || coinGroup.controls['collectionControl'].untouched">
+                    <select class="form-control" id="collectionSelect" formControlName="collectionControl">
+                      <option *ngFor="let collection of collections"
+                      [ngValue]="collection.id">{{collection.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="mintedBySelect">Choose the place of minting</label>
+                <div *ngIf="coinGroup.controls['mintedByControl'].invalid  && coinGroup.controls['mintedByControl'].touched">
+                  <select class="form-control is-invalid" id="mintedBySelect" formControlName="mintedByControl">
+                    <option *ngFor="let mnt of mintedBy"
+                    [ngValue]="mnt.id">{{mnt.name}}</option>
+                  </select> 
+                  <label class="invalid-feedback" for="mintedBySelect">
+                    Place of minting can't be empty
+                  </label>  
+                </div>
+                <div class="form-group">
+                  <div *ngIf="coinGroup.controls['mintedByControl'].valid  || coinGroup.controls['mintedByControl'].untouched">
+                    <select class="form-control" id="mintedBySelect" formControlName="mintedByControl">
+                      <option *ngFor="let mnt of mintedBy"
+                      [ngValue]="mnt.id">{{mnt.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div> 
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="authorSelect">Choose the author</label>
+                <div *ngIf="coinGroup.controls['authorControl'].invalid  && coinGroup.controls['authorControl'].touched">
+                  <select class="form-control is-invalid" id="authorSelect" formControlName="authorControl">
+                    <option *ngFor="let author of authors"
+                    [ngValue]="author.id">{{author.name}}</option>
+                  </select>
+                  <label class="invalid-feedback" for="authorSelect">
+                    Author can't be empty
+                  </label>    
+                </div>
+              <div class="form-group ">
+                  <div *ngIf="coinGroup.controls['authorControl'].valid  || coinGroup.controls['authorControl'].untouched">
+                    <select class="form-control" id="authorSelect" formControlName="authorControl">
+                      <option *ngFor="let author of authors"
+                      [ngValue]="author.id">{{author.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          <div class="col-md-6">  
+            <div class="form-group">
+              <label for="sculptorSelect">Choose the sculptor</label>
+              <div *ngIf="coinGroup.controls['sculptorControl'].invalid  && coinGroup.controls['sculptorControl'].touched">
+                <select class="form-control is-invalid" id="sculptorSelect" formControlName="sculptorControl">
+                  <option *ngFor="let sculptor of sculptors"
+                  [ngValue]="sculptor.id">{{sculptor.name}}</option>
+                </select>
+                <label class="invalid-feedback" for="sculptorSelect">
+                  Sculptor can't be empty
+                </label>      
+              </div>
+              <div class="form-group ">
+                <div *ngIf="coinGroup.controls['sculptorControl'].valid  || coinGroup.controls['sculptorControl'].untouched">
+                  <select class="form-control" id="sculptorSelect" formControlName="sculptorControl">
+                    <option *ngFor="let sculptor of sculptors"
+                    [ngValue]="sculptor.id">{{sculptor.name}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+          <div *ngIf="coinGroup.controls['yearControl'].invalid  && coinGroup.controls['yearControl'].touched ">
+            <input class="form-control is-invalid" id="createYear" placeholder="Year"  type="number"
+            formControlName="yearControl" min="0"> 
+            <label class="invalid-feedback" for="createYear">
+              Year can't be empty
+            </label> 
+          </div>
+          <div *ngIf="coinGroup.controls['yearControl'].invalid  && coinGroup.controls['yearControl'].touched ">
+              <input class="form-control" id="createYear" placeholder="Year"  type="number"
+               formControlName="yearControl" min="0">
+          </div>
+
+          <div class="form-row">
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="shapeSelect">Choose the shape</label>
+                <div *ngIf="coinGroup.controls['shapeControl'].invalid  && coinGroup.controls['shapeControl'].touched">
+                  <select class="form-control is-invalid" id="shapeSelect" formControlName="shapeControl">
+                    <option *ngFor="let shape of shapes"
+                    [ngValue]="shape.id">{{shape.name}}</option>
+                  </select>
+                  <label class="invalid-feedback" for="shapeSelect">
+                    Shape can't be empty
+                  </label>
+                </div>
+                <div *ngIf="coinGroup.controls['shapeControl'].valid  || coinGroup.controls['shapeControl'].untouched">
+                  <select class="form-control" id="shapeSelect" formControlName="shapeControl">
+                    <option *ngFor="let shape of shapes"
+                    [ngValue]="shape.id">{{shape.name}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="qualitySelect">Choose the quality</label>
+                <div *ngIf="coinGroup.controls['qualityControl'].invalid  && coinGroup.controls['qualityControl'].touched">
+                  <select class="form-control is-invalid" id="qualitySelect" formControlName="qualityControl">
+                    <option *ngFor="let quality of qualities"
+                    [ngValue]="quality.id">{{quality.name}}</option>
+                  </select>
+                  <label class="invalid-feedback" for="qualitySelect">
+                   Quality can't be empty
+                  </label>
+                </div>
+                <div *ngIf="coinGroup.controls['qualityControl'].valid  || coinGroup.controls['qualityControl'].untouched">
+                    <select class="form-control" id="qualitySelect" formControlName="qualityControl">
+                      <option *ngFor="let quality of qualities"
+                      [ngValue]="quality.id">{{quality.name}}</option>
+                    </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="edgeSelect">Choose the edge</label>
+                <div  *ngIf="coinGroup.controls['edgeControl'].invalid  && coinGroup.controls['edgeControl'].touched">
+                  <select class="form-control" id="edgeSelect" formControlName="edgeControl">
+                    <option *ngFor="let edge of edges"
+                    [ngValue]="edge.id">{{edge.name}}</option>
+                  </select>
+                  <label class="invalid-feedback" for="edgeSelect">
+                    Edge can't be empty
+                   </label>  
+                </div>
+                <div class="form-group" *ngIf="coinGroup.controls['edgeControl'].valid  || coinGroup.controls['edgeControl'].untouched">
+                  <select class="form-control" id="edgeSelect" formControlName="edgeControl">
+                    <option *ngFor="let edge of edges"
+                    [ngValue]="edge.id">{{edge.name}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="materialSelect">Choose the material</label>
+                <div *ngIf="coinGroup.controls['materialControl'].invalid  && coinGroup.controls['materialControl'].touched">
+                  <select class="form-control is-invalid" id="materialSelect" formControlName="materialControl">
+                    <option *ngFor="let material of materials"
+                    [ngValue]="material.id">{{material.name}}</option>
+                  </select>
+                  <label class="invalid-feedback" for="materialSelect">
+                    Edge can't be empty
+                   </label>  
+                </div>
+                <div class="form-group" *ngIf="coinGroup.controls['materialControl'].valid  || coinGroup.controls['materialControl'].untouched">
+                    <select class="form-control" id="materialSelect" formControlName="materialControl">
+                      <option *ngFor="let material of materials"
+                      [ngValue]="material.id">{{material.name}}</option>
+                    </select>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div *ngIf="coinGroup.controls['standartControl'].invalid && coinGroup.controls['standartControl'].touched ">
+                <div style="display:inline">
+                  <label  for="createStandart" class="alert alert-danger">Standart can't be empty</label>
+                </div>
+            </div>
+            <div>
+              <div style="display:inline">
+                <input class="form-control" id="createStandart" placeholder="Standart"  type="text" formControlName="standartControl">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div *ngIf="coinGroup.controls['denominationControl'].invalid  && coinGroup.controls['denominationControl'].touched ">
+              <div style="display:inline">
+                <label  for="createDenomination" class="alert alert-danger">Denomination can't be empty</label>
+              </div>
+            </div>
+            <div>
+              <div style="display:inline">
+                <input class="form-control" id="createDenomination" placeholder="Denomination"  type="text" formControlName="denominationControl">
+              </div>
+            </div>
+         </div>
+        <div class="form-group">
+          <div *ngIf="coinGroup.controls['mintageControl'].invalid  && coinGroup.controls['mintageControl'].touched ">
+            <div style="display:inline">
+              <label  for="createMintage" class="alert alert-danger">Mintage can't be empty</label>
             </div>
           </div>
           <div>
             <div style="display:inline">
-              <input class="form-control" id="createName" placeholder="Minter name"  type="text" formControlName="nameControl">
+              <input class="form-control" id="createMintage" placeholder="Mintage"  type="number"
+               formControlName="mintageControl" min="0">
             </div>
           </div>
-        
-      
-            <div class="form-group">
-            <input type="button" style="margin:5pt" class="btn btn-success" value="Add" 
-            >
-            <input type="button" style="margin:5pt" class="btn btn-danger" value="Cansel" (click)="changeCreateMode()">
+        </div>
+
+        <div class="form-group">
+            <div style="display:inline">
+              <input class="form-control" id="createAddName" placeholder="Additional name"  type="text" formControlName="additionalNameControl">
             </div>
-        </form>
+        </div>
+    
+        <div class="form-group">
+          <div style="display:inline">
+            <input class="form-control" id="createKM" placeholder="Krause-Mishler catalog number"  type="number"
+             formControlName="kmNumberControl" min="0">
+          </div>
+        </div>
+
+        <div class="form-group" style="display: flex;">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="createRare" formControlName="rareControl">
+            <label class="form-check-label" for="createRare">Is rare</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div *ngIf="coinGroup.controls['weightControl'].invalid  && coinGroup.controls['weightControl'].touched ">
+            <div style="display:inline">
+              <label  for="createWeight" class="alert alert-danger">Weight can't be empty</label>
+            </div>
+          </div>
+          <div>
+            <div style="display:inline">
+              <input class="form-control" id="createWeight" placeholder="Weight"  type="number"
+               formControlName="weightControl" min="0">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div *ngIf="coinGroup.controls['lengthControl'].invalid  && coinGroup.controls['lengthControl'].touched ">
+            <div style="display:inline">
+              <label  for="createLength" class="alert alert-danger">Length can't be empty</label>
+            </div>
+          </div>
+          <div>
+            <div style="display:inline">
+              <input class="form-control" id="createLength" placeholder="Length"  type="number"
+               formControlName="lengthControl" min="0">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div *ngIf="coinGroup.controls['widthControl'].invalid  && coinGroup.controls['widthControl'].touched ">
+            <div style="display:inline">
+              <label  for="createWidth" class="alert alert-danger">Width can't be empty</label>
+            </div>
+          </div>
+          <div>
+            <div style="display:inline">
+              <input class="form-control" id="createWidth" placeholder="Width"  type="number"
+               formControlName="widthControl" min="0">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <textarea class="form-control" cols="30" rows="10" formControlName="noteControl"></textarea>
+        </div>
+    
+    
+
+        <div class="form-group">
+          <input type="button" style="margin:5pt" class="btn btn-success" value="Add" 
+          [disabled]="coinGroup.valid">
+          <input type="button" style="margin:5pt" class="btn btn-danger" value="Cansel" (click)="changeCreateMode()">
+        </div>
+        
+        <div class="form-row">
+          <div class="col-md-6">
+            <div class="form-group">
+              
+            </div>
+          </div>     
+        </div>
+  </form>      
   </ng-template>
 
   <ng-template #EditTemplate>
