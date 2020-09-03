@@ -208,7 +208,7 @@ class CoinStyle(models.Model):
     denomination    = models.CharField(max_length = 255)
     mintage         = models.IntegerField()
 
-    additional_name = models.CharField(max_length = 255, blank = True, default = "")
+    additional_name = models.C  harField(max_length = 255, blank = True, default = "")
     km_number       = models.CharField(max_length = 255, blank = True, default = "")
 
     is_rare         = models.BooleanField()
