@@ -15,6 +15,6 @@ export class CoinStyle{
     is_substyle:boolean;
     weight:number;
     length:number;
-    width:number;
+    width?:number;
     
 }

@@ -3,6 +3,5 @@ export class Coin{
     collection:number;
     name:string;
     mintedBy:number;
-    author:number;
-    sculptor:number;
+    
 }
