@@ -30,30 +30,35 @@
   <ng-template #CreateTemplate>
       <div class="form-group">
           <label for="countrySelect">Select category</label>
-          <div *ngIf="categoryControl.invalid  && categoryControl.touched ">
-            <div style="display:inline-block">
-              <label  for="categorySelect" class="alert alert-danger">Category can't be empty</label>
-            </div>
+          <div *ngIf="categoryControl.invalid  && categoryControl.touched">
+            <select class="form-control is-invalid" id="categorySelect" [formControl]="categoryControl">
+              <option *ngFor="let category of categories"
+              [ngValue]="category.id">{{category.name}}</option>
+            </select>
+            <label class="invalid-feedback" for="categorySelect">
+              Category can't be empty
+            </label>
           </div>
-          <div>
-            <div style="display:inline-block">
-              <select class="form-control" id="categorySelect" [formControl]="categoryControl">
-                <option *ngFor="let category of categories" [ngValue]="category.id">{{category.name}}</option>
-              </select>
-            </div>
+          <div *ngIf="categoryControl.valid  || categoryControl.untouched">
+            <select class="form-control" id="categorySelect" [formControl]="categoryControl">
+              <option *ngFor="let category of categories"
+              [ngValue]="category.id">{{category.name}}</option>
+            </select>
           </div>
         </div>
       
         <div class="form-group">
           <div *ngIf="nameControl.invalid  && nameControl.touched ">
-            <div style="display:inline">
-              <label  for="createName" class="alert alert-danger">Name can't be empty</label>
-            </div>
+            <input class="form-control is-invalid" id="createName" placeholder="Collection name"  type="text"
+              [formControl]="nameControl"> 
+              <label class="invalid-feedback" for="createName">
+                Collection name can't be empty
+              </label> 
           </div>
-          <div>
-            <div style="display:inline">
+          <div *ngIf="nameControl.valid  || nameControl.untouched ">
+            
               <input class="form-control" id="createName" placeholder="Collection name"  type="text" [formControl]="nameControl">
-            </div>
+            
           </div>
         </div>
       
@@ -73,15 +78,16 @@
           </td>
           <td>
             <div *ngIf="nameControl.invalid  && nameControl.touched ">
-                <div style="display:inline-block">
-                  <label  for="editName" class="alert alert-danger" >
-                  Name can't be empty</label>
-                </div>
+              <input class="form-control is-invalid" id="createName" placeholder="Collection name"  type="text"
+                [formControl]="nameControl"> 
+                <label class="invalid-feedback" for="createName">
+                  Collection name can't be empty
+                </label> 
             </div>
-            <div>
-                <div style="display:inline-block">
+            <div *ngIf="nameControl.valid  || nameControl.untouched ">
+               
                   <input type="text" id="editName" [formControl]="nameControl">
-                </div>
+                
             </div>
           
           </td>

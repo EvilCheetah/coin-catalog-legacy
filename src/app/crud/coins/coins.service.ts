@@ -45,9 +45,7 @@ export class CoinsService {
     return this.http.get<MintedBy[]>("");
   }
 
-  coinsStyles():Observable<CoinStyle[]>{
-    return this.http.get<CoinStyle[]>("");
-  }
+ 
 
   getAllShapes():Observable<Shape[]>{
     return this.http.get<Shape[]>("");
@@ -65,8 +63,10 @@ export class CoinsService {
     return this.http.get<Material[]>("");
   }
 
-  getAllSubstyles():Observable<SubStyle[]>{
-    return this.http.get<SubStyle[]>("");
+  getSubstylesById(id:number):Observable<SubStyle[]>{
+    var param:HttpParams=new HttpParams();
+    param.set("id",id.toString())
+    return this.http.get<SubStyle[]>("",{params:param});
   }
 
   getNoteByStyleId(id:number):Observable<Note>{
@@ -91,6 +91,26 @@ export class CoinsService {
     var param:HttpParams=new HttpParams();
     param.set("id",id.toString())
     return this.http.get<CoinSculptor[]>("",{params:param}); 
+  }
+
+  getCoinsStyleById(id:number):Observable<CoinStyle>{
+    var param:HttpParams=new HttpParams();
+    param.set("id",id.toString())
+    return this.http.get<CoinStyle>("",{params:param});
+  }
+
+  createCoin(coinInfo:CoinInfo[]){
+    return this.http.post("",coinInfo);
+  }
+
+  updateCoin(coinInfo:CoinInfo[]){
+    return this.http.put("",coinInfo);
+  }
+
+  deleteCoin(id:number){
+    var param:HttpParams=new HttpParams();
+    param.set("id",id.toString())
+    return this.http.delete("",{params:param});
   }
 
 }

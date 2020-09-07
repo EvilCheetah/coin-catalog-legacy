@@ -31,30 +31,35 @@
   
   <div class="form-group">
     <label for="countrySelect">Select country</label>
-    <div *ngIf="countryControl.invalid  && countryControl.touched ">
-      <div style="display:inline-block">
-        <label  for="countrySelect" class="alert alert-danger">Country can't be empty</label>
-      </div>
+    <div *ngIf="countryControl.invalid  && countryControl.touched">
+      <select class="form-control is-invalid" id="countrySelect" [formControl]="countryControl">
+        <option *ngFor="let country of countries"
+         [ngValue]="country.id">
+         {{country.name}}
+        </option>
+      </select>
+      <label class="invalid-feedback" for="countrySelect">
+        Country can't be empty
+       </label>  
     </div>
-    <div>
-      <div style="display:inline-block">
+      <div *ngIf="countryControl.valid  || countryControl.untouched ">
         <select class="form-control" id="countrySelect" [formControl]="countryControl">
           <option *ngFor="let country of countries" [ngValue]="country.id">{{country.name}}</option>
         </select>
       </div>
-    </div>
+    
   </div>
 
   <div class="form-group">
     <div *ngIf="nameControl.invalid  && nameControl.touched ">
-      <div style="display:inline">
-        <label  for="createName" class="alert alert-danger">Name can't be empty</label>
+      <input class="form-control is-invalid" id="createName" placeholder="Category name"  type="text"
+        [formControl]="nameControl"> 
+        <label class="invalid-feedback" for="createName">
+          Category name can't be empty
+        </label> 
       </div>
-    </div>
-    <div>
-      <div style="display:inline">
-        <input class="form-control" id="createName" placeholder="Category name"  type="text" [formControl]="nameControl">
-      </div>
+    <div *ngIf="nameControl.valid  || nameControl.untouched ">
+      <input class="form-control" id="createName" placeholder="Category name"  type="text" [formControl]="nameControl">
     </div>
   </div>
 
@@ -76,15 +81,16 @@
     </td>
     <td>
       <div *ngIf="nameControl.invalid  && nameControl.touched ">
-          <div style="display:inline-block">
-            <label  for="editName" class="alert alert-danger" >
-            Name can't be empty</label>
-          </div>
-      </div>
-      <div>
-          <div style="display:inline-block">
-            <input type="text" id="editName" [formControl]="nameControl">
-          </div>
+        <input class="form-control is-invalid" id="createName" placeholder="Category name"  type="text"
+          [formControl]="nameControl"> 
+          <label class="invalid-feedback" for="createName">
+            Category name can't be empty
+          </label> 
+        </div>
+      <div *ngIf="nameControl.valid  || nameControl.untouched ">
+          
+            <input type="text" id="editName" placeholder="Category name" [formControl]="nameControl">
+          
       </div>
     
     </td>

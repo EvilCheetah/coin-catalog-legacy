@@ -188,7 +188,7 @@
                     [ngValue]="material.id">{{material.name}}</option>
                   </select>
                   <label class="invalid-feedback" for="materialSelect">
-                    Edge can't be empty
+                    Material can't be empty
                    </label>  
                 </div>
                 <div class="form-group" *ngIf="coinGroup.controls['materialControl'].valid  || coinGroup.controls['materialControl'].untouched">
@@ -595,10 +595,18 @@
         </div>
         
         <div class="form-group" >
-          <input type="button" style="margin:5pt" class="btn btn-success" value="Add coin" 
-          [disabled]="coinGroup.invalid || (coinAuthors.length==0 && coinSculptors.length==0)">
-          <input type="button" style="margin:5pt" class="btn btn-success" value="Add new style" 
-          [disabled]="coinGroup.invalid || (coinAuthors.length==0 && coinSculptors.length==0)" (click)="addNewStyle()">
+          <ng-template *ngIf="!editMode;else editTemplate">
+            <input type="button" style="margin:5pt" class="btn btn-success" value="Add coin" 
+            [disabled]="coinGroup.invalid || (coinAuthors.length==0 && coinSculptors.length==0)" (click)="createCoin()">
+          </ng-template>
+          <input type="button" style="margin:5pt" class="btn btn-success" value="Add new style"  
+            [disabled]="coinGroup.invalid || (coinAuthors.length==0 && coinSculptors.length==0)" (click)="addNewStyle()">
+          <ng-template #editTemplate>
+            <input type="button" style="margin:5pt" class="btn btn-success" value="Update current style" 
+            [disabled]="coinGroup.invalid || (coinAuthors.length==0 && coinSculptors.length==0)" (click)="updateStyle()">
+            <input type="button" style="margin:5pt" class="btn btn-success" value="Save changes"  
+            [disabled]="coinGroup.invalid || (coinAuthors.length==0 && coinSculptors.length==0)" (click)="updateCoin()">
+          </ng-template> 
           <input type="button" style="margin:5pt" class="btn btn-danger" value="Cansel" (click)="changeCreateMode()">
         </div>
         

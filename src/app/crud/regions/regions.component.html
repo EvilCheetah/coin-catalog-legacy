@@ -28,14 +28,16 @@
         
       <div class="form-group">
         <div *ngIf="nameControl.invalid  && nameControl.touched ">
-          <div style="display:inline">
-            <label  for="createName" class="alert alert-danger">Name can't be empty</label>
-          </div>
+          <input class="form-control is-invalid" id="createName" placeholder="Name"  type="text"
+            [formControl]="nameControl"> 
+            <label class="invalid-feedback" for="createName">
+              Name can't be empty
+            </label> 
         </div>
-        <div>
-          <div style="display:inline">
+        <div *ngIf="nameControl.valid  || nameControl.untouched ">
+          
             <input class="form-control" id="createName" placeholder="Region name"  type="text" [formControl]="nameControl">
-          </div>
+          
         </div>
       </div>
     
@@ -50,15 +52,16 @@
     <tr>
         <td>
           <div *ngIf="nameControl.invalid  && nameControl.touched ">
-              <div style="display:inline-block">
-                <label  for="editName" class="alert alert-danger" >
-                Name can't be empty</label>
-              </div>
+            <input class="form-control is-invalid" id="createName" placeholder="Region name"  type="text"
+              [formControl]="nameControl"> 
+              <label class="invalid-feedback" for="createName">
+                Region name can't be empty
+              </label> 
           </div>
-          <div>
-              <div style="display:inline-block">
-                <input type="text" id="editName" [formControl]="nameControl">
-              </div>
+          <div *ngIf="nameControl.valid  || nameControl.untouched ">
+             
+                <input type="text" placeholder="Region name" id="editName" [formControl]="nameControl">
+              
           </div>
         </td>  
         <td>

@@ -17,6 +17,7 @@ import {Collection} from 'src/app/classes/collection';
 import {CoinInfo} from 'src/app/classes/createCoin';
 import {CoinSculptor} from 'src/app/classes/coinSculptor';
 import {CoinAuthor} from 'src/app/classes/coinAuthor';
+import { typeWithParameters } from '@angular/compiler/src/render3/util';
 
 
 
@@ -61,6 +62,7 @@ export class CoinsComponent implements OnInit {
 
   selectedCoin=new Coin();
   createMode:Boolean=false;
+  editMode:Boolean=false;
   
 
   coinGroup:FormGroup= new FormGroup(
@@ -115,6 +117,7 @@ export class CoinsComponent implements OnInit {
   coinAuthors:CoinAuthor[]=[];
   coinSculptors:CoinSculptor[]=[];    
   coinInfo:CoinInfo[]=[];
+  selectedId:number;
   
 
   constructor(private service:CoinsService) { }
@@ -122,11 +125,15 @@ export class CoinsComponent implements OnInit {
   ngOnInit(): void {
     this.note.id=1;
     this.note.description="This is fucking description";
+    //this.loadValues();
     this.coinGroup.controls['multipleControl']
     .valueChanges
-    .subscribe(()=>{
-      this.coinAuthors=[];
-      this.coinSculptors=[];
+    .subscribe((val)=>{
+      if (val!=this.coinGroup.controls['multipleControl'].value)
+      {
+        this.coinAuthors=[];
+        this.coinSculptors=[];
+      }
     })
     
   }
@@ -189,6 +196,7 @@ export class CoinsComponent implements OnInit {
   }
 
   filterCoinSculptors(side:string):CoinSculptor[]{
+    
     return this.coinSculptors.filter(scu=>scu.side==side);
   }
 
@@ -224,6 +232,7 @@ export class CoinsComponent implements OnInit {
       {side:"Back", file:this.backFile},
       {side:"Edge", file:this.edgeFile}
     ];
+    
     let note = new Note();
     
     note.description = this.coinGroup.controls["noteControl"].value;
@@ -254,7 +263,7 @@ export class CoinsComponent implements OnInit {
     coinInf.note = note;
 
     this.coinInfo.push(coinInf);
-    console.log(this.coinInfo.length);
+    
   }
 
   getCollectionName(id:number):string{
@@ -272,7 +281,43 @@ export class CoinsComponent implements OnInit {
     return this.sculptors.find(sculptor=>sculptor.id==id).name;
   }
 
+  updateStyle(){
+    
+    let imgs:Image[]=[
+      {side:"Front", file:this.frontFile},
+      {side:"Back", file:this.backFile},
+      {side:"Edge", file:this.edgeFile}
+    ];
+    
+    
+    this.coinInfo[this.selectedId].images[0].file=this.frontFile;
+    this.coinInfo[this.selectedId].images[1].file=this.backFile;
+    this.coinInfo[this.selectedId].images[2].file=this.edgeFile;
+    this.coinInfo[this.selectedId].note.description = this.coinGroup.controls["noteControl"].value;
+    this.coinInfo[this.selectedId].coin.collection = this.coinGroup.controls["collectionControl"].value;
+    this.coinInfo[this.selectedId].coin.mintedBy = this.coinGroup.controls["mintedByControl"].value;
+    this.coinInfo[this.selectedId].coin.name = this.coinGroup.controls["nameControl"].value;
+    this.coinInfo[this.selectedId].style.is_rare = this.coinGroup.controls["rareControl"].value;
+    this.coinInfo[this.selectedId].style.km_number = this.coinGroup.controls["kmNumberControl"].value;
+    this.coinInfo[this.selectedId].style.length = this.coinGroup.controls["lengthControl"].value;
+    this.coinInfo[this.selectedId].style.material = this.coinGroup.controls["materialControl"].value;
+    this.coinInfo[this.selectedId].style.mintage = this.coinGroup.controls["mintageControl"].value;
+    this.coinInfo[this.selectedId].style.quality = this.coinGroup.controls["qualityControl"].value;
+    this.coinInfo[this.selectedId].style.shape = this.coinGroup.controls["shapeControl"].value;
+    this.coinInfo[this.selectedId].style.standart = this.coinGroup.controls["standartControl"].value;
+    this.coinInfo[this.selectedId].style.weight = this.coinGroup.controls["weightControl"].value;
+    this.coinInfo[this.selectedId].style.width = this.coinGroup.controls["widthControl"].value;
+    this.coinInfo[this.selectedId].style.year = this.coinGroup.controls["yearControl"].value;
+    this.coinInfo[this.selectedId].style.edge = this.coinGroup.controls["edgeControl"].value;
+    this.coinInfo[this.selectedId].style.denomination = this.coinGroup.controls["denominationControl"].value;
+    this.coinInfo[this.selectedId].style.additional_name = this.coinGroup.controls["additionalNameControl"].value;
+    this.coinInfo[this.selectedId].coinAuthors=this.coinAuthors;
+    this.coinInfo[this.selectedId].coinSculptors = this.coinSculptors;
+    
+  }
+
   showCoinById(id:number){
+    
     this.coinGroup.controls["collectionControl"].setValue(this.coinInfo[id].coin.collection);
     this.coinGroup.controls["noteControl"].setValue(this.coinInfo[id].note.description);
     this.coinGroup.controls["mintedByControl"].setValue(this.coinInfo[id].coin.mintedBy);
@@ -308,11 +353,14 @@ export class CoinsComponent implements OnInit {
 
   changeCreateMode(){
     this.createMode=!this.createMode;
-    this.coinGroup.reset();
-    this.clearPaths();
+    if (this.editMode) this.editMode=false;
     this.coinAuthors=[];
     this.coinSculptors=[];    
     this.coinInfo=[];
+    this.coinGroup.reset();
+    this.clearPaths();
+   
+    
   }
 
   selectCoin(coin:Coin){
@@ -320,12 +368,29 @@ export class CoinsComponent implements OnInit {
     this.changeCreateMode();
     let coinInf = new CoinInfo();
     coinInf.coin = coin;
-    coinInf.style = this.coinsStyles.find(st=>st.coin==coin.id);
+    coinInf.style = this.coinsStyles.find(st=>st.coin==coin.id); //= this.service.getCoinsStyleById(coin.id);
     coinInf.note = this.note; //service.getNote(coin.id);
-    coinInf.coinAuthors = this.allCoinAuthors.filter(aut=>aut.coin == coin.id);
-    coinInf.coinSculptors = this.allCoinSculptors.filter(scu=>scu.coin == coin.id);
-    coinInf.images = this.images.filter(img=>img.coin_style == coinInf.style.id);
+    coinInf.coinAuthors = this.allCoinAuthors.filter(aut=>aut.coin == coin.id);// = this.service.getCoinAuthorsById(coin.id);
+    coinInf.coinSculptors = this.allCoinSculptors.filter(scu=>scu.coin == coin.id);// = this.service.getCoinSculptorsById(coin.id);
+    coinInf.images = this.images.filter(img=>img.coin_style == coinInf.style.id); // = this.service.getImagesById(coin.id);
     this.coinInfo.push(coinInf);
+    /*this.service.getSubstylesById(coin.id).subscribe(styles=>
+      {
+        styles.forEach(sub=>
+          {
+            coinInf = new CoinInfo();
+            coinInf.coin = this.coins.find(c=>c.id==sub.substyle_coin);
+            coinInf.style = this.coinsStyles.find(st=>st.coin==sub.substyle_coin); // = this.service.getCoinsStyleById(sub.substyle_coin);
+            coinInf.note = this.note; //service.getNote(sub.substyle_coin);
+            coinInf.coinAuthors = this.allCoinAuthors.filter(aut=>aut.coin == sub.substyle_coin); // = this.service.getCoinAuthorsById(sub.substyle_coin);
+            coinInf.coinSculptors = this.allCoinSculptors.filter(scu=>scu.coin == sub.substyle_coin); // = this.service.getCoinSculptorsById(sub.substyle_coin);
+            coinInf.images = this.images.filter(img=>img.coin_style == coinInf.style.id); // = this.service.getImagesById(sub.substyle_coin);
+            this.coinInfo.push(coinInf);
+          }
+          )
+      }
+      )*/
+
     this.subStyles.filter(sub=>sub.parent_coin==coin.id).forEach(
       sub=>{
         coinInf = new CoinInfo();
@@ -339,20 +404,54 @@ export class CoinsComponent implements OnInit {
         
       }
       );
+
+    this.editMode = true;
     this.showCoinById(0);  
     
 
   }
 
-  updateCoin(){
+  loadValues(){
+    this.service.getAllAuthors().subscribe(author=>this.authors=author);
+    this.service.getAllCoins().subscribe(coins=>this.coins=coins);
+    this.service.getAllCollections().subscribe(coll=>this.collections=coll);
+    this.service.getAllEdges().subscribe(edge=>this.edges=edge);
+    this.service.getAllMaterials().subscribe(mat=>this.materials=mat);
+    this.service.getAllMintedBy().subscribe(mb=>this.mintedBy=mb);
+    this.service.getAllQualities().subscribe(qual=>this.qualities=qual);
+    this.service.getAllSculptors().subscribe(scu=>this.sculptors=scu);
+    this.service.getAllShapes().subscribe(sha=>this.shapes=sha);
+    
+    
+  }
 
+  updateCoin(){
+    
+    this.service.updateCoin(this.coinInfo).subscribe(()=>
+    {
+      this.service.getAllCoins();
+      this.changeCreateMode();
+      this.editMode=false;
+    }
+    );
   }
   
   createCoin(){
-
+    
+    this.service.createCoin(this.coinInfo).subscribe(()=>
+    {
+      this.service.getAllCoins();
+      this.changeCreateMode();
+    }
+    )
   }
 
   deleteCoin(id:number){
+    this.service.deleteCoin(id).subscribe(()=>
+    {
+      this.service.getAllCoins();
+    }
+    )
 
   }
 
