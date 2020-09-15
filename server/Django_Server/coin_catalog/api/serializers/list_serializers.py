@@ -1,80 +1,91 @@
 from rest_framework import serializers
+
 import coin_catalog.models as Coin
 
-
-class RegionSerializer(serializers.ModelSerializer):
+class RegionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.Region
         fields = ['id', 'name']
 
 
-class CountrySerializer(serializers.ModelSerializer):
+class CountrySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.Country
         fields = ['id', 'region', 'name']
 
 
-class CategorySerialier(serializers.ModelSerializer):
+class CategorySerialier(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.Category
         fields = ['id', 'country', 'name']
 
 
-class CollectionSerializer(serializers.ModelSerializer):
+class CollectionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.Collection
         fields = ['id', 'category', 'name']
 
 
-class MintedBySerializer(serializers.ModelSerializer):
+class MintedBySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.MintedBy
         fields = ['id', 'name']
 
 
-class AuthorNameSerializer(serializers.ModelSerializer):
+class AuthorNameSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.AuthorName
         fields = ['id', 'name']
 
 
-class SculptorNameSerializer(serializers.ModelSerializer):
+class SculptorNameSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.SculptorName
         fields = ['id', 'name']
 
 
-class MaterialSerializer(serializers.ModelSerializer):
+class MaterialSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.Material
         fields = ['id', 'name']
 
 
-class QualitySerializer(serializers.ModelSerializer):
+class QualitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.Quality
         fields = ['id', 'name']
 
 
-class EdgeSerializer(serializers.ModelSerializer):
+class EdgeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.Edge
         fields = ['id', 'name']
 
 
-class ShapeSerializer(serializers.ModelSerializer):
+class ShapeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.Shape
         fields = ['id', 'name']
 
 
-class CoinFamilySerializer(serializers.ModelSerializer):
+class CoinFamilySerializer(serializers.HyperlinkedModelSerializer):
+    authors   = serializers.SerializerMethodField()
+    sculptors = serializers.SerializerMethodField()
+
     class Meta:
         model  = Coin.CoinFamily
-        fields = ['id', 'collection', 'name', 'minted_by']
+        fields = ['id', 'collection', 'name', 'minted_by', 'authors', 'sculptors']
+
+    def get_authors(self, object):
+        author_list = (Coin.CoinAuthor).objects.filter(coin_family = object.pk)
+        return CoinAuthorSerializer(author_list, many = True, context = self.context).data
+
+    def get_sculptors(self, object):
+        sculptor_list = (Coin.CoinSculptor).objects.filter(coin_family = object.pk)
+        return CoinSculptorSerializer(sculptor_list, many = True, context = self.context).data
 
 
-class CoinStyleSerializer(serializers.ModelSerializer):
+class CoinStyleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.CoinStyle
         fields = ['id',        'year',     'coin_family',
@@ -85,37 +96,37 @@ class CoinStyleSerializer(serializers.ModelSerializer):
                   'weight',    'length',   'width']
 
 
-class SubStyleSerializer(serializers.ModelSerializer):
+class SubStyleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.SubStyle
         fields = ['substyle_coin', 'parent_coin']
 
 
-class NoteSerializer(serializers.ModelSerializer):
+class NoteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.Note
         fields = ['id', 'coin_style', 'description']
 
 
-class SideOfCoinSerializer(serializers.ModelSerializer):
+class SideOfCoinSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.SideOfCoin
         fields = ['id', 'name']
 
 
-class CoinAuthorSerializer(serializers.ModelSerializer):
+class CoinAllAuthorsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.CoinAuthor
         fields = ['id', 'coin_family', 'author', 'side']
 
 
-class CoinSculptorSerializer(serializers.ModelSerializer):
+class CoinAllSculptorsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.CoinSculptor
         fields = ['id', 'coin_family', 'sculptor', 'side']
 
 
-class ImageSerializer(serializers.ModelSerializer):
+class ImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model  = Coin.Image
         fields = ['id', 'coin_style', 'side', 'path']

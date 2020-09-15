@@ -12,6 +12,9 @@ class Region(models.Model):
     class Meta():
         db_table = 'coin_region'
 
+    def __str__(self):
+        return self.name
+
 
 class Country(models.Model):
     """
@@ -26,6 +29,9 @@ class Country(models.Model):
         unique_together = ['region', 'name']
         ordering        = ['region', 'name']
         db_table        = 'coin_country'
+
+    def __str__(self):
+        return self.name
 
 
 class Category(models.Model):
@@ -42,6 +48,9 @@ class Category(models.Model):
         ordering        = ['country', 'name']
         db_table        = 'coin_category'
 
+    def __str__(self):
+        return (self.country.name + ' > ' + self.name)
+
 
 class Collection(models.Model):
     """
@@ -57,6 +66,9 @@ class Collection(models.Model):
         ordering        = ['category', 'name']
         db_table        = 'coin_collection'
 
+    def __str__(self):
+        return (self.category.name + ' > ' + self.name)
+
 
 ##------------------MintedBy Information------------------##
 class MintedBy(models.Model):
@@ -69,6 +81,9 @@ class MintedBy(models.Model):
     class Meta():
         db_table = 'coin_minted_by'
 
+    def __str__(self):
+        return self.name
+
 
 class AuthorName(models.Model):
     """
@@ -80,6 +95,9 @@ class AuthorName(models.Model):
     class Meta():
         db_table = 'coin_author_name'
 
+    def __str__(self):
+        return self.name
+
 
 class SculptorName(models.Model):
     """
@@ -90,6 +108,9 @@ class SculptorName(models.Model):
 
     class Meta():
         db_table = 'coin_sculptor_name'
+
+    def __str__(self):
+        return self.name
 
 
 
@@ -104,6 +125,9 @@ class Material(models.Model):
     class Meta():
         db_table = 'coin_material'
 
+    def __str__(self):
+        return self.name
+
 
 class Quality(models.Model):
     """
@@ -114,6 +138,9 @@ class Quality(models.Model):
 
     class Meta():
         db_table = 'coin_quality'
+
+    def __str__(self):
+        return self.name
 
 
 class Edge(models.Model):
@@ -126,6 +153,9 @@ class Edge(models.Model):
     class Meta():
         db_table = 'coin_edge'
 
+    def __str__(self):
+        return self.name
+
 
 ##-----------Characteristics Information-----------##
 class Shape(models.Model):
@@ -137,6 +167,9 @@ class Shape(models.Model):
 
     class Meta():
         db_table = 'coin_shape'
+
+    def __str__(self):
+        return self.name
 
 
 ##---------------Coin Information---------------##
@@ -155,10 +188,14 @@ class CoinFamily(models.Model):
     minted_by  = models.ForeignKey(MintedBy, on_delete = models.CASCADE,
                                    blank = True, default = "")
 
+
     class Meta():
         unique_together = ['collection', 'name']
         ordering        = ['collection', 'name', 'minted_by']
         db_table        = 'coin_family'
+
+    def __str__(self):
+        return (self.collection.category.country.name + ' > ' + self.name)
 
 
 class CoinStyle(models.Model):
@@ -225,6 +262,9 @@ class CoinStyle(models.Model):
                            'km_number',    'additional_name']
         ordering        = ['year', 'coin_family', 'material', 'standard']
         db_table        = 'coin_style'
+
+    def __str__(self):
+        return (self.year + self.coin_family.name + self.material.name + self.standard)
 
 
 class SubStyle(models.Model):
