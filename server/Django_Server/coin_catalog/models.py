@@ -22,7 +22,7 @@ class Country(models.Model):
     name   - Country Name, e.g. UK, Russia, USA
     """
 
-    region = models.ForeignKey(Region, on_delete = models.CASCADE)
+    region = models.ForeignKey(Region, related_name = 'countries', on_delete = models.CASCADE)
     name   = models.CharField(max_length = 100)
 
     class Meta():
@@ -40,7 +40,7 @@ class Category(models.Model):
     name    - Category Name, e.g. History and Culture, Myths and etc.
     """
 
-    country = models.ForeignKey(Country, on_delete = models.CASCADE)
+    country = models.ForeignKey(Country, related_name = 'categories', on_delete = models.CASCADE)
     name    = models.CharField(max_length = 255)
 
     class Meta():

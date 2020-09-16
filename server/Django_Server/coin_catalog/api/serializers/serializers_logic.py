@@ -85,3 +85,7 @@ def get_country_from_coin_family(coin_family_object):
 
 def get_country_from_coin_style(coin_style_object):
     return get_country_from_coin_family(coin_style_object.coin_family)
+
+
+##-------------------Get Category Functions-------------------##
+#def get

@@ -5,11 +5,15 @@ import coin_catalog.api.serializers.serializers_logic as Logic
 
 
 class RegionSerializer(serializers.HyperlinkedModelSerializer):
-    total_coins = serializers.SerializerMethodField('get_number_of_coins')
+    total_coins  = serializers.SerializerMethodField('get_number_of_coins')
+    countries    = serializers.HyperlinkedRelatedField(
+        view_name    = 'country-detail',
+        read_only    = True,
+        many         = True)
 
     class Meta:
         model = CoinModel.Region
-        fields = ['id', 'name', 'total_coins']
+        fields = ['id', 'name', 'total_coins', 'countries']
 
     def get_number_of_coins(self, region):
         return Logic.get_number_of_coins_from_region(region.id)
@@ -18,10 +22,14 @@ class RegionSerializer(serializers.HyperlinkedModelSerializer):
 class CountrySerializer(serializers.HyperlinkedModelSerializer):
     region      = serializers.SerializerMethodField('get_region_name')
     total_coins = serializers.SerializerMethodField('get_number_of_coins')
+    categories  = serializers.HyperlinkedRelatedField(
+        view_name = 'category-detail',
+        read_only = True,
+        many      = True)
 
     class Meta:
         model  = CoinModel.Country
-        fields = ['id', 'region', 'name', 'total_coins']
+        fields = ['id', 'region', 'name', 'total_coins', 'categories']
 
     def get_region_name(self, country):
         return Logic.get_region_from_country(country)
