@@ -69,20 +69,9 @@ class ShapeSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CoinFamilySerializer(serializers.HyperlinkedModelSerializer):
-    authors   = serializers.SerializerMethodField()
-    sculptors = serializers.SerializerMethodField()
-
     class Meta:
         model  = Coin.CoinFamily
-        fields = ['id', 'collection', 'name', 'minted_by', 'authors', 'sculptors']
-
-    def get_authors(self, object):
-        author_list = (Coin.CoinAuthor).objects.filter(coin_family = object.pk)
-        return CoinAuthorSerializer(author_list, many = True, context = self.context).data
-
-    def get_sculptors(self, object):
-        sculptor_list = (Coin.CoinSculptor).objects.filter(coin_family = object.pk)
-        return CoinSculptorSerializer(sculptor_list, many = True, context = self.context).data
+        fields = ['id', 'collection', 'name', 'minted_by']
 
 
 class CoinStyleSerializer(serializers.HyperlinkedModelSerializer):
