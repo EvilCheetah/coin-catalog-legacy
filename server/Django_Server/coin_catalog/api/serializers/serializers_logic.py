@@ -24,7 +24,7 @@ def get_number_of_coins_from_country(country_id_list):
 
 
 def get_number_of_coins_from_categoty(category_id_list):
-    catetgory_id_list = _convert_to_list(category_id_list)
+    category_id_list = _convert_to_list(category_id_list)
 
     return get_number_of_coins_from_collection(
         [collection.id for collection in CoinModel.Collection.objects.filter(category_id__in = category_id_list)]

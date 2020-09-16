@@ -4,7 +4,7 @@ import coin_catalog.models as CoinModel
 import coin_catalog.api.serializers.serializers_logic as Logic
 
 
-class RegionSerializer(serializers.ModelSerializer):
+class RegionSerializer(serializers.HyperlinkedModelSerializer):
     total_coins = serializers.SerializerMethodField('get_number_of_coins')
 
     class Meta:
@@ -15,7 +15,7 @@ class RegionSerializer(serializers.ModelSerializer):
         return Logic.get_number_of_coins_from_region(region.id)
 
 
-class CountrySerializer(serializers.ModelSerializer):
+class CountrySerializer(serializers.HyperlinkedModelSerializer):
     region      = serializers.SerializerMethodField('get_region_name')
     total_coins = serializers.SerializerMethodField('get_number_of_coins')
 
@@ -32,7 +32,7 @@ class CountrySerializer(serializers.ModelSerializer):
 
 
 
-class CategorySerialier(serializers.HyperlinkedModelSerializer):
+class CategorySerializer(serializers.HyperlinkedModelSerializer):
     total_coins = serializers.SerializerMethodField('get_number_of_coins')
 
     class Meta:
