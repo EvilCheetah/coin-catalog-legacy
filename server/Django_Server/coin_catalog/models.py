@@ -22,7 +22,7 @@ class Country(models.Model):
     name   - Country Name, e.g. UK, Russia, USA
     """
 
-    region = models.ForeignKey(Region, related_name = 'countries', on_delete = models.CASCADE)
+    region = models.ForeignKey(Region, related_name = 'country_list', on_delete = models.CASCADE)
     name   = models.CharField(max_length = 100)
 
     class Meta():
@@ -40,7 +40,7 @@ class Category(models.Model):
     name    - Category Name, e.g. History and Culture, Myths and etc.
     """
 
-    country = models.ForeignKey(Country, related_name = 'categories', on_delete = models.CASCADE)
+    country = models.ForeignKey(Country, related_name = 'category_list', on_delete = models.CASCADE)
     name    = models.CharField(max_length = 255)
 
     class Meta():
@@ -58,7 +58,7 @@ class Collection(models.Model):
     name     - Collection (SubCategory), e.g. Saints, Greek Gods and etc.
     """
 
-    category = models.ForeignKey(Category, on_delete = models.CASCADE)
+    category = models.ForeignKey(Category, related_name = 'collection_list', on_delete = models.CASCADE)
     name     = models.CharField(max_length = 255)
 
     class Meta():
@@ -183,7 +183,7 @@ class CoinFamily(models.Model):
     mintedBy   - Reference to MintedBy Table
     """
 
-    collection = models.ForeignKey(Collection, on_delete = models.CASCADE)
+    collection = models.ForeignKey(Collection, related_name = 'coin_family_list', on_delete = models.CASCADE)
     name       = models.CharField(max_length = 255)
     minted_by  = models.ForeignKey(MintedBy, on_delete = models.CASCADE,
                                    blank = True, default = "")
@@ -235,7 +235,7 @@ class CoinStyle(models.Model):
     """
 
     year            = models.IntegerField()
-    coin_family     = models.ForeignKey(CoinFamily, on_delete = models.CASCADE)
+    coin_family     = models.ForeignKey(CoinFamily, related_name = 'coin_style_list', on_delete = models.CASCADE)
     shape           = models.ForeignKey(Shape,      on_delete = models.CASCADE)
     quality         = models.ForeignKey(Quality,    on_delete = models.CASCADE)
     edge            = models.ForeignKey(Edge,       on_delete = models.CASCADE)
@@ -264,7 +264,7 @@ class CoinStyle(models.Model):
         db_table        = 'coin_style'
 
     def __str__(self):
-        return (self.year + self.coin_family.name + self.material.name + self.standard)
+        return (str(self.year) + ' ' + self.coin_family.name + ' ' + self.material.name + ' ' + self.standard)
 
 
 class SubStyle(models.Model):
@@ -316,6 +316,9 @@ class SideOfCoin(models.Model):
 
     class Meta():
         db_table = 'coin_side'
+
+    def __str__(self):
+        return self.name
 
 
 class CoinAuthor(models.Model):
