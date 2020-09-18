@@ -2,9 +2,6 @@ import coin_catalog.models as CoinModel
 
 
 ##-------------------Local Functions-------------------##
-"""
-These functions are used only here
-"""
 def _is_list(object):
     return isinstance(object, list)
 
@@ -14,9 +11,6 @@ def _convert_to_list(object):
 
 
 ##-------------------Get Number of Coins-------------------##
-"""
-These functions get the total number of coins
-"""
 def get_number_of_coins_from_region(region_id):
     return get_number_of_coins_from_country(
         [country.id for country in CoinModel.Country.objects.filter(region_id = region_id)]
@@ -54,11 +48,8 @@ def get_number_of_coins_from_coin_family(coin_family_id_list):
 
 
 ##-------------------Get Region Functions-------------------##
-"""
-These functions get region name
-"""
 def get_region_from_country(country_object):
-    return country_object.region.name
+    return country_object.region.id
 
 def get_region_from_category(category_object):
     return get_region_from_country(category_object.country)
@@ -75,7 +66,7 @@ def get_region_from_coin_style(coin_style_object):
 
 ##-------------------Get Country Functions-------------------##
 def get_country_from_category(category_object):
-    return category_object.country.name
+    return category_object.country.id
 
 def get_country_from_collection(collection_object):
     return get_country_from_category(collection_object.category)
@@ -88,4 +79,74 @@ def get_country_from_coin_style(coin_style_object):
 
 
 ##-------------------Get Category Functions-------------------##
-#def get
+def get_category_from_collection(collection_object):
+    return collection_object.category.id
+
+def get_category_from_coin_family(coin_family_object):
+    return get_category_from_collection(coin_family_object.collection)
+
+def get_category_from_coin_style(coin_style_object):
+    return get_category_from_coin_family(coin_style_object.coin_family)
+
+
+##-------------------Get Collection Functions-------------------##
+def get_collection_from_coin_family(coin_family_object):
+    return coin_family_object.collection.id
+
+
+def get_collection_from_coin_style(coin_style_object):
+    return get_collection_from_coin_family(coin_style_object.coin_family)
+
+
+##-------------------Get Coin Family Function-------------------##
+def get_coin_family_from_coin_style(coin_style_object):
+    return coin_style_object.coin_family.id
+
+
+##-------------------Get Authors Functions-------------------##
+def get_authors_from_coin_family(coin_family_object):
+    return [
+        {
+            'side':   coin_author_object.side.id,
+            'author': coin_author_object.author.id
+        }
+        for coin_author_object in
+        CoinModel.CoinAuthor.objects.filter(coin_family_id = coin_family_object.id)
+    ]
+
+def get_authors_from_coin_style(coin_style_object):
+    return get_authors_from_coin_family(coin_style_object.coin_family)
+
+
+##-------------------Get Sculptors Functions-------------------##
+def get_sculptors_from_coin_family(coin_family_object):
+    return [
+        {
+            'side':     coin_sculptor_object.side.id,
+            'sculptor': coin_sculptor_object.sculptor.id
+        }
+
+        for coin_sculptor_object in
+        CoinModel.CoinSculptor.objects.filter(coin_family_id = coin_family_object.id)
+    ]
+
+def get_sculptors_from_coin_style(coin_style_object):
+    return get_sculptors_from_coin_family(coin_style_object.coin_family)
+
+
+def get_minted_by_from_coin_family(coin_family_object):
+    return coin_family_object.minted_by.id
+
+def get_minted_by_from_coin_style(coin_style_object):
+    return get_minted_by_from_coin_family(coin_style_object.coin_family)
+
+
+def get_images_from_coin_style(coin_style_object):
+    return [
+        {
+            'side': image_object.side.id,
+            'path': image_object.path
+        }
+        for image_object in
+        CoinModel.Image.objects.filter(coin_style_id = coin_style_object.id)
+    ]
