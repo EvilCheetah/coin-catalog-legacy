@@ -11,7 +11,7 @@ export class SculptorsService {
   constructor(private http:HttpClient) { }
 
   public getAllSculptors():Observable<Sculptor[]>{
-    return this.http.get<Sculptor[]>("");
+    return this.http.get<Sculptor[]>("http://127.0.0.1:8000/sculptor_name/");
   }
 
   public editSculptor(sculptor:Sculptor){

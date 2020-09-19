@@ -12,11 +12,11 @@ export class CategoriesService {
   constructor(private http:HttpClient) { }
 
   public getAllCategories():Observable<Category[]>{
-    return this.http.get<Category[]>("");
+    return this.http.get<Category[]>("http://127.0.0.1:8000/category/");
   }
 
   public getAllCountries():Observable<Country[]>{
-    return this.http.get<Country[]>("");
+    return this.http.get<Country[]>("http://127.0.0.1:8000/country/");
   }
 
   public editCategory(category:Category){

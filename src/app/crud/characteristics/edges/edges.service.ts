@@ -11,7 +11,7 @@ export class EdgesService {
   constructor(private http:HttpClient) { }
 
   public getAllEdges():Observable<Edge[]>{
-    return this.http.get<Edge[]>("");
+    return this.http.get<Edge[]>("http://127.0.0.1:8000/edge/");
   }
 
   public editEdge(edge:Edge){

@@ -13,9 +13,9 @@ export class CountriesComponent implements OnInit {
 
   constructor(private service:CountriesService) { }
 
-  regions:Region[]=[{id:1, name:"Region1"}, {id:2, name:"Region2"}];
+  regions:Region[]=[];
 
-  countries:Country[]=[{id:1, name:"Russia", region:1}, {id:2, name:"Belarus", region:2}];
+  countries:Country[]=[];
 
   regionControl= new FormControl('',[Validators.required, Validators.minLength(1)]);
 
@@ -26,8 +26,8 @@ export class CountriesComponent implements OnInit {
   createMode:boolean=false;
 
   ngOnInit(): void {
-    //this.loadCountries();
-    //this.loadRegions();
+    this.loadCountries();
+    this.loadRegions();
   }
 
   loadCountries(){

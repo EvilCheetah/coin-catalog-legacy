@@ -11,7 +11,7 @@ export class QualitiesService {
   constructor(private http:HttpClient) { }
 
   public getAllQualities():Observable<Quality[]>{
-    return this.http.get<Quality[]>("");
+    return this.http.get<Quality[]>("http://127.0.0.1:8000/quality/");
   }
 
   public editQuality(quality:Quality){

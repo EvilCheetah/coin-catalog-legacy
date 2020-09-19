@@ -13,8 +13,7 @@ export class RegionsComponent implements OnInit {
   constructor(private service:RegionsService) { }
 
   regions:Region[]=[
-    {name:'hello', id:1},
-    {name:'hell', id:2},
+    
   ];
 
   selectedRegion:Region=new Region();
@@ -22,11 +21,11 @@ export class RegionsComponent implements OnInit {
   createMode:boolean=false;
 
   ngOnInit(): void {
-    //this.loadRegions();
+    this.loadRegions();
   }
 
   loadRegions(){
-    this.service.getAllRegions();
+    this.service.getAllRegions().subscribe(data=>this.regions=data);
   }
 
   changeCreateMode(){

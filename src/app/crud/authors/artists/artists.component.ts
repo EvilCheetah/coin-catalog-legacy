@@ -12,21 +12,18 @@ export class ArtistsComponent implements OnInit {
 
   constructor(private service:ArtistsService) { }
 
-  artists:Author[]=[
-    {name:'hello', id:1},
-    {name:'hell', id:2},
-  ];
+  artists:Author[]=[];
 
   selectedArtist:Author=new Author();
   nameControl= new FormControl('', [Validators.minLength(1), Validators.required]);
   createMode:boolean=false;
 
   ngOnInit(): void {
-    //this.loadRegions();
+    this.loadArtists();
   }
 
   loadArtists(){
-    this.service.getAllArtists();
+    this.service.getAllArtists().subscribe(data=>this.artists=data);
   }
 
   changeCreateMode(){

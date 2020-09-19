@@ -13,21 +13,18 @@ export class ShapesComponent implements OnInit {
 
   constructor(private service:ShapesService) { }
 
-  shapes:Shape[]=[
-    {name:'hello', id:1},
-    {name:'hell', id:2},
-  ];
+  shapes:Shape[]=[];
 
   selectedShape:Shape=new Shape();
   nameControl= new FormControl('', [Validators.minLength(1), Validators.required]);
   createMode:boolean=false;
 
   ngOnInit(): void {
-    //this.loadRegions();
+    this.loadShapes();
   }
 
   loadShapes(){
-    this.service.getAllShapes();
+    this.service.getAllShapes().subscribe(data=>this.shapes=data);
   }
 
   changeCreateMode(){

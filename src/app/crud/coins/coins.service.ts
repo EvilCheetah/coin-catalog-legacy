@@ -26,41 +26,41 @@ export class CoinsService {
   constructor(private http:HttpClient) { }
 
   getAllCoins():Observable<Coin[]>{
-    return this.http.get<Coin[]>("");
+    return this.http.get<Coin[]>("http://127.0.0.1:8000/coin_family/");
   }
 
   getAllCollections():Observable<Collection[]>{
-    return this.http.get<Collection[]>("");
+    return this.http.get<Collection[]>("http://127.0.0.1:8000/collection/");
   }
 
   getAllAuthors():Observable<Author[]>{
-    return this.http.get<Author[]>("");
+    return this.http.get<Author[]>("http://127.0.0.1:8000/author_name/");
   }
 
   getAllSculptors():Observable<Sculptor[]>{
-    return this.http.get<Sculptor[]>("");
+    return this.http.get<Sculptor[]>("http://127.0.0.1:8000/sculptor_name/");
   }
 
   getAllMintedBy():Observable<MintedBy[]>{
-    return this.http.get<MintedBy[]>("");
+    return this.http.get<MintedBy[]>("http://127.0.0.1:8000/minted_by/");
   }
 
  
 
   getAllShapes():Observable<Shape[]>{
-    return this.http.get<Shape[]>("");
+    return this.http.get<Shape[]>("http://127.0.0.1:8000/shapes/");
   }
 
   getAllQualities():Observable<Quality[]>{
-    return this.http.get<Quality[]>("");
+    return this.http.get<Quality[]>("http://127.0.0.1:8000/quality/");
   }
 
   getAllEdges():Observable<Edge[]>{
-    return this.http.get<Edge[]>("");
+    return this.http.get<Edge[]>("http://127.0.0.1:8000/edge/");
   }
 
   getAllMaterials():Observable<Material[]>{
-    return this.http.get<Material[]>("");
+    return this.http.get<Material[]>("http://127.0.0.1:8000/material/");
   }
 
   getSubstylesById(id:number):Observable<SubStyle[]>{

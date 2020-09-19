@@ -13,9 +13,9 @@ export class CollectionsComponent implements OnInit {
 
   constructor(private service:CollectionsService) { }
 
-  collections:Collection[]=[{id:1, name:"Collection1", category:1}, {id:2, name:"Collection2", category:2}];
+  collections:Collection[]=[];
 
-  categories:Category[]=[{id:1, name:"Russia", country:1}, {id:2, name:"Belarus", country:2}];
+  categories:Category[]=[];
 
   categoryControl= new FormControl('',[Validators.required, Validators.minLength(1)]);
 
@@ -26,8 +26,8 @@ export class CollectionsComponent implements OnInit {
   createMode:boolean=false;
 
   ngOnInit(): void {
-    //this.loadCountries();
-    //this.loadRegions();
+    this.loadCollection();
+    this.loadCategories();
   }
   loadCollection(){
     this.service.getAllCollections().subscribe((data)=>this.collections=data);

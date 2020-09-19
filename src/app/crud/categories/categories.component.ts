@@ -14,24 +14,22 @@ export class CategoriesComponent implements OnInit {
   constructor(private service:CategoriesService) { }
 
   categories:Category[]=[
-    {name:'hello', id:1, country:1},
-    {name:'hell', id:2, country:2}
+    
   ];
 
   selectedCategory=new Category();
   createMode:boolean=false;
 
   countries:Country[]=[
-    {name:'Russia', id:1, region:1},
-    {name:'Belarus', id:2, region:2}
+    
   ];
 
   countryControl=new FormControl('',[Validators.required, Validators.minLength(1)]);
   nameControl=new FormControl('',[Validators.required, Validators.minLength(1)] );
 
   ngOnInit(): void {
-   /* this.loadCategories();
-    this.loadCountries();*/
+    this.loadCategories();
+    this.loadCountries();
   }
   loadCategories(){
     this.service.getAllCategories().subscribe((data)=>this.categories=data);

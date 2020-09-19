@@ -12,7 +12,7 @@ export class ArtistsService {
   constructor(private http:HttpClient) { }
 
   public getAllArtists():Observable<Author[]>{
-    return this.http.get<Author[]>("");
+    return this.http.get<Author[]>("http://127.0.0.1:8000/author_name/");
   }
 
   public editArtist(artist:Author){

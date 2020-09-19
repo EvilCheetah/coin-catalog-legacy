@@ -13,21 +13,18 @@ export class EdgesComponent implements OnInit {
 
   constructor(private service:EdgesService) { }
 
-  edges:Edge[]=[
-    {name:'hello', id:1},
-    {name:'hell', id:2},
-  ];
+  edges:Edge[]=[];
 
   selectedEdge:Edge=new Edge();
   nameControl= new FormControl('', [Validators.minLength(1), Validators.required]);
   createMode:boolean=false;
 
   ngOnInit(): void {
-    //this.loadRegions();
+    this.loadEdges();
   }
 
   loadEdges(){
-    this.service.getAllEdges();
+    this.service.getAllEdges().subscribe(data=>this.edges=data);
   }
 
   changeCreateMode(){

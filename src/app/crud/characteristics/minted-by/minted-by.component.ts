@@ -12,21 +12,18 @@ export class MintedByComponent implements OnInit {
 
   constructor(private service:MintedByService) { }
 
-  mintedBy:MintedBy[]=[
-    {name:'hello', id:1},
-    {name:'hell', id:2},
-  ];
+  mintedBy:MintedBy[]=[];
 
   selectedMintedBy:MintedBy=new MintedBy();
   nameControl= new FormControl('', [Validators.minLength(1), Validators.required]);
   createMode:boolean=false;
 
   ngOnInit(): void {
-    //this.loadRegions();
+    this.loadMintedBy();
   }
 
   loadMintedBy(){
-    this.service.getAllMintedBy();
+    this.service.getAllMintedBy().subscribe(data=>this.mintedBy=data);
   }
 
   changeCreateMode(){

@@ -12,21 +12,18 @@ export class QualitiesComponent implements OnInit {
 
   constructor(private service:QualitiesService) { }
 
-  qualities:Quality[]=[
-    {name:'hello', id:1},
-    {name:'hell', id:2},
-  ];
+  qualities:Quality[]=[];
 
   selectedQuality:Quality=new Quality();
   nameControl= new FormControl('', [Validators.minLength(1), Validators.required]);
   createMode:boolean=false;
 
   ngOnInit(): void {
-    //this.loadRegions();
+    this.loadQualities();
   }
 
   loadQualities(){
-    this.service.getAllQualities();
+    this.service.getAllQualities().subscribe(data=>this.qualities=data);
   }
 
   changeCreateMode(){

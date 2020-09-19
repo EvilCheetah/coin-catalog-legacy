@@ -12,10 +12,10 @@ export class CollectionsService {
   constructor(private http:HttpClient) { }
 
   public getAllCategories():Observable<Category[]>{
-    return this.http.get<Category[]>("");
+    return this.http.get<Category[]>("http://127.0.0.1:8000/category/");
   }
   public getAllCollections():Observable<Collection[]>{
-    return this.http.get<Collection[]>("");
+    return this.http.get<Collection[]>("http://127.0.0.1:8000/collection/");
   }
 
   public editCollection(collection:Collection){

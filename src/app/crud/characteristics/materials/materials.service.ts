@@ -11,7 +11,7 @@ export class MaterialsService {
   constructor(private http:HttpClient) { }
 
   public getAllMaterials():Observable<Material[]>{
-    return this.http.get<Material[]>("");
+    return this.http.get<Material[]>("http://127.0.0.1:8000/material/");
   }
 
   public editMaterial(material:Material){

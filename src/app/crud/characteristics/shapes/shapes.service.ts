@@ -11,7 +11,7 @@ export class ShapesService {
   constructor(private http:HttpClient) { }
 
   public getAllShapes():Observable<Shape[]>{
-    return this.http.get<Shape[]>("");
+    return this.http.get<Shape[]>("http://127.0.0.1:8000/shape/");
   }
 
   public editShape(shape:Shape){

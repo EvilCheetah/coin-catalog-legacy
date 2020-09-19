@@ -11,7 +11,7 @@ export class RegionsService {
   constructor(private http:HttpClient) { }
 
   public getAllRegions():Observable<Region[]>{
-    return this.http.get<Region[]>("");
+    return this.http.get<Region[]>("http://127.0.0.1:8000/region/");
   }
 
   public editRegion(category:Region){

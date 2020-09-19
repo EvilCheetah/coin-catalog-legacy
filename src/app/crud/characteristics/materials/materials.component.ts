@@ -12,21 +12,18 @@ export class MaterialsComponent implements OnInit {
 
   constructor(private service:MaterialsService) { }
 
-  materials:Material[]=[
-    {name:'hello', id:1},
-    {name:'hell', id:2},
-  ];
+  materials:Material[]=[];
 
   selectedMaterial:Material=new Material();
   nameControl= new FormControl('', [Validators.minLength(1), Validators.required]);
   createMode:boolean=false;
 
   ngOnInit(): void {
-    //this.loadRegions();
+    this.loadMaterials();
   }
 
   loadMaterials(){
-    this.service.getAllMaterials();
+    this.service.getAllMaterials().subscribe(data=>this.materials=data);
   }
 
   changeCreateMode(){

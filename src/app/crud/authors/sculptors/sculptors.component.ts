@@ -12,21 +12,18 @@ export class SculptorsComponent implements OnInit {
 
   constructor(private service:SculptorsService) { }
 
-  sculptors:Sculptor[]=[
-    {name:'hello', id:1},
-    {name:'hell', id:2},
-  ];
+  sculptors:Sculptor[]=[];
 
   selectedSculptor:Sculptor=new Sculptor();
   nameControl= new FormControl('', [Validators.minLength(1), Validators.required]);
   createMode:boolean=false;
 
   ngOnInit(): void {
-    //this.loadRegions();
+    this.loadSculptors();
   }
 
   loadSculptors(){
-    this.service.getAllSculptors();
+    this.service.getAllSculptors().subscribe(data=>this.sculptors=data);
   }
 
   changeCreateMode(){

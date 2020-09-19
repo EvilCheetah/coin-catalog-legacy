@@ -12,10 +12,10 @@ export class CountriesService {
   constructor(private http:HttpClient) { }
 
   public getAllRegions():Observable<Region[]>{
-    return this.http.get<Region[]>("");
+    return this.http.get<Region[]>("http://127.0.0.1:8000/region/");
   }
   public getAllCountries():Observable<Country[]>{
-    return this.http.get<Country[]>("");
+    return this.http.get<Country[]>("http://127.0.0.1:8000/country/");
   }
 
   public editCountry(country:Country){

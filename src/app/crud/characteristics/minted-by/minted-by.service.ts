@@ -11,7 +11,7 @@ export class MintedByService {
   constructor(private http:HttpClient) { }
 
   public getAllMintedBy():Observable<MintedBy[]>{
-    return this.http.get<MintedBy[]>("");
+    return this.http.get<MintedBy[]>("http://127.0.0.1:8000/minted_by/");
   }
 
   public editMintedBy(mintedBy:MintedBy){
