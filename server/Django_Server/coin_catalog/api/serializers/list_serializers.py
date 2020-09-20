@@ -82,7 +82,7 @@ class CoinStyleSerializer(serializers.ModelSerializer):
                   'material',  'standard', 'denomination',
                   'mintage',   'additional_name',
                   'km_number', 'is_rare',  'is_substyle',
-                  'weight',    'length',   'width']
+                  'weight',    'length',   'width', 'thickness']
 
 
 class SubStyleSerializer(serializers.ModelSerializer):

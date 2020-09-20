@@ -253,6 +253,7 @@ class CoinStyle(models.Model):
     weight          = models.FloatField()
     length          = models.FloatField()
     width           = models.FloatField()
+    thickness       = models.FloatField()
 
     class Meta():
         unique_together = ['year',         'coin_family',

@@ -206,7 +206,7 @@ class CoinStyleSerializer(serializers.ModelSerializer):
                   'material',  'standard',
                   'denomination', 'mintage',
                   #physical properties
-                  'weight',   'length', 'width',
+                  'weight',   'length', 'width', 'thickness',
                   'km_number', 'is_rare',  'is_substyle',
                   #creators
                   'authors', 'sculptors', 'minted_by', 'images'
