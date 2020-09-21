@@ -7,7 +7,7 @@ import coin_catalog.models as CoinModel
 import coin_catalog.api.serializers.list_serializers as CoinListSerializer
 import coin_catalog.api.serializers.instance_serializers as CoinInstanceSerializer
 import coin_catalog.api.filters as CoinFilter
-import coin_catalog.api.view_logic as OutputLogic
+import coin_catalog.api.view_logic as ViewSetLogic
 
 
 class RegionViewSet(viewsets.ModelViewSet):
@@ -15,8 +15,11 @@ class RegionViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.RegionSerializer
     filterset_class  = CoinFilter.RegionFilter
 
+    def get_queryset(self):
+        return ViewSetLogic.get_region_queryset(self.request)
+
     def retrieve(self, request, pk = None):
-        return Response(OutputLogic._get_serialized_data(
+        return Response(ViewSetLogic._get_object_instance(
                                 primary_key = pk,
                                 model_      = CoinModel.Region,
                                 serializer_ = CoinInstanceSerializer.RegionSerializer,
@@ -24,11 +27,14 @@ class RegionViewSet(viewsets.ModelViewSet):
 
 
 class CountryViewSet(viewsets.ModelViewSet):
-    queryset = CoinModel.Country.objects.all()
+    queryset         = CoinModel.Country.objects.all()
     serializer_class = CoinListSerializer.CountrySerializer
 
+    def get_queryset(self):
+        return ViewSetLogic.get_country_queryset(self.request)
+
     def retrieve(self, request, pk = None):
-        return Response(OutputLogic._get_serialized_data(
+        return Response(ViewSetLogic._get_object_instance(
                                 primary_key = pk,
                                 model_      = CoinModel.Country,
                                 serializer_ = CoinInstanceSerializer.CountrySerializer,
@@ -40,8 +46,11 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.CategorySerialier
     filterset_class  = CoinFilter.CategoryFilter
 
+    def get_queryset(self):
+        return ViewSetLogic.get_category_queryset(self.request)
+
     def retrieve(self, request, pk = None):
-        return Response(OutputLogic._get_serialized_data(
+        return Response(ViewSetLogic._get_object_instance(
                                 primary_key = pk,
                                 model_      = CoinModel.Category,
                                 serializer_ = CoinInstanceSerializer.CategorySerializer,
@@ -53,8 +62,11 @@ class CollectionViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.CollectionSerializer
     filterset_class  = CoinFilter.CollectionFilter
 
+    def get_queryset(self):
+        return ViewSetLogic.get_collection_queryset(self.request)
+
     def retrieve(self, request, pk = None):
-        return Response(OutputLogic._get_serialized_data(
+        return Response(ViewSetLogic._get_object_instance(
                                 primary_key = pk,
                                 model_      = CoinModel.Collection,
                                 serializer_ = CoinInstanceSerializer.CollectionSerializer,
@@ -100,8 +112,11 @@ class CoinFamilyViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.CoinFamily.objects.all()
     serializer_class = CoinListSerializer.CoinFamilySerializer
 
+    def get_queryset(self):
+        return ViewSetLogic.get_coin_family_queryset(self.request)
+
     def retrieve(self, request, pk = None):
-        return Response(OutputLogic._get_serialized_data(
+        return Response(ViewSetLogic._get_object_instance(
                                 primary_key = pk,
                                 model_      = CoinModel.CoinFamily,
                                 serializer_ = CoinInstanceSerializer.CoinFamilySerializer,
@@ -111,6 +126,9 @@ class CoinFamilyViewSet(viewsets.ModelViewSet):
 class CoinStyleViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.CoinStyle.objects.all()
     serializer_class = CoinListSerializer.CoinStyleSerializer
+
+    def get_queryset(self):
+        return ViewSetLogic.get_coin_style_queryset(self.request)
 
     def retrieve(self, request, pk = None):
         queryset = CoinModel.CoinStyle.objects.filter(pk = pk)
