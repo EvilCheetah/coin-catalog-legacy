@@ -240,7 +240,7 @@ class CoinStyle(models.Model):
     quality         = models.ForeignKey(Quality,    on_delete = models.CASCADE)
     edge            = models.ForeignKey(Edge,       on_delete = models.CASCADE)
     material        = models.ForeignKey(Material,   on_delete = models.CASCADE)
-    standard        = models.CharField(max_length = 30, blank = True, default = "")
+    standard        = models.FloatField()
     denomination    = models.CharField(max_length = 255)
     mintage         = models.IntegerField()
 
