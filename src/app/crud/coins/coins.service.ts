@@ -17,6 +17,7 @@ import {CoinSculptor} from 'src/app/classes/coinSculptor';
 import {CoinAuthor} from 'src/app/classes/coinAuthor';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Side } from 'src/app/classes/side';
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +49,7 @@ export class CoinsService {
  
 
   getAllShapes():Observable<Shape[]>{
-    return this.http.get<Shape[]>("http://127.0.0.1:8000/shapes/");
+    return this.http.get<Shape[]>("http://127.0.0.1:8000/shape/");
   }
 
   getAllQualities():Observable<Quality[]>{
@@ -61,6 +62,10 @@ export class CoinsService {
 
   getAllMaterials():Observable<Material[]>{
     return this.http.get<Material[]>("http://127.0.0.1:8000/material/");
+  }
+
+  getAllSides():Observable<Side[]>{
+    return this.http.get<Side[]>("http://127.0.0.1:8000/side_of_coin/");
   }
 
   getSubstylesById(id:number):Observable<SubStyle[]>{
@@ -94,9 +99,11 @@ export class CoinsService {
   }
 
   getCoinsStyleById(id:number):Observable<CoinStyle>{
-    var param:HttpParams=new HttpParams();
-    param.set("id",id.toString())
-    return this.http.get<CoinStyle>("",{params:param});
+    return this.http.get<CoinStyle>("http://127.0.0.1:8000/coin_style/"+id);
+  }
+
+  getCoinById(id:number):Observable<Coin>{
+    return this.http.get<Coin>("http://127.0.0.1:8000/coin_family/"+id);
   }
 
   createCoin(coinInfo:CoinInfo[]){

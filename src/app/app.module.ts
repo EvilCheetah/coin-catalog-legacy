@@ -24,6 +24,7 @@ import {UsersComponent} from './crud/users/users.component';
 import { ArtistsComponent } from './crud/authors/artists/artists.component';
 import { SculptorsComponent } from './crud/authors/sculptors/sculptors.component';
 import { MintedByComponent } from './crud/characteristics/minted-by/minted-by.component';
+import { SidesComponent } from './crud/characteristics/sides/sides.component';
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { MintedByComponent } from './crud/characteristics/minted-by/minted-by.co
     ArtistsComponent,
     SculptorsComponent,
     MintedByComponent,
+    SidesComponent,
     
 
   ],

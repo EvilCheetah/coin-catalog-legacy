@@ -6,15 +6,18 @@ export class CoinStyle{
     quality:number;
     edge:number;
     material:number;
-    standart:string;
+    standart:number; //!
     denomination:string;
     mintage:number;
     additional_name:string;
     km_number:string;
+    
     is_rare:boolean;
     is_substyle:boolean;
+
     weight:number;
     length:number;
     width?:number;
+    thickness?:number;
     
 }

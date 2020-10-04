@@ -385,36 +385,35 @@
           <textarea id="note" style="resize: none;" class="form-control" cols="30" rows="10" formControlName="noteControl"></textarea>
         </div>
 
-        <input type="file" id="frontInput" accept="image/jpeg,image/png,image/gif" style="display: none;" (change)="previewFront($event)" #frontInput>
-        <input type="file" id="backInput" accept="image/jpeg,image/png,image/gif" style="display: none;" (change)="previewBack($event)" #backInput>
-        <input type="file" id="edgeInput" accept="image/jpeg,image/png,image/gif" style="display: none;" (change)="previewEdge($event)" #edgeInput>
+        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/gif" style="display: none;" (change)="previewFile($event)" #fileInput>
+       
 
         
-        <div class="form-row">
+        <div class="form-row" *ngFor="let side of sides; index as j">
           <div class="col-md-6">
-            <label for="frontImage">Front of the coin</label> 
+            <label>{{side.name}} of the coin</label> 
             <div class="form-group">
-              <img id="frontImage"
+              <img id="Image"
                class="img-thumbnail"
                 width="400"
                 height="400" 
-                src="{{frontPath}}"
-                (click)="frontInput.click()"
+                src="{{paths[j]}}"
+                (click)="sideId=side.id; fileInput.click()"
                 >
             </div>
             <div class="form-row" *ngIf="coinGroup.controls['multipleControl'].value==true">
-              <div class="col-md-6" *ngIf="filterCoinAuthors('front').length>0">
+              <div class="col-md-6" *ngIf="filterCoinAuthors(side.id).length>0">
                 <label for="chosenAuthors">Choosen authors</label>
-                <div class="form-group" style="display: flex;" id="chosenAuthors" *ngFor="let item of filterCoinAuthors('front'); index as i">
+                <div class="form-group" style="display: flex;" id="chosenAuthors" *ngFor="let item of filterCoinAuthors(side.id); index as i">
                   <input type="button"
                   class="btn btn-primary"
                   value={{getAuthorName(item.author)}}
                   (click)="removeAuthor(i)">
                 </div>  
               </div>
-              <div class="col-md-6" *ngIf="filterCoinSculptors('front').length>0">
+              <div class="col-md-6" *ngIf="filterCoinSculptors(side.id).length>0">
                 <label for="chosenSculptors">Choosen sculptors</label>
-                <div class="form-group" style="display: flex;" *ngFor="let item of filterCoinSculptors('front'); index as i">
+                <div class="form-group" style="display: flex;" *ngFor="let item of filterCoinSculptors(side.id); index as i">
                   <input type="button"
                   class="btn btn-primary"
                   value={{getSculptorName(item.sculptor)}}
@@ -428,25 +427,25 @@
               <div class="col-md-6">
                   <div class="form-group ">
                       <label for="authorSelect">Choose the author</label>
-                      <select class="form-control" id="authorSelect" formControlName="authorFrontControl">
-                        <option *ngFor="let author of hasAuthor('front')"
+                      <select class="form-control" id="authorSelect" formControlName="{{'author'+side.name+'Control'}}">
+                        <option *ngFor="let author of hasAuthor(side.id)"
                         [ngValue]="author.id">{{author.name}}</option>
                       </select>
                     <input
                     type="button"
                     class="btn btn-success"
                     value="Add new author"
-                    [disabled]="coinGroup.controls['authorFrontControl'].value==null"
+                    [disabled]="coinGroup.controls['author'+side.name+'Control'].value==null"
                     (click)=
-                    "addNewAuthor(coinGroup.controls['authorFrontControl'].value,'front');
-                    coinGroup.controls['authorFrontControl'].setValue(null)">  
+                    "addNewAuthor(coinGroup.controls['author'+side.name+'Control'].value,side.id);
+                    coinGroup.controls['author'+side.name+'Control'].setValue(null)">  
                   </div>
                 </div>
               <div class="col-md-6">  
                 <div class="form-group">
                   <label for="sculptorSelect">Choose the sculptor</label>
-                  <select class="form-control" id="sculptorSelect" formControlName="sculptorFrontControl">
-                    <option *ngFor="let sculptor of hasSculptor('front')"
+                  <select class="form-control" id="sculptorSelect" formControlName="{{'sculptor'+side.name+'Control'}}">
+                    <option *ngFor="let sculptor of hasSculptor(side.id)"
                       [ngValue]="sculptor.id">
                       {{sculptor.name}} 
                     </option>
@@ -454,145 +453,18 @@
                   <input type="button"
                   class="btn btn-success"
                   value="Add new sculptor"
-                  [disabled]="coinGroup.controls['sculptorFrontControl'].value==null"
-                  (click)="addNewSculptor(coinGroup.controls['sculptorFrontControl'].value,'front');
-                  coinGroup.controls['sculptorFrontControl'].setValue(null)">  
+                  [disabled]="coinGroup.controls['sculptor'+side.name+'Control'].value==null"
+                  (click)="addNewSculptor(coinGroup.controls['sculptor'+side.name+'Control'].value,side.id);
+                  coinGroup.controls['sculptor'+side.name+'Control'].setValue(null)">  
                 </div>
               </div>
             </div> 
           </div>  
           
-          <div class="col-md-6">
-            <label >Back of the coin</label>
-            <div class="form-group"> 
-              <img class="img-thumbnail" width="400" height="400" src={{backPath}} (click)="backInput.click()">
-              
-            </div>
-            <div class="form-row" *ngIf="coinGroup.controls['multipleControl'].value==true">
-              <div class="col-md-6" *ngIf="filterCoinAuthors('back').length>0">
-                <label for="chosenAuthors">Choosen authors</label>
-                <div class="form-group" style="display: flex;" id="chosenAuthors" *ngFor="let item of filterCoinAuthors('back'); index as i">
-                  <input type="button"
-                  class="btn btn-primary"
-                  value={{getAuthorName(item.author)}}
-                  (click)="removeAuthor(i)">
-                </div>  
-              </div>
-              <div class="col-md-6" *ngIf="filterCoinSculptors('back').length>0">
-                <label for="chosenSculptors">Choosen sculptors</label>
-                <div class="form-group" style="display: flex;" *ngFor="let item of filterCoinSculptors('back'); index as i">
-                  <input type="button"
-                  class="btn btn-primary"
-                  value={{getSculptorName(item.sculptor)}}
-                  (click)="removeSculptor(i)"
-                  >
-                </div>  
-              </div>
-            </div>
-    
-            <div class="form-row" *ngIf="coinGroup.controls['multipleControl'].value==true">
-              <div class="col-md-6">
-                  <div class="form-group ">
-                      <label for="authorSelect">Choose the author</label>
-                      <select class="form-control" id="authorSelect" formControlName="authorBackControl">
-                        <option *ngFor="let author of hasAuthor('back')"
-                        [ngValue]="author.id">{{author.name}}</option>
-                      </select>
-                    <input
-                    type="button"
-                    class="btn btn-success"
-                    value="Add new author"
-                    [disabled]="coinGroup.controls['authorBackControl'].value==null"
-                    (click)=
-                    "addNewAuthor(coinGroup.controls['authorBackControl'].value,'back');
-                    coinGroup.controls['authorBackControl'].setValue(null)">  
-                  </div>
-                </div>
-              <div class="col-md-6">  
-                <div class="form-group">
-                  <label for="sculptorSelect">Choose the sculptor</label>
-                  <select class="form-control" id="sculptorSelect" formControlName="sculptorBackControl">
-                    <option *ngFor="let sculptor of hasSculptor('back')"
-                      [ngValue]="sculptor.id">
-                      {{sculptor.name}} 
-                    </option>
-                  </select>
-                  <input type="button"
-                  class="btn btn-success"
-                  value="Add new sculptor"
-                  [disabled]="coinGroup.controls['sculptorBackControl'].value==null"
-                  (click)="addNewSculptor(coinGroup.controls['sculptorBackControl'].value,'back');
-                  coinGroup.controls['sculptorBackControl'].setValue(null)">  
-                </div>
-              </div>
-          </div>
-          </div>
-          <div class="col-md-6">
-            <label>Edge of the coin</label>
-            <div class="form-group"> 
-              <img class="img-thumbnail" width="400" height="400" src={{edgePath}} (click)="edgeInput.click()">
-
-            </div>
-            <div class="form-row" *ngIf="coinGroup.controls['multipleControl'].value==true">
-              <div class="col-md-6" *ngIf="filterCoinAuthors('edge').length>0">
-                <label for="chosenAuthors">Choosen authors</label>
-                <div class="form-group" style="display: flex;" id="chosenAuthors" *ngFor="let item of filterCoinAuthors('edge'); index as i">
-                  <input type="button"
-                  class="btn btn-primary"
-                  value={{getAuthorName(item.author)}}
-                  (click)="removeAuthor(i)">
-                </div>  
-              </div>
-              <div class="col-md-6" *ngIf="filterCoinSculptors('edge').length>0">
-                <label for="chosenSculptors">Choosen sculptors</label>
-                <div class="form-group" style="display: flex;" *ngFor="let item of filterCoinSculptors('edge'); index as i">
-                  <input type="button"
-                  class="btn btn-primary"
-                  value={{getSculptorName(item.sculptor)}}
-                  (click)="removeSculptor(i)"
-                  >
-                </div>  
-              </div>
-            </div>
-    
-            <div class="form-row" *ngIf="coinGroup.controls['multipleControl'].value==true">
-              <div class="col-md-6">
-                  <div class="form-group ">
-                      <label for="authorSelect">Choose the author</label>
-                      <select class="form-control" id="authorSelect" formControlName="authorEdgeControl">
-                        <option *ngFor="let author of hasAuthor('edge')"
-                        [ngValue]="author.id">{{author.name}}</option>
-                      </select>
-                    <input
-                    type="button"
-                    class="btn btn-success"
-                    value="Add new author"
-                    [disabled]="coinGroup.controls['authorEdgeControl'].value==null"
-                    (click)=
-                    "addNewAuthor(coinGroup.controls['authorEdgeControl'].value,'edge');
-                    coinGroup.controls['authorEdgeControl'].setValue(null)">  
-                  </div>
-                </div>
-              <div class="col-md-6">  
-                <div class="form-group">
-                  <label for="sculptorSelect">Choose the sculptor</label>
-                  <select class="form-control" id="sculptorSelect" formControlName="sculptorFrontControl">
-                    <option *ngFor="let sculptor of hasSculptor('edge')"
-                      [ngValue]="sculptor.id">
-                      {{sculptor.name}} 
-                    </option>
-                  </select>
-                  <input type="button"
-                  class="btn btn-success"
-                  value="Add new sculptor"
-                  [disabled]="coinGroup.controls['sculptorEdgeControl'].value==null"
-                  (click)="addNewSculptor(coinGroup.controls['sculptorFrontControl'].value,'edge');
-                  coinGroup.controls['sculptorEdgeControl'].setValue(null)">  
-                </div>
-              </div>
-          </div>
+          
+          
           </div>     
-        </div>
+        
         
         <div class="form-group" >
           <ng-template *ngIf="!editMode;else editTemplate">

@@ -1,0 +1,72 @@
+<ng-template [ngIf]="!createMode" [ngIfElse]="CreateTemplate">
+    <div class="form-group">
+      <input type="button" class="btn btn-success" value="Create new"
+      (click)="changeCreateMode()">
+    </div>
+      <table class="table table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Controls</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let side of sides">
+            <ng-template [ngIf]="side!=selectedSide" [ngIfElse]="EditTemplate">
+            <tr>
+              <td>{{side.name}}</td>
+              <td>
+                <input type="button" style="margin: 2.5pt;" class="btn btn-primary" value="Edit" (click)="selectSide(side)">
+                <input type="button" style="margin: 2.5pt;" class="btn btn-danger" value="Delete" (click)="deleteSide(side.id)">
+              </td>
+            </tr>
+          </ng-template>
+          </tbody>
+        </table>    
+  </ng-template>
+  
+  <ng-template #CreateTemplate>
+          
+        <div class="form-group">
+          <div *ngIf="nameControl.invalid  && nameControl.touched ">
+            <input class="form-control is-invalid" id="createName" placeholder="Name"  type="text"
+              [formControl]="nameControl"> 
+              <label class="invalid-feedback" for="createName">
+                Name can't be empty
+              </label> 
+            </div>
+          <div *ngIf="nameControl.valid  || nameControl.untouched ">
+            
+              <input class="form-control" id="createName" placeholder="Side name"  type="text" [formControl]="nameControl">
+            
+          </div>
+        </div>
+      
+        <div class="form-group">
+          <input type="button" style="margin:5pt" class="btn btn-success" value="Add" (click)="createSide()"
+          [disabled]="nameControl.invalid">
+          <input type="button" style="margin:5pt" class="btn btn-danger" value="Cansel" (click)="changeCreateMode()">
+        </div>
+  </ng-template>
+  
+  <ng-template #EditTemplate>
+      <tr>
+          <td>
+            <div *ngIf="nameControl.invalid  && nameControl.touched ">
+              <input class="form-control is-invalid" id="createName" placeholder="Name"  type="text"
+                [formControl]="nameControl"> 
+                <label class="invalid-feedback" for="createName">
+                  Name can't be empty
+                </label> 
+              </div>
+            <div *ngIf="nameControl.valid  || nameControl.untouched ">
+               
+                  <input type="text" id="editName" [formControl]="nameControl">
+                
+            </div>
+          </td>  
+          <td>
+            <input type="button" style="margin: 2.5pt;" class="btn btn-success" value="Save" (click)="saveEdit()">
+            <input type="button" style="margin: 2.5pt;" class="btn btn-danger" value="Cansel" (click)="cancelEdit()">
+          </td>
+      </tr>
+  </ng-template>

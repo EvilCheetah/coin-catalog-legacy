@@ -17,7 +17,8 @@ import {Collection} from 'src/app/classes/collection';
 import {CoinInfo} from 'src/app/classes/createCoin';
 import {CoinSculptor} from 'src/app/classes/coinSculptor';
 import {CoinAuthor} from 'src/app/classes/coinAuthor';
-import { typeWithParameters } from '@angular/compiler/src/render3/util';
+import { Side } from 'src/app/classes/side';
+
 
 
 
@@ -30,35 +31,24 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 })
 export class CoinsComponent implements OnInit {
 
-  coins:Coin[]=[{id:1, collection:1, name:"Coin1", mintedBy:1},
-  {id:2, collection:2, name:"Coin21", mintedBy:1}];
+  coins:Coin[]=[];
 
-  collections:Collection[]=[{id:1, name:"Collection1", category:1},
-  {id:2, name:"Collection2", category:2}];
-  authors:Author[]=[{id:1, name:"Author1"}];
-  sculptors:Sculptor[]=[{id:1, name:"Sculptor1"}];
-  mintedBy:MintedBy[]=[{id:1, name:"Belarus"}];
+  collections:Collection[]=[];
+  authors:Author[]=[];
+  sculptors:Sculptor[]=[];
+  mintedBy:MintedBy[]=[];
+  sides:Side[]=[];
+
+  coinsStyles:CoinStyle[]=[]
   
+  shapes: Shape[]=[];
+  qualities : Quality[]=[];
+  edges : Edge[]=[];
+  materials : Material[]=[];
 
-  coinsStyles:CoinStyle[]=[{id:1, year:1999, coin:1, shape:1,
-     quality:1, edge:1, material:1, standart:"Standart", denomination:"Denomination",
-      mintage:1, additional_name:"NaN", km_number:"Number", is_rare:false, is_substyle:false,
-    weight:10, length:30, width:40},
-    {id:2, year:1988, coin:2, shape:1,
-      quality:1, edge:1, material:1, standart:"Standart", denomination:"Denomination",
-       mintage:1, additional_name:"NaN", km_number:"Number", is_rare:true, is_substyle:true,
-     weight:10, length:30, width:40}
-  ]
-  
-  shapes: Shape[]=[{id:1, name:"Shape1"}];
-  qualities : Quality[]=[{id:1, name:"Quality1"}];
-  edges : Edge[]=[{id:1, name:"Edge1"}];
-  materials : Material[]=[{id:1, name:"Material1"}];
-
-  subStyles:SubStyle[]=[{id:1, parent_coin:1, substyle_coin:2 }];
+  subStyles:SubStyle[]=[];
   note = new Note;
-  images:Image[]=[{id:1, side:"front", coin_style:1, path:"https://dh.img.tyt.by/n/zamirovskiy/06/b/04_pushkinskaya_20200815_zam_tutby_phsl.jpg"},
-  {id:2, side:"back", coin_style:1, path:"https://dh.img.tyt.by/n/buryakina/08/c/photo_2020-08-15_16-32-09.jpg"}];
+  images:Image[]=[];
 
   selectedCoin=new Coin();
   createMode:Boolean=false;
@@ -72,12 +62,6 @@ export class CoinsComponent implements OnInit {
       mintedByControl:new FormControl("", [Validators.minLength(1), Validators.required]),
       authorControl:new FormControl(""),
       sculptorControl:new FormControl(""),
-      authorFrontControl:new FormControl(""),
-      sculptorFrontControl:new FormControl(""),
-      authorBackControl:new FormControl(""),
-      sculptorBackControl:new FormControl(""),
-      authorEdgeControl:new FormControl(""),
-      sculptorEdgeControl:new FormControl(""),
       yearControl:new FormControl("", [Validators.minLength(1), Validators.required]),
       shapeControl:new FormControl("", [Validators.minLength(1), Validators.required]),
       qualityControl:new FormControl("", [Validators.minLength(1), Validators.required]),
@@ -92,40 +76,36 @@ export class CoinsComponent implements OnInit {
       rareControl:new FormControl(""),
       substyleControl:new FormControl(""),
       weightControl:new FormControl("", [ Validators.required]),
-      lengthControl:new FormControl("", [ Validators.required]),
+      lengthControl:new FormControl("", []),
       widthControl:new FormControl("", [ Validators.required]),
+      thicknessControl:new FormControl("", [Validators.required]),
       noteControl:new FormControl("")
     }
   );
   
-
-
-  frontPath:any="assets/images/add.png";
-  backPath:any="assets/images/add.png";
-  edgePath:any="assets/images/add.png";
-
-  frontFile:File=null;
-  backFile:File=null;
-  edgeFile:File=null;
+  paths:any[]=[];
   
-  allCoinAuthors:CoinAuthor[]=[{id:1, coin:1, author:1, side:'front'},
-  {id:2, coin:1, author:1, side:'back'}, {id:3, coin:2, author:1}];
+  files:File[]=[];
+  
+  allCoinAuthors:CoinAuthor[]=[];
 
-  allCoinSculptors:CoinSculptor[]=[{id:1, coin:1, sculptor:1, side:'front'},
-  {id:2, coin:1, sculptor:1, side:'back'}, {id:3, coin:2, sculptor:1}];
+  allCoinSculptors:CoinSculptor[]=[];
 
   coinAuthors:CoinAuthor[]=[];
   coinSculptors:CoinSculptor[]=[];    
   coinInfo:CoinInfo[]=[];
   selectedId:number;
+  sideId:number;
   
 
   constructor(private service:CoinsService) { }
 
   ngOnInit(): void {
-    this.note.id=1;
-    this.note.description="This is fucking description";
-    //this.loadValues();
+    this.loadValues();
+    this.sides.forEach(side => {
+      this.coinGroup.addControl('author'+side.name+'Control', new FormControl());
+      this.coinGroup.addControl('sculptor'+side.name+'Control', new FormControl())
+    });
     this.coinGroup.controls['multipleControl']
     .valueChanges
     .subscribe((val)=>{
@@ -139,75 +119,53 @@ export class CoinsComponent implements OnInit {
   }
 
   clearPaths(){
-    this.frontPath="assets/images/add.png";
-    this.backPath="assets/images/add.png";
-    this.edgePath="assets/images/add.png";
-    this.frontFile = null;
-    this.backFile = null;
-    this.edgeFile = null;
+    this.paths.forEach(path=>path="assets/images/add.png");
+    this.files.forEach(file=>file=null);
+
+    
+    
   }
 
-  previewFront(event){
-    this.frontFile=<File>event.target.files[0];
+  previewFile(event){
+    this.files[this.sideId]=<File>event.target.files[0];
     var reader = new FileReader();
-    reader.readAsDataURL(this.frontFile);
+    reader.readAsDataURL(this.files[this.sideId]);
     reader.onload=((fl)=>{
-      this.frontPath=reader.result;
+      this.paths[this.sideId]=reader.result;
     })
   }
-
-  previewBack(event){
-    this.backFile=<File>event.target.files[0];
-    var reader = new FileReader();
-    reader.readAsDataURL(this.backFile);
-    reader.onload=((fl)=>{
-      this.backPath=reader.result;
-    })
-  }
-
-  previewEdge(event){
-    this.edgeFile=<File>event.target.files[0];
-    var reader = new FileReader();
-    reader.readAsDataURL(this.edgeFile);
-    reader.onload=((fl)=>{
-      this.edgePath=reader.result;
-    })
-  }
-
-  addNewSculptor(sculptor:number, side?:string){
+ 
+  addNewSculptor(sculptor:number, side?:number){
     var coinSculptor = new CoinSculptor();
     coinSculptor.sculptor = sculptor;
     if (side) coinSculptor.side=side;
     this.coinSculptors.push(coinSculptor);
-    
   }
 
-  addNewAuthor(author:number, side?:string){
-    
+  addNewAuthor(author:number, side?:number){
     var coinAuthor = new CoinAuthor();
     coinAuthor.author = author;
     if (side) coinAuthor.side=side;
     this.coinAuthors.push(coinAuthor);
-    
   }
 
-  filterCoinAuthors(side:string):CoinAuthor[]{
+  filterCoinAuthors(side:number):CoinAuthor[]{
     return this.coinAuthors.filter(aut=>aut.side==side);
   }
 
-  filterCoinSculptors(side:string):CoinSculptor[]{
+  filterCoinSculptors(side:number):CoinSculptor[]{
     
     return this.coinSculptors.filter(scu=>scu.side==side);
   }
 
-  hasSculptor(side?:string):Sculptor[]{
+  hasSculptor(side?:number):Sculptor[]{
     if (side==null)
       return this.sculptors.filter(sc=>this.coinSculptors.find(id=>id.sculptor==sc.id && id.side==side)==null);
     else
       return this.sculptors.filter(sc=>this.coinSculptors.find(id=>id.sculptor==sc.id && id.side==side)==null); 
   }
 
-  hasAuthor(side?:string):Author[]{
+  hasAuthor(side?:number):Author[]{
     if (side==null)
       return this.authors.filter(au=>this.coinAuthors.find(id=>id.author==au.id)==null);
     else
@@ -227,11 +185,11 @@ export class CoinsComponent implements OnInit {
     let coinInf = new CoinInfo();
     let coin = new Coin();
     let coinStyl = new CoinStyle();
-    let imgs:Image[]=[
+    /*let imgs:Image[]=[
       {side:"Front", file:this.frontFile},
       {side:"Back", file:this.backFile},
       {side:"Edge", file:this.edgeFile}
-    ];
+    ];*/
     
     let note = new Note();
     
@@ -257,7 +215,9 @@ export class CoinsComponent implements OnInit {
     this.clearPaths();
     coinInf.coin = coin;
     coinInf.style = coinStyl;
-    coinInf.images = imgs;
+    this.files.forEach(
+      (file, index)=>coinInf.images.push(new Image(this.sides[index].id, file))
+      )
     coinInf.coinAuthors=this.coinAuthors;
     coinInf.coinSculptors = this.coinSculptors;
     coinInf.note = note;
@@ -283,16 +243,10 @@ export class CoinsComponent implements OnInit {
 
   updateStyle(){
     
-    let imgs:Image[]=[
-      {side:"Front", file:this.frontFile},
-      {side:"Back", file:this.backFile},
-      {side:"Edge", file:this.edgeFile}
-    ];
-    
-    
-    this.coinInfo[this.selectedId].images[0].file=this.frontFile;
-    this.coinInfo[this.selectedId].images[1].file=this.backFile;
-    this.coinInfo[this.selectedId].images[2].file=this.edgeFile;
+    this.coinInfo[this.selectedId].images=[];
+    this.files.forEach(
+      (file, index)=>this.coinInfo[this.selectedId].images.push(new Image(this.sides[index].id, file))
+      )
     this.coinInfo[this.selectedId].note.description = this.coinGroup.controls["noteControl"].value;
     this.coinInfo[this.selectedId].coin.collection = this.coinGroup.controls["collectionControl"].value;
     this.coinInfo[this.selectedId].coin.mintedBy = this.coinGroup.controls["mintedByControl"].value;
@@ -343,12 +297,10 @@ export class CoinsComponent implements OnInit {
         this.coinInfo[id].coinSculptors.some(scu=>scu.side!=null)
         )
           this.coinGroup.controls["multipleControl"].setValue(true);
-    if (this.images[0]!=null)
-      this.frontPath = this.images[0].path;
-    if (this.images[1]!=null)
-      this.backPath = this.images[1].path;
-    if (this.images[2]!=null)
-      this.edgePath = this.images[2].path;
+    this.images.forEach(image => {
+      if (image.path) this.paths.push(image.path)     
+    });      
+    
   }
 
   changeCreateMode(){
@@ -366,31 +318,18 @@ export class CoinsComponent implements OnInit {
   selectCoin(coin:Coin){
 
     this.changeCreateMode();
-    let coinInf = new CoinInfo();
-    coinInf.coin = coin;
-    coinInf.style = this.coinsStyles.find(st=>st.coin==coin.id); //= this.service.getCoinsStyleById(coin.id);
-    coinInf.note = this.note; //service.getNote(coin.id);
-    coinInf.coinAuthors = this.allCoinAuthors.filter(aut=>aut.coin == coin.id);// = this.service.getCoinAuthorsById(coin.id);
-    coinInf.coinSculptors = this.allCoinSculptors.filter(scu=>scu.coin == coin.id);// = this.service.getCoinSculptorsById(coin.id);
-    coinInf.images = this.images.filter(img=>img.coin_style == coinInf.style.id); // = this.service.getImagesById(coin.id);
-    this.coinInfo.push(coinInf);
-    /*this.service.getSubstylesById(coin.id).subscribe(styles=>
+    this.coinInfo.push(this.getCoinInfo(coin));
+    this.service.getSubstylesById(coin.id).subscribe(styles=>
       {
         styles.forEach(sub=>
           {
-            coinInf = new CoinInfo();
-            coinInf.coin = this.coins.find(c=>c.id==sub.substyle_coin);
-            coinInf.style = this.coinsStyles.find(st=>st.coin==sub.substyle_coin); // = this.service.getCoinsStyleById(sub.substyle_coin);
-            coinInf.note = this.note; //service.getNote(sub.substyle_coin);
-            coinInf.coinAuthors = this.allCoinAuthors.filter(aut=>aut.coin == sub.substyle_coin); // = this.service.getCoinAuthorsById(sub.substyle_coin);
-            coinInf.coinSculptors = this.allCoinSculptors.filter(scu=>scu.coin == sub.substyle_coin); // = this.service.getCoinSculptorsById(sub.substyle_coin);
-            coinInf.images = this.images.filter(img=>img.coin_style == coinInf.style.id); // = this.service.getImagesById(sub.substyle_coin);
-            this.coinInfo.push(coinInf);
+            this.service.getCoinById(sub.substyle_coin)
+            .subscribe(coin=>this.coinInfo.push(this.getCoinInfo(coin)));
           }
           )
       }
-      )*/
-
+      );
+      /*
     this.subStyles.filter(sub=>sub.parent_coin==coin.id).forEach(
       sub=>{
         coinInf = new CoinInfo();
@@ -403,12 +342,27 @@ export class CoinsComponent implements OnInit {
         this.coinInfo.push(coinInf);
         
       }
-      );
+      );*/
 
     this.editMode = true;
     this.showCoinById(0);  
     
 
+  }
+
+  getCoinInfo(coin:Coin):CoinInfo{
+    let coinInf = new CoinInfo();
+    coinInf.coin = coin;
+    this.service.getCoinsStyleById(coin.id).subscribe(style=>
+      {
+        coinInf.style=style;
+        this.service.getNoteByStyleId(style.id).subscribe(note=>coinInf.note=note);
+      });
+    
+    this.service.getCoinAuthorsById(coin.id).subscribe(ca=>coinInf.coinAuthors=ca);
+    this.service.getCoinSculptorsById(coin.id).subscribe(cs=>coinInf.coinSculptors=cs);
+    this.service.getImagesById(coin.id).subscribe(img=>coinInf.images=img);
+    return coinInf;
   }
 
   loadValues(){
@@ -421,7 +375,7 @@ export class CoinsComponent implements OnInit {
     this.service.getAllQualities().subscribe(qual=>this.qualities=qual);
     this.service.getAllSculptors().subscribe(scu=>this.sculptors=scu);
     this.service.getAllShapes().subscribe(sha=>this.shapes=sha);
-    
+    this.service.getAllSides().subscribe(side=>this.sides=side);
     
   }
 
