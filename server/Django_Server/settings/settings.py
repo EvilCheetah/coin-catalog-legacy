@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     #Apps
     'coin_catalog',
+    #'accounts',
 ]
 
 MIDDLEWARE = [
@@ -81,6 +82,9 @@ WSGI_APPLICATION = 'settings.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+
+
+#AUTH_USER_MODEL = 'accounts.User'
 
 
 REST_FRAMEWORK = {

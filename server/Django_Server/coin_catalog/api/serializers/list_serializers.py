@@ -77,12 +77,10 @@ class CoinFamilySerializer(serializers.ModelSerializer):
 class CoinStyleSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Coin.CoinStyle
-        fields = ['id',        'year',     'coin_family',
-                  'shape',     'quality',  'edge',
-                  'material',  'standard', 'denomination',
-                  'mintage',   'additional_name',
-                  'km_number', 'is_rare',  'is_substyle',
-                  'weight',    'length',   'width', 'thickness']
+        fields = ['id',          'year',
+                  'coin_family', 'additional_name',
+                  'km_number',   'quality',
+                  'material',    'standard']
 
 
 class SubStyleSerializer(serializers.ModelSerializer):
