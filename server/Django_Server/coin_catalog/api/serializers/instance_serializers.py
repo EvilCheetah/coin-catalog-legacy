@@ -183,16 +183,18 @@ class CoinFamilySerializer(serializers.ModelSerializer):
 
 
 class CoinStyleSerializer(serializers.ModelSerializer):
-    region      = serializers.SerializerMethodField('get_region')
-    country     = serializers.SerializerMethodField('get_country')
-    category    = serializers.SerializerMethodField('get_category')
-    collection  = serializers.SerializerMethodField('get_collection')
-    coin_family = serializers.SerializerMethodField('get_coin_family')
-    coin_name   = serializers.SerializerMethodField('get_coin_name')
-    authors     = serializers.SerializerMethodField('get_authors')
-    sculptors   = serializers.SerializerMethodField('get_sculptors')
-    minted_by   = serializers.SerializerMethodField('get_minted_by')
-    images      = serializers.SerializerMethodField('get_images')
+    region                = serializers.SerializerMethodField('get_region')
+    country               = serializers.SerializerMethodField('get_country')
+    category              = serializers.SerializerMethodField('get_category')
+    collection            = serializers.SerializerMethodField('get_collection')
+    coin_family           = serializers.SerializerMethodField('get_coin_family')
+    coin_name             = serializers.SerializerMethodField('get_coin_name')
+    denomination_currency = serializers.SerializerMethodField('get_denomination_currency')
+    authors               = serializers.SerializerMethodField('get_authors')
+    sculptors             = serializers.SerializerMethodField('get_sculptors')
+    notes                 = serializers.SerializerMethodField('get_notes')
+    minted_by             = serializers.SerializerMethodField('get_minted_by')
+    images                = serializers.SerializerMethodField('get_images')
 
     class Meta:
         model  = CoinModel.CoinStyle
@@ -204,12 +206,15 @@ class CoinStyleSerializer(serializers.ModelSerializer):
                   #coin characteristics and value
                   'shape',     'quality',  'edge',
                   'material',  'standard',
-                  'denomination', 'mintage',
+                  'denomination_value',
+                  'denomination_currency',
+                  'mintage',
                   #physical properties
                   'weight',   'length', 'width', 'thickness',
                   'km_number', 'is_rare',  'is_substyle',
-                  #creators
-                  'authors', 'sculptors', 'minted_by', 'images'
+                  #creators and additional information
+                  'authors', 'sculptors', 'notes',
+                  'minted_by', 'images'
                   ]
 
     def get_region(self, coin_style_object):
@@ -230,11 +235,17 @@ class CoinStyleSerializer(serializers.ModelSerializer):
     def get_coin_name(self, coin_style_object):
         return coin_style_object.coin_family.name
 
+    def get_denomination_currency(self, coin_style_object):
+        return Logic.get_currency_from_coin_style(coin_style_object)
+
     def get_authors(self, coin_style_object):
         return Logic.get_authors_from_coin_style(coin_style_object)
 
     def get_sculptors(self, coin_style_object):
         return Logic.get_sculptors_from_coin_style(coin_style_object)
+
+    def get_notes(self, coin_style_object):
+        return Logic.get_notes_from_coin_style(coin_style_object)
 
     def get_minted_by(self, coin_style_object):
         return Logic.get_minted_by_from_coin_style(coin_style_object)

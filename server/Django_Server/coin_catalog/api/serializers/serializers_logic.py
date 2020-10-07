@@ -103,6 +103,11 @@ def get_coin_family_from_coin_style(coin_style_object):
     return coin_style_object.coin_family.id
 
 
+##---------------Denomination-Currency Functions---------------##
+def get_currency_from_coin_style(coin_style_object):
+    return coin_style_object.denomination_currency.currency.id
+
+
 ##-------------------Get Authors Functions-------------------##
 def get_authors_from_coin_family(coin_family_object):
     return [
@@ -132,6 +137,14 @@ def get_sculptors_from_coin_family(coin_family_object):
 
 def get_sculptors_from_coin_style(coin_style_object):
     return get_sculptors_from_coin_family(coin_style_object.coin_family)
+
+
+def get_notes_from_coin_style(coin_style_object):
+    return [
+        note.description
+        for note in
+        CoinModel.Note.objects.filter(coin_style_id = coin_style_object.id)
+    ]
 
 
 def get_minted_by_from_coin_family(coin_family_object):

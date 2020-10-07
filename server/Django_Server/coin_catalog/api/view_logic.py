@@ -4,121 +4,84 @@ import coin_catalog.models as CoinModel
 import coin_catalog.api.serializers.list_serializers as CoinListSerializer
 
 CHAR_SPLIT_CHAR = ','
-NUM_SPLIT_CHAR  = '-'
 
 ##----------------------Private Functions----------------------##
 def _split_string(item: str) -> list:
     return item.split(CHAR_SPLIT_CHAR)
 
 
-def _split_numbers(items: str) -> list:
-    return items.split(NUM_SPLIT_CHAR)
+def _get_year_range_queryset(queryset, year_gte_limit, year_lte_limit):
+    if ( year_gte_limit ):
+        queryset = queryset.filter(year__gte = int(year_gte_limit))
 
-
-def _get_year_range_queryset(queryset, year_range):
-    year_range = _split_numbers(year_range)
-
-    if ( len(year_range) == 1 ):
-        return queryset
-
-    if ( year_range[0] != ''):
-        queryset = queryset.filter(year__gte = int(year_range[0]))
-
-    if ( year_range[1] != ''):
-        queryset = queryset.filter(year__lte = int(year_range[1]))
+    if ( year_lte_limit ):
+        queryset = queryset.filter(year__lte = int(year_lte_limit))
 
     return queryset
 
 
-def _get_standard_range_queryset(queryset, standard_range):
-    standard_range = _split_numbers(standard_range)
+def _get_standard_range_queryset(queryset, standard_gte_limit, standard_lte_limit):
+    if ( standard_gte_limit ):
+        queryset = queryset.filter(standard__gte = float(standard_gte_limit))
 
-    if ( len(standard_range) == 1):
-        return queryset
-
-    if ( standard_range[0] != ''):
-        queryset = queryset.filter(standard__gte = float(standard_range[0]))
-
-    if ( standard_range[1] != ''):
-        queryset = queryset.filter(standard__lte = float(standard_range[1]))
+    if ( standard_lte_limit ):
+        queryset = queryset.filter(standard__lte = float(standard_lte_limit))
 
     return queryset
 
 
-def _get_mintage_range_queryset(queryset, mintage_range):
-    mintage_range = _split_numbers(mintage_range)
-
-    if ( len(mintage_range) == 1):
-        return queryset
-
-    if ( mintage_range[0] != ''):
-        queryset = queryset.filter(mintage__gte = int(mintage_range[0]))
-
-    if ( mintage_range[1] != ''):
-        queryset = queryset.filter(mintage__lte = int(mintage_range[1]))
-
-    return queryset
+def _get_denomination_queryset(queryset, denomination_value, denomination_currency):
+    return queryset.filter(denomination_value = denomination_value).filter(denomination_currency__currency__id = denomination_currency)
 
 
-def _get_weight_range_queryset(queryset, weight_range):
-    weight_range = _split_numbers(weight_range)
+def _get_mintage_range_queryset(queryset, mintage_gte_limit, mintage_lte_limit):
+    if ( mintage_gte_limit ):
+        queryset = queryset.filter(mintage__gte = int(mintage_gte_limit))
 
-    if ( len(weight_range) == 1):
-        return queryset
-
-    if ( weight_range[0] != ''):
-        queryset = queryset.filter(weight__gte = float(weight_range[0]))
-
-    if ( weight_range[1] != ''):
-        queryset = queryset.filter(weight__lte = float(weight_range[1]))
+    if ( mintage_lte_limit ):
+        queryset = queryset.filter(mintage__lte = int(mintage_lte_limit))
 
     return queryset
 
 
-def _get_length_range_queryset(queryset, length_range):
-    length_range = _split_numbers(length_range)
+def _get_weight_range_queryset(queryset, weight_gte_limit, weight_lte_limit):
+    if ( weight_gte_limit ):
+        queryset = queryset.filter(weight__gte = float(weight_gte_limit))
 
-    if ( len(length_range) == 1):
-        return queryset
-
-    if ( length_range[0] != ''):
-        queryset = queryset.filter(length__gte = float(length_range[0]))
-
-    if ( length_range[1] != ''):
-        queryset = queryset.filter(length__lte = float(length_range[1]))
+    if ( weight_lte_limit ):
+        queryset = queryset.filter(weight__lte = float(weight_lte_limit))
 
     return queryset
 
 
-def _get_width_range_queryset(queryset, width_range):
-    width_range = _split_numbers(width_range)
+def _get_length_range_queryset(queryset, length_gte_limit, length_lte_limit):
+    if ( length_gte_limit ):
+        queryset = queryset.filter(length__gte = float(length_gte_limit))
 
-    if ( len(width_range) == 1):
-        return queryset
-
-    if ( width_range[0] != ''):
-        queryset = queryset.filter(width__gte = float(width_range[0]))
-
-    if ( width_range[1] != ''):
-        queryset = queryset.filter(width__lte = float(width_range[1]))
+    if ( length_lte_limit ):
+        queryset = queryset.filter(length__lte = float(length_lte_limit))
 
     return queryset
 
 
-def _get_thickness_range_queryset(queryset, thickness_range):
-    thickness_range = _split_numbers(thickness_range)
+def _get_width_range_queryset(queryset, width_gte_limit, width_lte_limit):
+    if ( width_gte_limit ):
+        queryset = queryset.filter(width__gte = float(width_gte_limit))
 
-    if ( len(thickness_range) == 1):
-        return queryset
-
-    if ( thickness_range[0] != ''):
-        queryset = queryset.filter(thickness__gte = float(thickness_range[0]))
-
-    if ( thickness_range[1] != ''):
-        queryset = queryset.filter(thickness__lte = float(thickness_range[1]))
+    if ( width_lte_limit ):
+        queryset = queryset.filter(width__lte = float(width_lte_limit))
 
     return queryset
 
+
+def _get_thickness_range_queryset(queryset, thickness_gte_limit, thickness_lte_limit):
+    if ( thickness_gte_limit ):
+        queryset = queryset.filter(thickness__gte = float(thickness_gte_limit))
+
+    if ( thickness_lte_limit ):
+        queryset = queryset.filter(thickness__lte = float(thickness_lte_limit))
+
+    return queryset
 
 
 
@@ -227,35 +190,43 @@ def get_coin_style_queryset(request):
     queryset = CoinModel.CoinStyle.objects.all()
 
     #Exact match
-    km_number        = request.query_params.get('km_number')
+    km_number = request.query_params.get('km_number')
 
     #IF km_number is specified, return an item(usually 1 item)
     if km_number:
         return queryset.filter(km_number = km_number)
 
     #Ancestors parameters
-    region_id        = request.query_params.get('region')
-    country_id       = request.query_params.get('country')
-    category_id      = request.query_params.get('category')
-    collection_id    = request.query_params.get('collection')
-    coin_family_id   = request.query_params.get('coin_family')
-    minted_by_id     = request.query_params.get('minted_by')
+    region_id             = request.query_params.get('region')
+    country_id            = request.query_params.get('country')
+    category_id           = request.query_params.get('category')
+    collection_id         = request.query_params.get('collection')
+    coin_family_id        = request.query_params.get('coin_family')
+    minted_by_id          = request.query_params.get('minted_by')
 
     #Standard Information parameters
-    year_range       = request.query_params.get('year')
-    shape_id         = request.query_params.get('shape')
-    quality_id       = request.query_params.get('quality')
-    edge_id          = request.query_params.get('edge')
-    material_id      = request.query_params.get('material')
-    standard_range   = request.query_params.get('standard')
-    denomination     = request.query_params.get('denomination')
-    mintage_range    = request.query_params.get('mintage')
+    year_gte_limit        = request.query_params.get('year_lte')
+    year_lte_limit        = request.query_params.get('year_gte')
+    shape_id              = request.query_params.get('shape')
+    quality_id            = request.query_params.get('quality')
+    edge_id               = request.query_params.get('edge')
+    material_id           = request.query_params.get('material')
+    standard_gte_limit    = request.query_params.get('standard_lte')
+    standard_lte_limit    = request.query_params.get('standard_gte')
+    denomination_value    = request.query_params.get('denomination_value')
+    denomination_currency = request.query_params.get('denomination_currency')
+    mintage_gte_limit     = request.query_params.get('mintage_gte')
+    mintage_lte_limit     = request.query_params.get('mintage_lte')
 
     #Characteristics parameters
-    weight_range     = request.query_params.get('weight')
-    length_range     = request.query_params.get('length')
-    width_range      = request.query_params.get('width')
-    thickness_range  = request.query_params.get('thickness')
+    weight_gte_limit      = request.query_params.get('weight_gte')
+    weight_lte_limit      = request.query_params.get('weight_lte')
+    length_gte_limit      = request.query_params.get('length_gte')
+    length_lte_limit      = request.query_params.get('length_lte')
+    width_gte_limit       = request.query_params.get('width_gte')
+    width_lte_limit       = request.query_params.get('width_lte')
+    thickness_gte_limit   = request.query_params.get('thickness_gte')
+    thickness_lte_limit   = request.query_params.get('thickness_lte')
 
     #No KM - process to the filter process
     #Ancestors Search
@@ -271,8 +242,8 @@ def get_coin_style_queryset(request):
         queryset = queryset.filter(coin_family__minted_by__id__in = _split_string(minted_by_id))
 
     #Standard Information Search
-    if year_range:
-        queryset = _get_year_range_queryset(queryset, year_range)
+    if (year_gte_limit or year_lte_limit):
+        queryset = _get_year_range_queryset(queryset, year_gte_limit, year_lte_limit)
     if shape_id:
         queryset = queryset.filter(shape__id__in = _split_string(shape_id))
     if quality_id:
@@ -281,21 +252,33 @@ def get_coin_style_queryset(request):
         queryset = queryset.filter(edge__id__in = _split_string(edge_id))
     if material_id:
         queryset = queryset.filter(material__id__in = _split_string(material_id))
-    if standard_range:
-        queryset = _get_standard_range_queryset(queryset, standard_range)
-    if denomination:
-        queryset = queryset.filter(denomination__in = _split_string(denomintation))
-    if mintage_range:
-        queryset = _get_mintage_range_queryset(queryset, mintage_range)
+    if (standard_gte_limit or standard_gte_limit):
+        queryset = _get_standard_range_queryset(queryset, standard_gte_limit, standard_lte_limit)
+    #Filter IF AND ONLY IF there is Denomination Value and Currency
+    if (denomination_value and denomination_currency):
+        queryset = _get_denomination_queryset(queryset, denomination_value, denomination_currency)
+    if (mintage_gte_limit or mintage_lte_limit):
+        queryset = _get_mintage_range_queryset(queryset, mintage_gte_limit, mintage_lte_limit)
 
     #Characteristics Search
-    if weight_range:
-        queryset = _get_weight_range_queryset(queryset, weight_range)
-    if length_range:
-        queryset = _get_length_range_queryset(queryset, length_range)
-    if width_range:
-        queryset = _get_width_range_queryset(queryset, width_range)
-    if thickness_range:
-        queryset = _get_thickness_range_queryset(queryset, thickness_range)
+    if (weight_gte_limit or weight_lte_limit):
+        queryset = _get_weight_range_queryset(queryset, weight_gte_limit, weight_lte_limit)
+    if (length_gte_limit or length_lte_limit):
+        queryset = _get_length_range_queryset(queryset, length_gte_limit, length_lte_limit)
+    if (width_gte_limit or width_lte_limit):
+        queryset = _get_width_range_queryset(queryset, width_gte_limit, width_lte_limit)
+    if (thickness_gte_limit or thickness_lte_limit):
+        queryset = _get_thickness_range_queryset(queryset, thickness_gte_limit, thickness_lte_limit)
+
+    return queryset
+
+
+def get_sub_style_queryset(request):
+    queryset  = CoinModel.SubStyle.objects.all()
+
+    parent_style_id = request.query_params.get('parent')
+
+    if parent_style_id:
+        return queryset.filter(parent_coin = parent_style_id)
 
     return queryset
