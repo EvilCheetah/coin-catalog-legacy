@@ -26,6 +26,12 @@ class CollectionSerializer(serializers.ModelSerializer):
         fields = ['id', 'category', 'name']
 
 
+class CurrencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model  = Coin.Currency
+        fields = ['id', 'name']
+
+
 class MintedBySerializer(serializers.ModelSerializer):
     class Meta:
         model  = Coin.MintedBy
