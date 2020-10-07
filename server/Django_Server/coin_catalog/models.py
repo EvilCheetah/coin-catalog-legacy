@@ -9,7 +9,7 @@ class Region(models.Model):
 
     name = models.CharField(max_length = 20, unique = True)
 
-    class Meta():
+    class Meta:
         db_table = 'coin_region'
 
     def __str__(self):
@@ -25,9 +25,8 @@ class Country(models.Model):
     region = models.ForeignKey(Region, related_name = 'country_list', on_delete = models.CASCADE)
     name   = models.CharField(max_length = 100)
 
-    class Meta():
+    class Meta:
         unique_together = ['region', 'name']
-        ordering        = ['region', 'name']
         db_table        = 'coin_country'
 
     def __str__(self):
@@ -43,9 +42,8 @@ class Category(models.Model):
     country = models.ForeignKey(Country, related_name = 'category_list', on_delete = models.CASCADE)
     name    = models.CharField(max_length = 255)
 
-    class Meta():
+    class Meta:
         unique_together = ['country', 'name']
-        ordering        = ['country', 'name']
         db_table        = 'coin_category'
 
     def __str__(self):
@@ -61,13 +59,26 @@ class Collection(models.Model):
     category = models.ForeignKey(Category, related_name = 'collection_list', on_delete = models.CASCADE)
     name     = models.CharField(max_length = 255)
 
-    class Meta():
+    class Meta:
         unique_together = ['category', 'name']
-        ordering        = ['category', 'name']
         db_table        = 'coin_collection'
 
     def __str__(self):
         return (self.category.name + ' > ' + self.name)
+
+
+class Currency(models.Model):
+    """
+    name - Name of the Currency
+    """
+
+    name = models.CharField(max_length = 255, unique = True)
+
+    class Meta:
+        db_table = 'coin_currrency'
+
+    def __str__(self):
+        return self.name
 
 
 ##------------------MintedBy Information------------------##
@@ -78,7 +89,7 @@ class MintedBy(models.Model):
 
     name = models.CharField(max_length = 255, unique = True)
 
-    class Meta():
+    class Meta:
         db_table = 'coin_minted_by'
 
     def __str__(self):
@@ -92,7 +103,7 @@ class AuthorName(models.Model):
 
     name = models.CharField(max_length = 255, unique = True)
 
-    class Meta():
+    class Meta:
         db_table = 'coin_author_name'
 
     def __str__(self):
@@ -106,7 +117,7 @@ class SculptorName(models.Model):
 
     name = models.CharField(max_length = 255, unique = True)
 
-    class Meta():
+    class Meta:
         db_table = 'coin_sculptor_name'
 
     def __str__(self):
@@ -115,6 +126,23 @@ class SculptorName(models.Model):
 
 
 ##----------------Base Information----------------##
+class CountryCurrency(models.Model):
+    """
+    country  - Reference to Country Table
+    currency - Reference to Currency Table
+    """
+
+    country  = models.ForeignKey(Country,  on_delete = models.CASCADE)
+    currency = models.ForeignKey(Currency, on_delete = models.CASCADE)
+
+    class Meta:
+        unique_together = ['country', 'currency']
+        db_table        = 'coin_country_currency'
+
+    def __str__(self):
+        return (self.country.name + ': ' + self.currency.name)
+
+
 class Material(models.Model):
     """
     name - Name of Material, e.g. Gold, Silver, Cooper-Nickel and etc.
@@ -122,7 +150,7 @@ class Material(models.Model):
 
     name = models.CharField(max_length = 255, unique = True)
 
-    class Meta():
+    class Meta:
         db_table = 'coin_material'
 
     def __str__(self):
@@ -136,7 +164,7 @@ class Quality(models.Model):
 
     name = models.CharField(max_length = 255, unique = True)
 
-    class Meta():
+    class Meta:
         db_table = 'coin_quality'
 
     def __str__(self):
@@ -150,7 +178,7 @@ class Edge(models.Model):
 
     name = models.CharField(max_length = 255, unique = True)
 
-    class Meta():
+    class Meta:
         db_table = 'coin_edge'
 
     def __str__(self):
@@ -165,7 +193,7 @@ class Shape(models.Model):
 
     name = models.CharField(max_length = 255, unique = True)
 
-    class Meta():
+    class Meta:
         db_table = 'coin_shape'
 
     def __str__(self):
@@ -189,9 +217,8 @@ class CoinFamily(models.Model):
                                    blank = True, default = "")
 
 
-    class Meta():
+    class Meta:
         unique_together = ['collection', 'name']
-        ordering        = ['collection', 'name', 'minted_by']
         db_table        = 'coin_family'
 
     def __str__(self):
@@ -202,24 +229,26 @@ class CoinStyle(models.Model):
     """
     Holds the information of different styles of the coin with same names
 
-    year             - Put into Circulation
-    coin_family      - Reference to Coin Table
-    shape            - Reference to Shape Table
-    quality          - Reference to Quality Table
-    edge             - Reference to Edge Table
-    material         - Reference to Material Table
-    standard         - Standard of the Material(Fineness), e.g. 925/1000, 999/1000 and etc.
-    denomination     - Actual "Worth of Coin" in local currency
-    mintage          - Amount of coins minted, e.g. 20k, 500 and etc.
-    additional_name  - Additional Name(Postfix), e.g. 25 Years Anniversary and etc.
-    km_number        - KM(Krause-Mishler) catalog number
-    is_rare          - To indicate if coin can be viewed under a subscription mode.
-    is_substyle      - To indicate that the coin is the Child(substyle) of different coin
-    weight           - Weight of coin in Metric units
-    length           - Length of coin in Metric units, always present
-    width            - Width  of coin in Metric units, may be absent, e.g. Shape is Round
-    notes            - Additional information about coin, e.g. coin is inlaid with smth,
-                       pad-printing and etc.
+    year                  - Put into Circulation
+    coin_family           - Reference to Coin Table
+    denomination_value    - Value of "Worth of Coin" in local currency
+    denomination_currency - Reference to CountryCurrency Table, Actutual Name of Currency
+    shape                 - Reference to Shape Table
+    quality               - Reference to Quality Table
+    edge                  - Reference to Edge Table
+    material              - Reference to Material Table
+    standard              - Standard of the Material(Fineness), e.g. 925/1000, 999/1000 and etc.
+    mintage               - Amount of coins minted, e.g. 20k, 500 and etc.
+    additional_name       - Additional Name(Postfix), e.g. 25 Years Anniversary and etc.
+    km_number             - KM(Krause-Mishler) catalog number
+    is_rare               - To indicate if coin can be viewed under a subscription mode.
+    is_substyle           - To indicate that the coin is the Child(substyle) of different coin
+    weight                - Weight(in grams) of coin in Metric units
+    length                - Length(in mm)    of coin in Metric units, always present
+    width                 - Width(in mm)     of coin in Metric units, may be absent, e.g. Shape is Round
+    thickness             - Thickness(in mm) of coin in Metric units, may be absent,
+    notes                 - Additional information about coin, e.g. coin is inlaid with smth,
+                            pad-printing and etc.
 
     Uniqueness of coin identifies by:
         - Year
@@ -234,38 +263,43 @@ class CoinStyle(models.Model):
         - Additional Name
     """
 
-    year            = models.IntegerField()
-    coin_family     = models.ForeignKey(CoinFamily, related_name = 'coin_style_list', on_delete = models.CASCADE)
-    shape           = models.ForeignKey(Shape,      on_delete = models.CASCADE)
-    quality         = models.ForeignKey(Quality,    on_delete = models.CASCADE)
-    edge            = models.ForeignKey(Edge,       on_delete = models.CASCADE)
-    material        = models.ForeignKey(Material,   on_delete = models.CASCADE)
-    standard        = models.FloatField()
-    denomination    = models.CharField(max_length = 255)
-    mintage         = models.IntegerField()
+    year                  = models.IntegerField()
+    coin_family           = models.ForeignKey(CoinFamily, related_name = 'coin_style_list', on_delete = models.CASCADE)
+    denomination_value    = models.FloatField()
+    denomination_currency = models.ForeignKey(CountryCurrency, on_delete = models.CASCADE)
+    shape                 = models.ForeignKey(Shape,           on_delete = models.CASCADE)
+    quality               = models.ForeignKey(Quality,         on_delete = models.CASCADE)
+    edge                  = models.ForeignKey(Edge,            on_delete = models.CASCADE)
+    material              = models.ForeignKey(Material,        on_delete = models.CASCADE)
+    standard              = models.FloatField()
+    mintage               = models.IntegerField()
 
-    additional_name = models.CharField(max_length = 255, blank = True, default = "")
-    km_number       = models.CharField(max_length = 255, blank = True, default = "")
+    additional_name       = models.CharField(max_length = 255, blank = True, default = "")
+    km_number             = models.CharField(max_length = 255, blank = True, default = "")
 
-    is_rare         = models.BooleanField()
-    is_substyle     = models.BooleanField()
+    is_rare               = models.BooleanField()
+    is_substyle           = models.BooleanField()
 
-    weight          = models.FloatField()
-    length          = models.FloatField()
-    width           = models.FloatField()
-    thickness       = models.FloatField()
+    weight                = models.FloatField()
+    length                = models.FloatField()
+    width                 = models.FloatField()
+    thickness             = models.FloatField()
 
-    class Meta():
+    class Meta:
         unique_together = ['year',         'coin_family',
                            'shape',        'quality',
                            'material',     'standard',
-                           'denomination', 'is_substyle',
+                           'denomination_value', 'denomination_currency',
+                           'is_substyle',
                            'km_number',    'additional_name']
-        ordering        = ['year', 'coin_family', 'material', 'standard']
         db_table        = 'coin_style'
 
     def __str__(self):
-        return (str(self.year) + ' ' + self.coin_family.name + ' ' + self.material.name + ' ' + self.standard)
+        return (str(self.year) + ' ' +
+                str(self.coin_family.name) + ' - ' +
+                str(self.additional_name) + ' - ' +
+                str(self.material.name) + ' ' +
+                str(self.standard))
 
 
 class SubStyle(models.Model):
@@ -284,7 +318,7 @@ class SubStyle(models.Model):
     parent_coin   = models.ForeignKey(CoinStyle, on_delete = models.CASCADE,
                                       related_name = "coin_base_edition")
 
-    class Meta():
+    class Meta:
         unique_together = ['parent_coin', 'substyle_coin']
         db_table        = 'coin_style_connector'
 
@@ -301,7 +335,7 @@ class Note(models.Model):
     coin_style  = models.ForeignKey(CoinStyle, on_delete = models.CASCADE)
     description = models.CharField(max_length = 255)
 
-    class Meta():
+    class Meta:
         unique_together = ['coin_style', 'description']
         db_table        = 'coin_note'
 
@@ -315,7 +349,7 @@ class SideOfCoin(models.Model):
 
     name = models.CharField(max_length = 255, unique = True)
 
-    class Meta():
+    class Meta:
         db_table = 'coin_side'
 
     def __str__(self):
@@ -335,9 +369,8 @@ class CoinAuthor(models.Model):
     author      = models.ForeignKey(AuthorName, on_delete = models.CASCADE)
     side        = models.ForeignKey(SideOfCoin, on_delete = models.CASCADE)
 
-    class Meta():
+    class Meta:
         unique_together = ['coin_family', 'author', 'side']
-        ordering        = ['coin_family', 'side', 'author']
         db_table        = 'coin_authors'
 
 
@@ -354,9 +387,8 @@ class CoinSculptor(models.Model):
     sculptor    = models.ForeignKey(SculptorName, on_delete = models.CASCADE)
     side        = models.ForeignKey(SideOfCoin,   on_delete = models.CASCADE)
 
-    class Meta():
+    class Meta:
         unique_together = ['coin_family', 'sculptor', 'side']
-        ordering        = ['coin_family', 'side', 'sculptor']
         db_table        = 'coin_sculptors'
 
 
@@ -371,9 +403,8 @@ class Image(models.Model):
 
     coin_style = models.ForeignKey(CoinStyle,  on_delete = models.CASCADE)
     side       = models.ForeignKey(SideOfCoin, on_delete = models.CASCADE)
-    path       = models.CharField(max_length = 255)
+    path       = models.CharField(max_length = 255, unique = True)
 
-    class Meta():
+    class Meta:
         unique_together = ['coin_style', 'side', 'path']
-        ordering        = ['coin_style', 'side', 'path']
         db_table        = 'coin_image'
