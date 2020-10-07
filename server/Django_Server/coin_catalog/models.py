@@ -67,6 +67,7 @@ class Collection(models.Model):
         return (self.category.name + ' > ' + self.name)
 
 
+##---------------Currency Information---------------##
 class Currency(models.Model):
     """
     name - Name of the Currency
@@ -79,6 +80,25 @@ class Currency(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class CountryCurrency(models.Model):
+    """
+    country  - Reference to Country Table
+    currency - Reference to Currency Table
+    """
+
+    country  = models.ForeignKey(Country,  on_delete = models.CASCADE)
+    currency = models.ForeignKey(Currency, on_delete = models.CASCADE)
+
+    class Meta:
+        unique_together = ['country', 'currency']
+        db_table        = 'coin_country_currency_connector'
+
+    def __str__(self):
+        return (self.country.name + ': ' + self.currency.name)
+
+
 
 
 ##------------------MintedBy Information------------------##
@@ -126,23 +146,6 @@ class SculptorName(models.Model):
 
 
 ##----------------Base Information----------------##
-class CountryCurrency(models.Model):
-    """
-    country  - Reference to Country Table
-    currency - Reference to Currency Table
-    """
-
-    country  = models.ForeignKey(Country,  on_delete = models.CASCADE)
-    currency = models.ForeignKey(Currency, on_delete = models.CASCADE)
-
-    class Meta:
-        unique_together = ['country', 'currency']
-        db_table        = 'coin_country_currency'
-
-    def __str__(self):
-        return (self.country.name + ': ' + self.currency.name)
-
-
 class Material(models.Model):
     """
     name - Name of Material, e.g. Gold, Silver, Cooper-Nickel and etc.

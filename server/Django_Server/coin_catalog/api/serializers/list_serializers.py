@@ -32,6 +32,12 @@ class CurrencySerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
+class CountryCurrencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model  = Coin.CountryCurrency
+        fields = ['id', 'country', 'currency']
+
+
 class MintedBySerializer(serializers.ModelSerializer):
     class Meta:
         model  = Coin.MintedBy

@@ -77,6 +77,11 @@ class CurrencyViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.CurrencySerializer
 
 
+class CountryCurrencyViewSet(viewsets.ModelViewSet):
+    queryset         = CoinModel.CountryCurrency.objects.all()
+    serializer_class = CoinListSerializer.CountryCurrencySerializer
+
+
 class MintedByViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.MintedBy.objects.all()
     serializer_class = CoinListSerializer.MintedBySerializer
