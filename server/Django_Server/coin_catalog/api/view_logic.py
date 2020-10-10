@@ -5,11 +5,13 @@ import coin_catalog.api.serializers.list_serializers as CoinListSerializer
 
 CHAR_SPLIT_CHAR = ','
 
+
 ##----------------------Private Functions----------------------##
 def _split_string(item: str) -> list:
     return item.split(CHAR_SPLIT_CHAR)
 
 
+##-----------------------Range Functions-----------------------##
 def _get_year_range_queryset(queryset, year_gte_limit, year_lte_limit):
     if ( year_gte_limit ):
         queryset = queryset.filter(year__gte = int(year_gte_limit))
@@ -82,6 +84,29 @@ def _get_thickness_range_queryset(queryset, thickness_gte_limit, thickness_lte_l
         queryset = queryset.filter(thickness__lte = float(thickness_lte_limit))
 
     return queryset
+
+
+##--------------------Descendants-Dedicated Functions--------------------##
+def _get_queryset_based_on_coin_family(request, queryset):
+    coin_family = request.query_params.get('coin_family')
+
+    if ( coin_family ):
+        queryset = queryset.filter(coin_family_id = coin_family)
+
+    return queryset
+
+
+def _get_queryset_based_on_coin_style(request, queryset):
+    coin_style = request.query_params.get('coin_style')
+
+    if ( coin_style ):
+        queryset = queryset.filter(coin_style_id = coin_style)
+
+    return queryset
+
+############################################################################
+##########################END OF PRIVATE FUNCTIONS##########################
+############################################################################
 
 
 
@@ -282,6 +307,30 @@ def get_sub_style_queryset(request):
         return queryset.filter(parent_coin = parent_style_id)
 
     return queryset
+
+
+def get_note_queryset(request):
+    queryset = CoinModel.Note.objects.all()
+
+    return _get_queryset_based_on_coin_style(request, queryset)
+
+
+def get_coin_author_queryset(request):
+    queryset = CoinModel.CoinAuthor.objects.all()
+
+    return _get_queryset_based_on_coin_family(request, queryset)
+
+
+def get_coin_sculptor_queryset(request):
+    queryset = CoinModel.CoinSculptor.objects.all()
+
+    return _get_queryset_based_on_coin_family(request, queryset)
+
+
+def get_image_queryset(request):
+    queryset = CoinModel.Image.objects.all()
+
+    return _get_queryset_based_on_coin_style(request, queryset)
 
 
 def get_coin_queryset(request):

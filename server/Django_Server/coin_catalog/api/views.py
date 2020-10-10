@@ -72,6 +72,7 @@ class CollectionViewSet(viewsets.ModelViewSet):
                                 serializer_ = CoinInstanceSerializer.CollectionSerializer,
                                 request     = self.request))
 
+
 class CurrencyViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.Currency.objects.all()
     serializer_class = CoinListSerializer.CurrencySerializer
@@ -166,6 +167,9 @@ class NoteViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.Note.objects.all()
     serializer_class = CoinListSerializer.NoteSerializer
 
+    def get_queryset(self):
+        return ViewSetLogic.get_note_queryset(self.request)
+
 
 class SideOfCoinViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.SideOfCoin.objects.all()
@@ -176,12 +180,21 @@ class CoinAuthorViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.CoinAuthor.objects.all()
     serializer_class = CoinListSerializer.CoinAllAuthorsSerializer
 
+    def get_queryset(self):
+        return ViewSetLogic.get_coin_author_queryset(self.request)
+
 
 class CoinSculptorViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.CoinSculptor.objects.all()
     serializer_class = CoinListSerializer.CoinAllSculptorsSerializer
 
+    def get_queryset(self):
+        return ViewSetLogic.get_coin_sculptor_queryset(self.request)
+
 
 class ImageViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.Image.objects.all()
     serializer_class = CoinListSerializer.ImageSerializer
+
+    def get_queryset(self):
+        return ViewSetLogic.get_image_queryset(self.request)
