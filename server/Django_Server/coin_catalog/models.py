@@ -99,8 +99,6 @@ class CountryCurrency(models.Model):
         return (self.country.name + ': ' + self.currency.name)
 
 
-
-
 ##------------------MintedBy Information------------------##
 class MintedBy(models.Model):
     """
@@ -142,7 +140,6 @@ class SculptorName(models.Model):
 
     def __str__(self):
         return self.name
-
 
 
 ##----------------Base Information----------------##
@@ -266,8 +263,9 @@ class CoinStyle(models.Model):
         - Additional Name
     """
 
-    year                  = models.IntegerField()
     coin_family           = models.ForeignKey(CoinFamily, related_name = 'coin_style_list', on_delete = models.CASCADE)
+
+    year                  = models.IntegerField()
     denomination_value    = models.FloatField()
     denomination_currency = models.ForeignKey(CountryCurrency, on_delete = models.CASCADE)
     shape                 = models.ForeignKey(Shape,           on_delete = models.CASCADE)

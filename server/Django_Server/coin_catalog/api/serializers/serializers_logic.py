@@ -49,7 +49,7 @@ def get_number_of_coins_from_coin_family(coin_family_id_list):
 
 ##-------------------Get Region Functions-------------------##
 def get_region_from_country(country_object):
-    return country_object.region.id
+    return country_object.region.name
 
 def get_region_from_category(category_object):
     return get_region_from_country(category_object.country)
@@ -66,7 +66,7 @@ def get_region_from_coin_style(coin_style_object):
 
 ##-------------------Get Country Functions-------------------##
 def get_country_from_category(category_object):
-    return category_object.country.id
+    return category_object.country.name
 
 def get_country_from_collection(collection_object):
     return get_country_from_category(collection_object.category)
@@ -80,7 +80,7 @@ def get_country_from_coin_style(coin_style_object):
 
 ##-------------------Get Category Functions-------------------##
 def get_category_from_collection(collection_object):
-    return collection_object.category.id
+    return collection_object.category.name
 
 def get_category_from_coin_family(coin_family_object):
     return get_category_from_collection(coin_family_object.collection)
@@ -91,7 +91,7 @@ def get_category_from_coin_style(coin_style_object):
 
 ##-------------------Get Collection Functions-------------------##
 def get_collection_from_coin_family(coin_family_object):
-    return coin_family_object.collection.id
+    return coin_family_object.collection.name
 
 
 def get_collection_from_coin_style(coin_style_object):
@@ -100,20 +100,30 @@ def get_collection_from_coin_style(coin_style_object):
 
 ##-------------------Get Coin Family Function-------------------##
 def get_coin_family_from_coin_style(coin_style_object):
-    return coin_style_object.coin_family.id
+    return coin_style_object.coin_family.name
 
 
 ##---------------Denomination-Currency Functions---------------##
 def get_currency_from_coin_style(coin_style_object):
-    return coin_style_object.denomination_currency.currency.id
+    return coin_style_object.denomination_currency.currency.name
+
+
+##---------------Substyle Information Function---------------##
+def get_substyle_status_from_coin_style(coin_style_object):
+    coin_sub_style_object = CoinModel.SubStyle.objects.filter(substyle_coin = coin_style_object)
+
+    if ( coin_sub_style_object ):
+        return coin_sub_style_object[0].parent_coin.id
+
+    return None
 
 
 ##-------------------Get Authors Functions-------------------##
 def get_authors_from_coin_family(coin_family_object):
     return [
         {
-            'side':   coin_author_object.side.id,
-            'author': coin_author_object.author.id
+            'side':   coin_author_object.side.name,
+            'author': coin_author_object.author.name
         }
         for coin_author_object in
         CoinModel.CoinAuthor.objects.filter(coin_family_id = coin_family_object.id)
@@ -127,8 +137,8 @@ def get_authors_from_coin_style(coin_style_object):
 def get_sculptors_from_coin_family(coin_family_object):
     return [
         {
-            'side':     coin_sculptor_object.side.id,
-            'sculptor': coin_sculptor_object.sculptor.id
+            'side':     coin_sculptor_object.side.name,
+            'sculptor': coin_sculptor_object.sculptor.name
         }
 
         for coin_sculptor_object in
@@ -157,7 +167,7 @@ def get_minted_by_from_coin_style(coin_style_object):
 def get_images_from_coin_style(coin_style_object):
     return [
         {
-            'side': image_object.side.id,
+            'side': image_object.side.name,
             'path': image_object.path
         }
         for image_object in

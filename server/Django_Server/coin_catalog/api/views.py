@@ -145,6 +145,15 @@ class CoinStyleViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+class CoinViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset         = CoinModel.CoinStyle.objects.all()
+    #Has the same serializer for Instance and List
+    serializer_class = CoinInstanceSerializer.CoinSerializer
+
+    def get_queryset(self):
+        return ViewSetLogic.get_coin_queryset(self.request)
+
+
 class SubStyleViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.SubStyle.objects.all()
     serializer_class = CoinListSerializer.SubStyleSerializer

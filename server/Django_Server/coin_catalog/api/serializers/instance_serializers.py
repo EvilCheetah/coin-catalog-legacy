@@ -183,75 +183,79 @@ class CoinFamilySerializer(serializers.ModelSerializer):
 
 
 class CoinStyleSerializer(serializers.ModelSerializer):
-    region                = serializers.SerializerMethodField('get_region')
-    country               = serializers.SerializerMethodField('get_country')
-    category              = serializers.SerializerMethodField('get_category')
-    collection            = serializers.SerializerMethodField('get_collection')
-    coin_family           = serializers.SerializerMethodField('get_coin_family')
-    coin_name             = serializers.SerializerMethodField('get_coin_name')
-    denomination_currency = serializers.SerializerMethodField('get_denomination_currency')
-    authors               = serializers.SerializerMethodField('get_authors')
-    sculptors             = serializers.SerializerMethodField('get_sculptors')
-    notes                 = serializers.SerializerMethodField('get_notes')
-    minted_by             = serializers.SerializerMethodField('get_minted_by')
-    images                = serializers.SerializerMethodField('get_images')
+    # region                = serializers.SerializerMethodField('get_region')
+    # country               = serializers.SerializerMethodField('get_country')
+    # category              = serializers.SerializerMethodField('get_category')
+    # collection            = serializers.SerializerMethodField('get_collection')
+    # coin_family           = serializers.SerializerMethodField('get_coin_family')
+    # coin_name             = serializers.SerializerMethodField('get_coin_name')
+    # denomination_currency = serializers.SerializerMethodField('get_denomination_currency')
+    # authors               = serializers.SerializerMethodField('get_authors')
+    # sculptors             = serializers.SerializerMethodField('get_sculptors')
+    # notes                 = serializers.SerializerMethodField('get_notes')
+    # minted_by             = serializers.SerializerMethodField('get_minted_by')
+    # images                = serializers.SerializerMethodField('get_images')
 
     class Meta:
         model  = CoinModel.CoinStyle
         fields = ['id',
                   #ancestors
-                  'region', 'country', 'category', 'collection', 'coin_family',
+                  ##'region', 'country', 'category', 'collection',
+                  'coin_family',
                   #basic info
-                  'year', 'coin_name', 'additional_name',
+                  'year',
+                  ##'coin_name',
                   #coin characteristics and value
-                  'shape',     'quality',  'edge',
-                  'material',  'standard',
                   'denomination_value',
                   'denomination_currency',
+                  'shape',     'quality',  'edge',
+                  'material',  'standard',
                   'mintage',
+
+                  'additional_name',
                   #physical properties
-                  'weight',   'length', 'width', 'thickness',
                   'km_number', 'is_rare',  'is_substyle',
+                  'weight',   'length', 'width', 'thickness',
                   #creators and additional information
-                  'authors', 'sculptors', 'notes',
-                  'minted_by', 'images'
+                  ##'authors', 'sculptors', 'notes',
+                  ##'minted_by', 'images'
                   ]
 
-    def get_region(self, coin_style_object):
-        return Logic.get_region_from_coin_style(coin_style_object)
-
-    def get_country(self, coin_style_object):
-        return Logic.get_country_from_coin_style(coin_style_object)
-
-    def get_category(self, coin_style_object):
-        return Logic.get_category_from_coin_style(coin_style_object)
-
-    def get_collection(self, coin_style_object):
-        return Logic.get_collection_from_coin_style(coin_style_object)
-
-    def get_coin_family(self, coin_style_object):
-        return Logic.get_coin_family_from_coin_style(coin_style_object)
-
-    def get_coin_name(self, coin_style_object):
-        return coin_style_object.coin_family.name
-
-    def get_denomination_currency(self, coin_style_object):
-        return Logic.get_currency_from_coin_style(coin_style_object)
-
-    def get_authors(self, coin_style_object):
-        return Logic.get_authors_from_coin_style(coin_style_object)
-
-    def get_sculptors(self, coin_style_object):
-        return Logic.get_sculptors_from_coin_style(coin_style_object)
-
-    def get_notes(self, coin_style_object):
-        return Logic.get_notes_from_coin_style(coin_style_object)
-
-    def get_minted_by(self, coin_style_object):
-        return Logic.get_minted_by_from_coin_style(coin_style_object)
-
-    def get_images(self, coin_style_object):
-        return Logic.get_images_from_coin_style(coin_style_object)
+    # def get_region(self, coin_style_object):
+    #     return Logic.get_region_from_coin_style(coin_style_object)
+    #
+    # def get_country(self, coin_style_object):
+    #     return Logic.get_country_from_coin_style(coin_style_object)
+    #
+    # def get_category(self, coin_style_object):
+    #     return Logic.get_category_from_coin_style(coin_style_object)
+    #
+    # def get_collection(self, coin_style_object):
+    #     return Logic.get_collection_from_coin_style(coin_style_object)
+    #
+    # def get_coin_family(self, coin_style_object):
+    #     return Logic.get_coin_family_from_coin_style(coin_style_object)
+    #
+    # def get_coin_name(self, coin_style_object):
+    #     return coin_style_object.coin_family.name
+    #
+    # def get_denomination_currency(self, coin_style_object):
+    #     return Logic.get_currency_from_coin_style(coin_style_object)
+    #
+    # def get_authors(self, coin_style_object):
+    #     return Logic.get_authors_from_coin_style(coin_style_object)
+    #
+    # def get_sculptors(self, coin_style_object):
+    #     return Logic.get_sculptors_from_coin_style(coin_style_object)
+    #
+    # def get_notes(self, coin_style_object):
+    #     return Logic.get_notes_from_coin_style(coin_style_object)
+    #
+    # def get_minted_by(self, coin_style_object):
+    #     return Logic.get_minted_by_from_coin_style(coin_style_object)
+    #
+    # def get_images(self, coin_style_object):
+    #     return Logic.get_images_from_coin_style(coin_style_object)
 
 
 class SubStyleSerializer(serializers.ModelSerializer):
@@ -300,3 +304,98 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model  = CoinModel.Image
         fields = ['id', 'coin_style', 'side', 'path']
+
+
+class CoinSerializer(serializers.ModelSerializer):
+    region                = serializers.SerializerMethodField('get_region')
+    country               = serializers.SerializerMethodField('get_country')
+    category              = serializers.SerializerMethodField('get_category')
+    collection            = serializers.SerializerMethodField('get_collection')
+    coin_family           = serializers.SerializerMethodField('get_coin_family')
+    #coin_name             = serializers.SerializerMethodField('get_coin_name')
+    denomination_currency = serializers.SerializerMethodField('get_denomination_currency')
+    shape                 = serializers.SerializerMethodField('get_shape')
+    quality               = serializers.SerializerMethodField('get_quality')
+    edge                  = serializers.SerializerMethodField('get_edge')
+    material              = serializers.SerializerMethodField('get_material')
+    substyle_of           = serializers.SerializerMethodField('get_substyle')
+    authors               = serializers.SerializerMethodField('get_authors')
+    sculptors             = serializers.SerializerMethodField('get_sculptors')
+    notes                 = serializers.SerializerMethodField('get_notes')
+    minted_by             = serializers.SerializerMethodField('get_minted_by')
+    images                = serializers.SerializerMethodField('get_images')
+
+    class Meta:
+        model  = CoinModel.CoinStyle
+        fields = ['id',
+                  #ancestors
+                  'region', 'country', 'category', 'collection', 'coin_family',
+                  #basic info
+                  'additional_name',
+                  'year', #'coin_name',
+                  #coin characteristics and value
+                  'shape',     'quality',  'edge',
+                  'material',  'standard',
+                  'denomination_value',
+                  'denomination_currency',
+                  'mintage',
+                  #physical properties
+                  'weight',   'length', 'width', 'thickness',
+                  'km_number',
+                  'substyle_of',
+                  ##'is_rare',  'is_substyle',
+                  #creators and additional information
+                  'authors', 'sculptors', 'notes',
+                  'minted_by', 'images'
+                  ]
+
+    def get_region(self, coin_style_object):
+        return Logic.get_region_from_coin_style(coin_style_object)
+
+    def get_country(self, coin_style_object):
+        return Logic.get_country_from_coin_style(coin_style_object)
+
+    def get_category(self, coin_style_object):
+        return Logic.get_category_from_coin_style(coin_style_object)
+
+    def get_collection(self, coin_style_object):
+        return Logic.get_collection_from_coin_style(coin_style_object)
+
+    def get_coin_family(self, coin_style_object):
+        return Logic.get_coin_family_from_coin_style(coin_style_object)
+
+    def get_coin_name(self, coin_style_object):
+        return coin_style_object.coin_family.name
+
+    def get_denomination_currency(self, coin_style_object):
+        return Logic.get_currency_from_coin_style(coin_style_object)
+
+    def get_shape(self, coin_style_object):
+        return coin_style_object.shape.name
+
+    def get_quality(self, coin_style_object):
+        return coin_style_object.quality.name
+
+    def get_edge(self, coin_style_object):
+        return coin_style_object.edge.name
+
+    def get_material(self, coin_style_object):
+        return coin_style_object.material.name
+
+    def get_substyle(self, coin_style_object):
+        return Logic.get_substyle_status_from_coin_style(coin_style_object)
+
+    def get_authors(self, coin_style_object):
+        return Logic.get_authors_from_coin_style(coin_style_object)
+
+    def get_sculptors(self, coin_style_object):
+        return Logic.get_sculptors_from_coin_style(coin_style_object)
+
+    def get_notes(self, coin_style_object):
+        return Logic.get_notes_from_coin_style(coin_style_object)
+
+    def get_minted_by(self, coin_style_object):
+        return Logic.get_minted_by_from_coin_style(coin_style_object)
+
+    def get_images(self, coin_style_object):
+        return Logic.get_images_from_coin_style(coin_style_object)

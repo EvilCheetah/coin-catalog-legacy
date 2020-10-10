@@ -282,3 +282,90 @@ def get_sub_style_queryset(request):
         return queryset.filter(parent_coin = parent_style_id)
 
     return queryset
+
+
+def get_coin_queryset(request):
+    queryset = CoinModel.CoinStyle.objects.all()
+
+    #Exact match
+    km_number = request.query_params.get('km_number')
+
+    #IF km_number is specified, return an item(usually 1 item)
+    if km_number:
+        return queryset.filter(km_number = km_number)
+
+    #Ancestors parameters
+    region_id             = request.query_params.get('region')
+    country_id            = request.query_params.get('country')
+    category_id           = request.query_params.get('category')
+    collection_id         = request.query_params.get('collection')
+    coin_family_id        = request.query_params.get('coin_family')
+    minted_by_id          = request.query_params.get('minted_by')
+
+    #Standard Information parameters
+    year_gte_limit        = request.query_params.get('year_lte')
+    year_lte_limit        = request.query_params.get('year_gte')
+    shape_id              = request.query_params.get('shape')
+    quality_id            = request.query_params.get('quality')
+    edge_id               = request.query_params.get('edge')
+    material_id           = request.query_params.get('material')
+    standard_gte_limit    = request.query_params.get('standard_lte')
+    standard_lte_limit    = request.query_params.get('standard_gte')
+    denomination_value    = request.query_params.get('denomination_value')
+    denomination_currency = request.query_params.get('denomination_currency')
+    mintage_gte_limit     = request.query_params.get('mintage_gte')
+    mintage_lte_limit     = request.query_params.get('mintage_lte')
+
+    #Characteristics parameters
+    weight_gte_limit      = request.query_params.get('weight_gte')
+    weight_lte_limit      = request.query_params.get('weight_lte')
+    length_gte_limit      = request.query_params.get('length_gte')
+    length_lte_limit      = request.query_params.get('length_lte')
+    width_gte_limit       = request.query_params.get('width_gte')
+    width_lte_limit       = request.query_params.get('width_lte')
+    thickness_gte_limit   = request.query_params.get('thickness_gte')
+    thickness_lte_limit   = request.query_params.get('thickness_lte')
+
+    #No KM - process to the filter process
+    #Ancestors Search
+    if region_id:
+        queryset = queryset.filter(coin_family__collection__category__country__region__name__in = _split_string(region_id))
+    if country_id:
+        queryset = queryset.filter(coin_family__collection__category__country__name__in = _split_string(country_id))
+    if category_id:
+        queryset = queryset.filter(coin_family__collection__category__name__in = _split_string(category_id))
+    if collection_id:
+        queryset = queryset.filter(coin_family__collection__name__in = _split_string(collection_id))
+    if minted_by_id:
+        queryset = queryset.filter(coin_family__minted_by__name__in = _split_string(minted_by_id))
+
+    #Standard Information Search
+    if (year_gte_limit or year_lte_limit):
+        queryset = _get_year_range_queryset(queryset, year_gte_limit, year_lte_limit)
+    if shape_id:
+        queryset = queryset.filter(shape__name__in = _split_string(shape_id))
+    if quality_id:
+        queryset = queryset.filter(quality__name__in = _split_string(quality_id))
+    if edge_id:
+        queryset = queryset.filter(edge__name__in = _split_string(edge_id))
+    if material_id:
+        queryset = queryset.filter(material__name__in = _split_string(material_id))
+    if (standard_gte_limit or standard_gte_limit):
+        queryset = _get_standard_range_queryset(queryset, standard_gte_limit, standard_lte_limit)
+    #Filter IF AND ONLY IF there is Denomination Value and Currency
+    if (denomination_value and denomination_currency):
+        queryset = _get_denomination_queryset(queryset, denomination_value, denomination_currency)
+    if (mintage_gte_limit or mintage_lte_limit):
+        queryset = _get_mintage_range_queryset(queryset, mintage_gte_limit, mintage_lte_limit)
+
+    #Characteristics Search
+    if (weight_gte_limit or weight_lte_limit):
+        queryset = _get_weight_range_queryset(queryset, weight_gte_limit, weight_lte_limit)
+    if (length_gte_limit or length_lte_limit):
+        queryset = _get_length_range_queryset(queryset, length_gte_limit, length_lte_limit)
+    if (width_gte_limit or width_lte_limit):
+        queryset = _get_width_range_queryset(queryset, width_gte_limit, width_lte_limit)
+    if (thickness_gte_limit or thickness_lte_limit):
+        queryset = _get_thickness_range_queryset(queryset, thickness_gte_limit, thickness_lte_limit)
+
+    return queryset
