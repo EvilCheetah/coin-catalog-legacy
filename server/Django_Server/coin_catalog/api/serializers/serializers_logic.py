@@ -1,5 +1,5 @@
 import coin_catalog.models as CoinModel
-
+from coin_catalog.api.serializers import list_serializers as CoinListSerializer
 
 ##-------------------Local Functions-------------------##
 def _is_list(object):
@@ -173,3 +173,31 @@ def get_images_from_coin_style(coin_style_object):
         for image_object in
         CoinModel.Image.objects.filter(coin_style_id = coin_style_object.id)
     ]
+
+
+def get_notes_for_preloaded_coin(coin_style_object):
+    return CoinListSerializer.NoteSerializer(
+                CoinModel.Note.objects.filter(coin_style_id = coin_style_object.id),
+                many = True
+           ).data
+
+
+def get_authors_for_pre_loaded_coin(coin_style_object):
+    return CoinListSerializer.CoinAllAuthorsSerializer(
+                CoinModel.CoinAuthor.objects.filter(coin_family_id = coin_style_object.coin_family.id),
+                many = True
+           ).data
+
+
+def get_sculptors_for_pre_loaded_coin(coin_style_object):
+    return CoinListSerializer.CoinAllSculptorsSerializer(
+                CoinModel.CoinSculptor.objects.filter(coin_family_id = coin_style_object.coin_family.id),
+                many = True
+           ).data
+
+
+def get_images_for_pre_loaded_coin(coin_style_object):
+    return CoinListSerializer.ImageSerializer(
+                CoinModel.Image.objects.filter(coin_style_id = coin_style_object.id),
+                many = True
+           ).data

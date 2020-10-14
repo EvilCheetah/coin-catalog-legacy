@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -146,15 +145,6 @@ class CoinStyleViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class CoinViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset         = CoinModel.CoinStyle.objects.all()
-    #Has the same serializer for Instance and List
-    serializer_class = CoinInstanceSerializer.CoinSerializer
-
-    def get_queryset(self):
-        return ViewSetLogic.get_coin_queryset(self.request)
-
-
 class SubStyleViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.SubStyle.objects.all()
     serializer_class = CoinListSerializer.SubStyleSerializer
@@ -198,3 +188,21 @@ class ImageViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return ViewSetLogic.get_image_queryset(self.request)
+
+
+class PreLoadedCoinViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset         = CoinModel.CoinStyle.objects.all()
+    #Has the same serializer for Instance and List
+    serializer_class = CoinInstanceSerializer.PreLoadedCoinSerializer
+
+    # def get_queryset(self):
+    #     return ViewSetLogic.get_full_info_coin_queryset(self.request)
+
+
+class FullInfoCoinViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset         = CoinModel.CoinStyle.objects.all()
+    #Has the same serializer for Instance and List
+    serializer_class = CoinInstanceSerializer.FullInfoCoinSerializer
+
+    def get_queryset(self):
+        return ViewSetLogic.get_full_info_coin_queryset(self.request)

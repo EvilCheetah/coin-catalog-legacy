@@ -117,7 +117,7 @@ def _get_thickness_range_queryset(queryset, thickness_gte_limit, thickness_lte_l
             queryset = queryset.filter(thickness__lte = float(thickness_lte_limit))
 
         return queryset
-        
+
     except ValueError:
         Exception.type_error_for_float_range_parameter('thickness')
 
@@ -412,7 +412,7 @@ def get_image_queryset(request):
     return _get_queryset_based_on_coin_style(request, queryset)
 
 
-def get_coin_queryset(request):
+def get_full_info_coin_queryset(request):
     queryset = CoinModel.CoinStyle.objects.all()
 
     #Exact match

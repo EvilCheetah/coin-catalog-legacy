@@ -1,6 +1,7 @@
 from django.urls import path, include
-from . import views
 from rest_framework import routers
+
+from coin_catalog.api import views
 
 
 router  = routers.DefaultRouter()
@@ -29,9 +30,14 @@ router.register('coin_author',      views.CoinAuthorViewSet,        basename = '
 router.register('coin_sculptor',    views.CoinSculptorViewSet,      basename = 'coin_sculptor-model')
 router.register('image',            views.ImageViewSet,             basename = 'image-model')
 
+
+#Angular Requested ViewSet
+#Solving async issues/errors
+router.register('voobsche_pihui',   views.PreLoadedCoinViewSet,     basename = 'coin-with-preloaded-descendants')
+
 #Human-Readable Substyle View Set
 #Preformatted with Text
-router.register('coin',             views.CoinViewSet,              basename = 'coin-full-detail')
+router.register('coin',             views.FullInfoCoinViewSet,      basename = 'coin-full-detail')
 
 urlpatterns = [
     path('', include(router.urls)),
