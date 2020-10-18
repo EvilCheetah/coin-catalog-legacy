@@ -1,5 +1,6 @@
 import coin_catalog.models as CoinModel
 from coin_catalog.api.serializers import list_serializers as CoinListSerializer
+from coin_catalog.api.serializers import instance_serializers as CoinInstanceSerializer
 
 ##-------------------Local Functions-------------------##
 def _is_list(object):
@@ -11,6 +12,12 @@ def _convert_to_list(object):
 
 
 ##-------------------Get Number of Coins-------------------##
+"""
+These Functions are designated to return the number of CoinStyle
+objects that are present in the any 'parent' model, with specified
+id of 'parent' model
+"""
+
 def get_number_of_coins_from_region(region_id):
     return get_number_of_coins_from_country(
         [country.id for country in CoinModel.Country.objects.filter(region_id = region_id)]
@@ -48,6 +55,10 @@ def get_number_of_coins_from_coin_family(coin_family_id_list):
 
 
 ##-------------------Get Region Functions-------------------##
+"""
+These functions are designated to return 'region' name based on any
+descendant object that was specified
+"""
 def get_region_from_country(country_object):
     return country_object.region.name
 
@@ -65,6 +76,10 @@ def get_region_from_coin_style(coin_style_object):
 
 
 ##-------------------Get Country Functions-------------------##
+"""
+These functions are designated to return 'country' name based on any
+descendant object that was specified
+"""
 def get_country_from_category(category_object):
     return category_object.country.name
 
@@ -79,6 +94,10 @@ def get_country_from_coin_style(coin_style_object):
 
 
 ##-------------------Get Category Functions-------------------##
+"""
+These functions are designated to return 'category' name based on any
+descendant object that was specified
+"""
 def get_category_from_collection(collection_object):
     return collection_object.category.name
 
@@ -90,6 +109,10 @@ def get_category_from_coin_style(coin_style_object):
 
 
 ##-------------------Get Collection Functions-------------------##
+"""
+These functions are designated to return 'collection' name based on any
+descendant object that was specified
+"""
 def get_collection_from_coin_family(coin_family_object):
     return coin_family_object.collection.name
 
@@ -99,16 +122,29 @@ def get_collection_from_coin_style(coin_style_object):
 
 
 ##-------------------Get Coin Family Function-------------------##
+"""
+This function is designated to return 'coin_family' name based on any
+descendant object that was specified
+"""
 def get_coin_family_from_coin_style(coin_style_object):
     return coin_style_object.coin_family.name
 
 
 ##---------------Denomination-Currency Functions---------------##
+"""
+This function is designated to return 'currency' name based on
+specified coin_style object
+"""
 def get_currency_from_coin_style(coin_style_object):
     return coin_style_object.denomination_currency.currency.name
 
 
 ##---------------Substyle Information Function---------------##
+"""
+This function is designated to return the parent id of the 'coin_style'
+    If Coin is a substyle of another coin, returns the ID of parent Coin
+    else returns NULL
+"""
 def get_substyle_status_from_coin_style(coin_style_object):
     coin_sub_style_object = CoinModel.SubStyle.objects.filter(substyle_coin = coin_style_object)
 
@@ -119,6 +155,10 @@ def get_substyle_status_from_coin_style(coin_style_object):
 
 
 ##-------------------Get Authors Functions-------------------##
+"""
+These functions are designated to return a list of 'authors' name based on
+specified object
+"""
 def get_authors_from_coin_family(coin_family_object):
     return [
         {
@@ -134,19 +174,26 @@ def get_authors_from_coin_style(coin_style_object):
 
 
 ##-------------------Get Sculptors Functions-------------------##
+"""
+These functions are designated to return a list of 'sculptors' name based on
+specified object
+"""
 def get_sculptors_from_coin_family(coin_family_object):
     return [
-        {
-            'side':     coin_sculptor_object.side.name,
-            'sculptor': coin_sculptor_object.sculptor.name
-        }
+            {
+                'side':     coin_sculptor_object.side.name,
+                'sculptor': coin_sculptor_object.sculptor.name
+            }
 
-        for coin_sculptor_object in
-        CoinModel.CoinSculptor.objects.filter(coin_family_id = coin_family_object.id)
-    ]
+            for coin_sculptor_object in
+            CoinModel.CoinSculptor.objects.filter(coin_family_id = coin_family_object.id)
+        ]
+
 
 def get_sculptors_from_coin_style(coin_style_object):
     return get_sculptors_from_coin_family(coin_style_object.coin_family)
+
+
 
 
 def get_notes_from_coin_style(coin_style_object):
@@ -157,13 +204,28 @@ def get_notes_from_coin_style(coin_style_object):
     ]
 
 
+
+##-------------------------Get Minted By-------------------------##
+"""
+These functions are designated to return 'minted' id based on
+specified object
+"""
 def get_minted_by_from_coin_family(coin_family_object):
     return coin_family_object.minted_by.id
+
 
 def get_minted_by_from_coin_style(coin_style_object):
     return get_minted_by_from_coin_family(coin_style_object.coin_family)
 
 
+##
+"""
+These functions are designated to return a list of 'images' name based on
+coin style object
+with given format:
+    side: side_name
+    path: path_string
+"""
 def get_images_from_coin_style(coin_style_object):
     return [
         {
@@ -175,29 +237,41 @@ def get_images_from_coin_style(coin_style_object):
     ]
 
 
-def get_notes_for_preloaded_coin(coin_style_object):
-    return CoinListSerializer.NoteSerializer(
-                CoinModel.Note.objects.filter(coin_style_id = coin_style_object.id),
+##--------------------------Pre Loaded Information--------------------------##
+"""
+These functions are designated to obtain the required information
+based on coin_family or coin_style
+"""
+def get_authors_for_pre_loaded_coin_family(coin_family_object):
+    return CoinInstanceSerializer.CoinAllAuthorsSerializer(
+                CoinModel.CoinAuthor.objects.filter(coin_family_id = coin_family_object.id),
                 many = True
            ).data
 
 
-def get_authors_for_pre_loaded_coin(coin_style_object):
-    return CoinListSerializer.CoinAllAuthorsSerializer(
-                CoinModel.CoinAuthor.objects.filter(coin_family_id = coin_style_object.coin_family.id),
+def get_sculptors_for_pre_loaded_coin_family(coin_family_object):
+    return CoinInstanceSerializer.CoinAllSculptorsSerializer(
+                CoinModel.CoinSculptor.objects.filter(coin_family_id = coin_family_object.id),
                 many = True
            ).data
 
 
-def get_sculptors_for_pre_loaded_coin(coin_style_object):
-    return CoinListSerializer.CoinAllSculptorsSerializer(
-                CoinModel.CoinSculptor.objects.filter(coin_family_id = coin_style_object.coin_family.id),
+def get_styles_for_pre_loaded_coin_family(coin_family_object):
+    return CoinInstanceSerializer.PreLoadedCoinStyleSerializer(
+                CoinModel.CoinStyle.objects.filter(coin_family_id = coin_family_object.id),
                 many = True
            ).data
 
 
-def get_images_for_pre_loaded_coin(coin_style_object):
-    return CoinListSerializer.ImageSerializer(
+def get_image_queryset_from_coin_style(coin_style_object):
+    return CoinInstanceSerializer.ImageSerializer(
                 CoinModel.Image.objects.filter(coin_style_id = coin_style_object.id),
+                many = True
+           ).data
+
+
+def get_notes_queryset_from_coin_style(coin_style_object):
+    return CoinInstanceSerializer.NoteSerializer(
+                CoinModel.Note.objects.filter(coin_style_id = coin_style_object.id),
                 many = True
            ).data

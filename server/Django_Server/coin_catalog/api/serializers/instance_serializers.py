@@ -6,85 +6,55 @@ import coin_catalog.api.serializers.serializers_logic as Logic
 
 class RegionSerializer(serializers.ModelSerializer):
     total_coins  = serializers.SerializerMethodField('get_number_of_coins')
-    country_list = serializers.HyperlinkedRelatedField(
-        view_name    = 'country-detail',
-        read_only    = True,
-        many         = True)
 
     class Meta:
         model = CoinModel.Region
-        fields = ['id', 'name', 'total_coins', 'country_list']
+        fields = ['id', 'name', 'total_coins',
+                  #Displays the list of IDs of Country
+                  #'country_list'
+                 ]
 
     def get_number_of_coins(self, region_object):
         return Logic.get_number_of_coins_from_region(region_object.id)
 
 
 class CountrySerializer(serializers.ModelSerializer):
-    region        = serializers.SerializerMethodField('get_region')
     total_coins   = serializers.SerializerMethodField('get_number_of_coins')
-    category_list = serializers.HyperlinkedRelatedField(
-        view_name = 'category-detail',
-        read_only = True,
-        many      = True)
 
     class Meta:
         model  = CoinModel.Country
-        fields = ['id', 'region', 'name', 'total_coins', 'category_list']
-
-    def get_region(self, country_object):
-        return Logic.get_region_from_country(country_object)
+        fields = ['id', 'region', 'name', 'total_coins',
+                  #Displays the list of IDs of Category
+                  #'category_list'
+                 ]
 
     def get_number_of_coins(self, country_object):
         return Logic.get_number_of_coins_from_country(country_object.id)
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    region          = serializers.SerializerMethodField('get_region_name')
-    country         = serializers.SerializerMethodField('get_country_name')
     total_coins     = serializers.SerializerMethodField('get_number_of_coins')
-    collection_list = serializers.HyperlinkedRelatedField(
-        view_name = 'collection-detail',
-        read_only = True,
-        many      = True
-    )
 
     class Meta:
         model  = CoinModel.Category
-        fields = ['id', 'region', 'country', 'name', 'total_coins', 'collection_list']
-
-    def get_region_name(self, category_object):
-        return Logic.get_region_from_category(category_object)
-
-    def get_country_name(self, category_object):
-        return Logic.get_country_from_category(category_object)
+        fields = ['id', 'country', 'name', 'total_coins',
+                  #Displays the list of IDs of Collection
+                  #'collection_list'
+                 ]
 
     def get_number_of_coins(self, category_object):
         return Logic.get_number_of_coins_from_categoty(category_object.id)
 
 
 class CollectionSerializer(serializers.ModelSerializer):
-    region      = serializers.SerializerMethodField('get_region')
-    country     = serializers.SerializerMethodField('get_country')
-    category    = serializers.SerializerMethodField('get_category')
     total_coins = serializers.SerializerMethodField('get_number_of_coins')
-    coin_family_list = serializers.HyperlinkedRelatedField(
-        view_name = 'coinfamily-detail',
-        read_only = True,
-        many      = True
-    )
 
     class Meta:
         model  = CoinModel.Collection
-        fields = ['id', 'region', 'country', 'category', 'name', 'total_coins', 'coin_family_list']
-
-    def get_region(self, collection_object):
-        return Logic.get_region_from_collection(collection_object)
-
-    def get_country(self, collection_object):
-        return Logic.get_country_from_collection(collection_object)
-
-    def get_category(self, collection_object):
-        return Logic.get_category_from_collection(collection_object)
+        fields = ['id', 'category', 'name', 'total_coins',
+                  ##Displays the list of IDs of CoinFamily
+                  #'coin_family_list'
+                 ]
 
     def get_number_of_coins(self, collection_object):
         return Logic.get_number_of_coins_from_collection(collection_object.id)
@@ -133,53 +103,23 @@ class ShapeSerializer(serializers.ModelSerializer):
 
 
 class CoinFamilySerializer(serializers.ModelSerializer):
-    region      = serializers.SerializerMethodField('get_region')
-    country     = serializers.SerializerMethodField('get_country')
-    category    = serializers.SerializerMethodField('get_category')
-    collection  = serializers.SerializerMethodField('get_collection')
     total_coins = serializers.SerializerMethodField('get_number_of_coins')
-    authors     = serializers.SerializerMethodField('get_authors')
-    sculptors   = serializers.SerializerMethodField('get_sculptors')
-    coin_style_list = serializers.HyperlinkedRelatedField(
-        view_name = 'coinstyle-detail',
-        read_only = True,
-        many      = True
-    )
-
     class Meta:
+
         model  = CoinModel.CoinFamily
         fields = ['id',
-                  #ancestors
-                  'region', 'country', 'category', 'collection',
+                  'collection',
                   'name',
-                  'total_coins',
                   #creators
-                  'authors', 'sculptors', 'minted_by',
-                  'coin_style_list']
-
-    def get_region(self, coin_family_object):
-        return Logic.get_region_from_coin_family(coin_family_object)
-
-    def get_country(self, coin_family_object):
-        return Logic.get_country_from_coin_family(coin_family_object)
-
-    def get_category(self, coin_family_object):
-        return Logic.get_category_from_coin_family(coin_family_object)
-
-    def get_collection(self, coin_family_object):
-        return Logic.get_collection_from_coin_family(coin_family_object)
+                  #'authors', 'sculptors',
+                  'minted_by',
+                  'total_coins',
+                  ##Displays the list of IDs of CoinStyle
+                  #'coin_style_list'
+                  ]
 
     def get_number_of_coins(self, coin_family_object):
         return Logic.get_number_of_coins_from_coin_family(coin_family_object.id)
-
-    def get_authors(self, coin_family_object):
-        return Logic.get_authors_from_coin_family(coin_family_object)
-
-    def get_sculptors(self, coin_family_object):
-        return Logic.get_sculptors_from_coin_family(coin_family_object)
-
-    def get_minted_by(self, coin_family_object):
-        return Logic.get_minted_by_from_coin_family(coin_family_object)
 
 
 class CoinStyleSerializer(serializers.ModelSerializer):
@@ -257,45 +197,55 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = ['id', 'coin_style', 'side', 'path']
 
 
-class PreLoadedCoinSerializer(serializers.ModelSerializer):
-    parent_style_id = serializers.SerializerMethodField('get_parent_style_id')
-    notes           = serializers.SerializerMethodField('get_notes')
+##-----------------------Preloaded Coin Serializers-----------------------##
+class PreLoadedCoinFamilySerializer(serializers.ModelSerializer):
     authors         = serializers.SerializerMethodField('get_authors')
     sculptors       = serializers.SerializerMethodField('get_sculptors')
-    images          = serializers.SerializerMethodField('get_images')
+    styles          = serializers.SerializerMethodField('get_styles')
+
+    class Meta:
+        model  = CoinModel.CoinFamily
+        fields = ['id', 'collection', 'name', 'minted_by',
+                  'authors', 'sculptors', 'styles']
+
+    def get_authors(self, coin_family_object):
+        return Logic.get_authors_for_pre_loaded_coin_family(coin_family_object)
+
+    def get_sculptors(self, coin_family_object):
+        return Logic.get_sculptors_for_pre_loaded_coin_family(coin_family_object)
+
+    def get_styles(self, coin_family_object):
+        return Logic.get_styles_for_pre_loaded_coin_family(coin_family_object)
+
+
+class PreLoadedCoinStyleSerializer(serializers.ModelSerializer):
+    substyle_of = serializers.SerializerMethodField('get_substyle_status')
+    notes       = serializers.SerializerMethodField('get_notes')
+    images      = serializers.SerializerMethodField('get_images')
 
     class Meta:
         model  = CoinModel.CoinStyle
         fields = ['id', 'coin_family', 'year',
-                  'parent_style_id',
-                  'denomination_value',
-                  'denomination_currency',
-                  'shape', 'quality',  'edge',
-                  'material',  'standard',
+                  'denomination_value', 'denomination_currency',
+                  'shape', 'quality', 'edge', 'material', 'standard',
                   'mintage',
-                  'additional_name',
-                  'km_number',
+                  'additional_name', 'km_number',
+                  'is_rare', 'substyle_of',
                   'weight', 'length', 'width', 'thickness',
-                  'notes',
-                  'authors', 'sculptors',
-                  'images']
+                  'notes', 'images'
+                  ]
 
-    def get_parent_style_id(self, coin_style_object):
+    def get_substyle_status(self, coin_style_object):
         return Logic.get_substyle_status_from_coin_style(coin_style_object)
 
     def get_notes(self, coin_style_object):
-        return Logic.get_notes_for_preloaded_coin(coin_style_object)
-
-    def get_authors(self, coin_style_object):
-        return Logic.get_authors_for_pre_loaded_coin(coin_style_object)
-
-    def get_sculptors(self, coin_style_object):
-        return Logic.get_sculptors_for_pre_loaded_coin(coin_style_object)
+        return Logic.get_notes_queryset_from_coin_style(coin_style_object)
 
     def get_images(self, coin_style_object):
-        return Logic.get_images_for_pre_loaded_coin(coin_style_object)
+        return Logic.get_image_queryset_from_coin_style(coin_style_object)
 
 
+##--------------------------Full Info Coin--------------------------##
 class FullInfoCoinSerializer(serializers.ModelSerializer):
     region                = serializers.SerializerMethodField('get_region')
     country               = serializers.SerializerMethodField('get_country')
