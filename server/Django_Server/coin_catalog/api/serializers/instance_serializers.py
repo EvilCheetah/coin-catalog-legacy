@@ -4,6 +4,10 @@ import coin_catalog.models as CoinModel
 import coin_catalog.api.serializers.serializers_logic as Logic
 
 
+##---------------------------Model Serializers---------------------------##
+"""
+These Serializers are designated for pure model output
+"""
 class RegionSerializer(serializers.ModelSerializer):
     total_coins  = serializers.SerializerMethodField('get_number_of_coins')
 
@@ -141,7 +145,8 @@ class CoinStyleSerializer(serializers.ModelSerializer):
 
                   'additional_name',
                   #physical properties
-                  'km_number', 'is_rare',  'is_substyle',
+                  'km_number',
+                  'is_rare',  'is_substyle',
                   'weight',   'length', 'width', 'thickness',
                   #creators and additional information
                   ##'authors', 'sculptors', 'notes',
@@ -197,7 +202,11 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = ['id', 'coin_style', 'side', 'path']
 
 
-##-----------------------Preloaded Coin Serializers-----------------------##
+##-------------------Preloaded Coin Serializers for CoinFamily-------------------##
+"""
+These Serializers are designated to preload the data for CoinFamily to avoid
+async load errors in Angular
+"""
 class PreLoadedCoinFamilySerializer(serializers.ModelSerializer):
     authors         = serializers.SerializerMethodField('get_authors')
     sculptors       = serializers.SerializerMethodField('get_sculptors')
@@ -218,7 +227,7 @@ class PreLoadedCoinFamilySerializer(serializers.ModelSerializer):
         return Logic.get_styles_for_pre_loaded_coin_family(coin_family_object)
 
 
-class PreLoadedCoinStyleSerializer(serializers.ModelSerializer):
+class CoinStyleSerializerForPreloadedCoinFamily(serializers.ModelSerializer):
     substyle_of = serializers.SerializerMethodField('get_substyle_status')
     notes       = serializers.SerializerMethodField('get_notes')
     images      = serializers.SerializerMethodField('get_images')
@@ -245,7 +254,44 @@ class PreLoadedCoinStyleSerializer(serializers.ModelSerializer):
         return Logic.get_image_queryset_from_coin_style(coin_style_object)
 
 
+
+##-------------------PreLoaded Coin Serializer for CoinStyle-------------------##
+"""
+This Serializer is Designated to Prelaod the Data for CoinStyle Model
+in order to avoid async load errors in Angular
+"""
+class PreLoadedCoinStyleSerializer(serializers.ModelSerializer):
+    substyles = serializers.SerializerMethodField('get_substyles')
+    notes     = serializers.SerializerMethodField('get_notes')
+    images    = serializers.SerializerMethodField('get_images')
+
+    class Meta:
+        model  = CoinModel.CoinStyle
+        fields = ['id', 'coin_family', 'year',
+                  'denomination_value', 'denomination_currency',
+                  'shape', 'quality', 'edge', 'material', 'standard',
+                  'mintage',
+                  'additional_name', 'km_number',
+                  'is_rare',
+                  'substyles',
+                  'weight', 'length', 'width', 'thickness',
+                  'notes', 'images']
+
+    def get_substyles(self, coin_style_object):
+        return Logic.get_substyle_list_from_coin_style(coin_style_object)
+
+    def get_notes(self, coin_style_object):
+        return Logic.get_notes_queryset_from_coin_style(coin_style_object)
+
+    def get_images(self, coin_style_object):
+        return Logic.get_image_queryset_from_coin_style(coin_style_object)
+
+
 ##--------------------------Full Info Coin--------------------------##
+"""
+This Serializer is designated for Human-Readable Output of every coin
+in Database
+"""
 class FullInfoCoinSerializer(serializers.ModelSerializer):
     region                = serializers.SerializerMethodField('get_region')
     country               = serializers.SerializerMethodField('get_country')

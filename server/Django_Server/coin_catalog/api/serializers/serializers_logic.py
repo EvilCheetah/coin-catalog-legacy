@@ -237,7 +237,7 @@ def get_images_from_coin_style(coin_style_object):
     ]
 
 
-##--------------------------Pre Loaded Information--------------------------##
+##-------------------Pre Loaded Information For CoinFamily-------------------##
 """
 These functions are designated to obtain the required information
 based on coin_family or coin_style
@@ -257,7 +257,7 @@ def get_sculptors_for_pre_loaded_coin_family(coin_family_object):
 
 
 def get_styles_for_pre_loaded_coin_family(coin_family_object):
-    return CoinInstanceSerializer.PreLoadedCoinStyleSerializer(
+    return CoinInstanceSerializer.CoinStyleSerializerForPreloadedCoinFamily(
                 CoinModel.CoinStyle.objects.filter(coin_family_id = coin_family_object.id),
                 many = True
            ).data
@@ -273,5 +273,17 @@ def get_image_queryset_from_coin_style(coin_style_object):
 def get_notes_queryset_from_coin_style(coin_style_object):
     return CoinInstanceSerializer.NoteSerializer(
                 CoinModel.Note.objects.filter(coin_style_id = coin_style_object.id),
+                many = True
+           ).data
+
+
+##-------------------PreLoaded Information For CoinFamily-------------------##
+def get_substyle_list_from_coin_style(coin_style_object):
+    list_of_substyles = CoinModel.SubStyle.objects.filter(
+                            parent_coin_id = coin_style_object.id
+                        ).values_list('substyle_coin_id', flat = True)
+
+    return CoinInstanceSerializer.CoinStyleSerializer(
+                CoinModel.CoinStyle.objects.filter(id__in = list(list_of_substyles)),
                 many = True
            ).data

@@ -33,7 +33,8 @@ router.register('image',            views.ImageViewSet,                 basename
 
 #Angular Requested ViewSet
 #Solving async issues/errors
-router.register('voobsche_pihui',   views.PreLoadedCoinFamilyViewSet,   basename = 'coin-with-preloaded-descendants')
+router.register('pre_coin_family',   views.PreLoadedCoinFamilyViewSet,   basename = 'coin_family-with-preloaded-descendants')
+router.register('pre_coin_style',    views.PreLoadedCoinStyleViewSet,    basename = 'coin_stylewith-preloaded-descendants')
 
 #Human-Readable Substyle View Set
 #Preformatted with Text

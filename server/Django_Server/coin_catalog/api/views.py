@@ -9,6 +9,10 @@ import coin_catalog.api.filters as CoinFilter
 import coin_catalog.api.view_logic as ViewSetLogic
 
 
+##-------------------Model Based View Sets-------------------##
+"""
+These ViewSets are designated for pure model output
+"""
 class RegionViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.Region.objects.all()
     serializer_class = CoinListSerializer.RegionSerializer
@@ -192,8 +196,12 @@ class ImageViewSet(viewsets.ModelViewSet):
         return ViewSetLogic.get_image_queryset(self.request)
 
 
+##--------------------PreLoaded View Sets--------------------##
+"""
+These ViewSets are designated to avoid async errors with
+requests
+"""
 class PreLoadedCoinFamilyViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset         = CoinModel.CoinStyle.objects.all()
     serializer_class = CoinInstanceSerializer.PreLoadedCoinFamilySerializer
 
     def get_queryset(self):
@@ -204,6 +212,20 @@ class PreLoadedCoinFamilyViewSet(viewsets.ReadOnlyModelViewSet):
                                 primary_key = pk,
                                 model_      = CoinModel.CoinFamily,
                                 serializer_ = CoinInstanceSerializer.PreLoadedCoinFamilySerializer,
+                                request     = self.request))
+
+
+class PreLoadedCoinStyleViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = CoinInstanceSerializer.PreLoadedCoinStyleSerializer
+
+    def get_queryset(self):
+        return None
+
+    def retrieve(self, request, pk = None):
+        return Response(ViewSetLogic.get_object_instance(
+                                primary_key = pk,
+                                model_      = CoinModel.CoinStyle,
+                                serializer_ = CoinInstanceSerializer.PreLoadedCoinStyleSerializer,
                                 request     = self.request))
 
 
