@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     #Apps
+    'accounts',
     'coin_catalog',
-    #'accounts',
 ]
 
 MIDDLEWARE = [
@@ -84,12 +84,7 @@ WSGI_APPLICATION = 'settings.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 
-#AUTH_USER_MODEL = 'accounts.User'
-
-
-REST_FRAMEWORK = {
-    #'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
-}
+AUTH_USER_MODEL = 'accounts.Account'
 
 
 DATABASES = {
