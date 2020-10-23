@@ -10,7 +10,8 @@ class Region(models.Model):
     name = models.CharField(max_length = 20, unique = True)
 
     class Meta:
-        db_table = 'coin_region'
+        db_table            = 'coin_region'
+        verbose_name_plural = 'Regions'
 
     def __str__(self):
         return self.name
@@ -26,8 +27,9 @@ class Country(models.Model):
     name   = models.CharField(max_length = 100)
 
     class Meta:
-        unique_together = ['region', 'name']
-        db_table        = 'coin_country'
+        db_table            = 'coin_country'
+        unique_together     = ['region', 'name']
+        verbose_name_plural = 'Countries'
 
     def __str__(self):
         return self.name
@@ -43,11 +45,16 @@ class Category(models.Model):
     name    = models.CharField(max_length = 255)
 
     class Meta:
-        unique_together = ['country', 'name']
-        db_table        = 'coin_category'
+        db_table            = 'coin_category'
+        unique_together     = ['country', 'name']
+        verbose_name_plural = 'Categories'
 
     def __str__(self):
         return (self.country.name + ' > ' + self.name)
+
+    @property
+    def region(self):
+        return self.country.region.name
 
 
 class Collection(models.Model):
@@ -60,11 +67,25 @@ class Collection(models.Model):
     name     = models.CharField(max_length = 255)
 
     class Meta:
-        unique_together = ['category', 'name']
-        db_table        = 'coin_collection'
+        db_table            = 'coin_collection'
+        unique_together     = ['category', 'name']
+        verbose_name_plural = 'Collections'
 
     def __str__(self):
         return (self.category.name + ' > ' + self.name)
+
+    @property
+    def region(self):
+        return self.category.region
+
+    @property
+    def country(self):
+        return self.category.country.name
+
+    @property
+    def category_name(self):
+        return self.category.name
+
 
 
 ##---------------Currency Information---------------##
@@ -76,7 +97,8 @@ class Currency(models.Model):
     name = models.CharField(max_length = 255, unique = True)
 
     class Meta:
-        db_table = 'coin_currrency'
+        db_table            = 'coin_currrency'
+        verbose_name_plural = 'Currencies'
 
     def __str__(self):
         return self.name
@@ -92,8 +114,9 @@ class CountryCurrency(models.Model):
     currency = models.ForeignKey(Currency, on_delete = models.CASCADE)
 
     class Meta:
-        unique_together = ['country', 'currency']
-        db_table        = 'coin_country_currency_connector'
+        db_table            = 'coin_country_currency_connector'
+        unique_together     = ['country', 'currency']
+        verbose_name_plural = 'Country-Currencies'
 
     def __str__(self):
         return (self.country.name + ': ' + self.currency.name)
@@ -108,7 +131,8 @@ class MintedBy(models.Model):
     name = models.CharField(max_length = 255, unique = True)
 
     class Meta:
-        db_table = 'coin_minted_by'
+        db_table            = 'coin_minted_by'
+        verbose_name_plural = 'Minted By'
 
     def __str__(self):
         return self.name
@@ -122,7 +146,8 @@ class AuthorName(models.Model):
     name = models.CharField(max_length = 255, unique = True)
 
     class Meta:
-        db_table = 'coin_author_name'
+        db_table            = 'coin_author_name'
+        verbose_name_plural = 'Authors\' Name'
 
     def __str__(self):
         return self.name
@@ -136,7 +161,8 @@ class SculptorName(models.Model):
     name = models.CharField(max_length = 255, unique = True)
 
     class Meta:
-        db_table = 'coin_sculptor_name'
+        db_table            = 'coin_sculptor_name'
+        verbose_name_plural = 'Sculptors\' Name'
 
     def __str__(self):
         return self.name
@@ -151,7 +177,8 @@ class Material(models.Model):
     name = models.CharField(max_length = 255, unique = True)
 
     class Meta:
-        db_table = 'coin_material'
+        db_table            = 'coin_material'
+        verbose_name_plural = 'Materials'
 
     def __str__(self):
         return self.name
@@ -165,7 +192,8 @@ class Quality(models.Model):
     name = models.CharField(max_length = 255, unique = True)
 
     class Meta:
-        db_table = 'coin_quality'
+        db_table            = 'coin_quality'
+        verbose_name_plural = 'Qualities'
 
     def __str__(self):
         return self.name
@@ -179,7 +207,8 @@ class Edge(models.Model):
     name = models.CharField(max_length = 255, unique = True)
 
     class Meta:
-        db_table = 'coin_edge'
+        db_table            = 'coin_edge'
+        verbose_name_plural = 'Edge Styles'
 
     def __str__(self):
         return self.name
@@ -194,7 +223,8 @@ class Shape(models.Model):
     name = models.CharField(max_length = 255, unique = True)
 
     class Meta:
-        db_table = 'coin_shape'
+        db_table            = 'coin_shape'
+        verbose_name_plural = 'Shapes'
 
     def __str__(self):
         return self.name
@@ -218,11 +248,28 @@ class CoinFamily(models.Model):
 
 
     class Meta:
-        unique_together = ['collection', 'name']
-        db_table        = 'coin_family'
+        db_table            = 'coin_family'
+        unique_together     = ['collection', 'name']
+        verbose_name_plural = 'Coin Families'
 
     def __str__(self):
         return (self.collection.category.country.name + ' > ' + self.name)
+
+    @property
+    def region(self):
+        return self.collection.region
+
+    @property
+    def country(self):
+        return self.collection.country
+
+    @property
+    def category_name(self):
+        return self.collection.category_name
+
+    @property
+    def collection_name(self):
+        return self.collection.name
 
 
 class CoinStyle(models.Model):
@@ -287,13 +334,14 @@ class CoinStyle(models.Model):
     thickness             = models.FloatField()
 
     class Meta:
-        unique_together = ['year',         'coin_family',
-                           'shape',        'quality',
-                           'material',     'standard',
-                           'denomination_value', 'denomination_currency',
-                           'is_substyle',
-                           'km_number',    'additional_name']
-        db_table        = 'coin_style'
+        db_table            = 'coin_style'
+        unique_together     = ['year',         'coin_family',
+                               'shape',        'quality',
+                               'material',     'standard',
+                               'denomination_value', 'denomination_currency',
+                               'is_substyle',
+                               'km_number',    'additional_name']
+        verbose_name_plural = 'Coin Styles'
 
     def __str__(self):
         return (str(self.year) + ' ' +
@@ -301,6 +349,18 @@ class CoinStyle(models.Model):
                 str(self.additional_name) + ' - ' +
                 str(self.material.name) + ' ' +
                 str(self.standard))
+
+    @property
+    def country(self):
+        return self.coin_family.country
+
+    @property
+    def coin_family_name(self):
+        return self.coin_family.name
+
+    @property
+    def denomination(self):
+        return (str(self.denomination_value) + ' ' + self.denomination_currency.currency.name)
 
 
 class SubStyle(models.Model):
@@ -320,8 +380,9 @@ class SubStyle(models.Model):
                                       related_name = "coin_base_edition")
 
     class Meta:
-        unique_together = ['parent_coin', 'substyle_coin']
-        db_table        = 'coin_style_connector'
+        db_table            = 'coin_style_connector'
+        unique_together     = ['parent_coin', 'substyle_coin']
+        verbose_name_plural = 'Coin SubStyle Connectors'
 
 
 class Note(models.Model):
@@ -337,8 +398,9 @@ class Note(models.Model):
     description = models.CharField(max_length = 255)
 
     class Meta:
-        unique_together = ['coin_style', 'description']
-        db_table        = 'coin_note'
+        db_table            = 'coin_note'
+        unique_together     = ['coin_style', 'description']
+        verbose_name_plural = 'Notes'
 
 
 ##------------------Visual Information------------------##
@@ -351,7 +413,8 @@ class SideOfCoin(models.Model):
     name = models.CharField(max_length = 255, unique = True)
 
     class Meta:
-        db_table = 'coin_side'
+        db_table            = 'coin_side'
+        verbose_name_plural = 'Coin Sides'
 
     def __str__(self):
         return self.name
@@ -371,8 +434,9 @@ class CoinAuthor(models.Model):
     side        = models.ForeignKey(SideOfCoin, on_delete = models.CASCADE)
 
     class Meta:
-        unique_together = ['coin_family', 'author', 'side']
-        db_table        = 'coin_authors'
+        db_table            = 'coin_authors'
+        unique_together     = ['coin_family', 'author', 'side']
+        verbose_name_plural = 'Coin Style Authors'
 
 
 class CoinSculptor(models.Model):
@@ -389,8 +453,9 @@ class CoinSculptor(models.Model):
     side        = models.ForeignKey(SideOfCoin,   on_delete = models.CASCADE)
 
     class Meta:
-        unique_together = ['coin_family', 'sculptor', 'side']
-        db_table        = 'coin_sculptors'
+        db_table            = 'coin_sculptors'
+        unique_together     = ['coin_family', 'sculptor', 'side']
+        verbose_name_plural = 'Coin Style Sulptors'
 
 
 class Image(models.Model):
@@ -407,5 +472,6 @@ class Image(models.Model):
     path       = models.CharField(max_length = 255, unique = True)
 
     class Meta:
-        unique_together = ['coin_style', 'side', 'path']
-        db_table        = 'coin_image'
+        db_table            = 'coin_image'
+        unique_together     = ['coin_style', 'side', 'path']
+        verbose_name_plural = 'Images'
