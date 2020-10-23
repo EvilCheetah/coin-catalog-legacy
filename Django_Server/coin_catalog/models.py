@@ -253,7 +253,7 @@ class CoinFamily(models.Model):
         verbose_name_plural = 'Coin Families'
 
     def __str__(self):
-        return (self.collection.category.country.name + ' > ' + self.name)
+        return self.name
 
     @property
     def region(self):
