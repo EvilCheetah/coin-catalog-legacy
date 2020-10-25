@@ -319,7 +319,7 @@ class CoinStyle(models.Model):
     quality               = models.ForeignKey(Quality,         on_delete = models.CASCADE)
     edge                  = models.ForeignKey(Edge,            on_delete = models.CASCADE)
     material              = models.ForeignKey(Material,        on_delete = models.CASCADE)
-    standard              = models.FloatField()
+    standard              = models.DecimalField(max_digits = 5, decimal_places = 2)
     mintage               = models.IntegerField()
 
     additional_name       = models.CharField(max_length = 255, blank = True, default = "")
@@ -328,10 +328,10 @@ class CoinStyle(models.Model):
     is_rare               = models.BooleanField()
     is_substyle           = models.BooleanField()
 
-    weight                = models.FloatField()
-    length                = models.FloatField()
-    width                 = models.FloatField()
-    thickness             = models.FloatField()
+    weight                = models.DecimalField(max_digits = 11, decimal_places = 2)
+    length                = models.DecimalField(max_digits = 11, decimal_places = 2)
+    width                 = models.DecimalField(max_digits = 11, decimal_places = 2)
+    thickness             = models.DecimalField(max_digits = 11, decimal_places = 2)
 
     class Meta:
         db_table            = 'coin_style'
