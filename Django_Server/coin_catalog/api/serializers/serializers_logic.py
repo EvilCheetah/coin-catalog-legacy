@@ -211,7 +211,7 @@ These functions are designated to return 'minted' id based on
 specified object
 """
 def get_minted_by_from_coin_family(coin_family_object):
-    return coin_family_object.minted_by.id
+    return coin_family_object.minted_by.name
 
 
 def get_minted_by_from_coin_style(coin_style_object):
