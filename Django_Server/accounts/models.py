@@ -5,31 +5,43 @@ from django.contrib.auth.models import (
     AbstractBaseUser
 )
 
-from django.utils import timezone
+
+class AccountManager(BaseUserManager):
+    def create_user(self, email, username, password = None):
+        if not email:
+            raise ValueError("Users must have an email address")
+        if not username:
+            raise ValueError("Users must have an username")
+
+        user = self.model(
+                email    = self.normalize_email(email),
+                username = username
+        )
+
+        user.set_password(password)
+        user.save(using = self._db)
+
+        return user
+
+    def create_superuser(self, email, username, password = None):
+        user = self.create_user(
+                email    = self.normalize_email(email),
+                username = username,
+                password = password
+        )
+
+        user.is_staff     = True
+        user.is_admin     = True
+        user.is_superuser = True
+
+        user.save(using = self._db)
+
+        return user
 
 
-class User(AbstractBaseUser):
-    username = models.CharField(max_length = 255, unique = True)
+class Account(AbstractBaseUser):
     email    = models.EmailField(max_length = 255, unique = True)
-
-    #Plan-based account types
-    basic_plan    = models.BooleanField(
-        default   = True,
-        help_text = ("User have the access to the most of the coins in Database. "
-                    "No access to price history.")
-    )
-
-    advanced_plan = models.BooleanField(
-        default   = False,
-        help_text = ("User have access to all coins. "
-                     "Also have access to price history.")
-    )
-
-    business_plan = models.BooleanField(
-        default   = False,
-        help_text = ("Advanced plan is included. "
-                     "Also grants the access to the API.")
-    )
+    username = models.CharField(max_length = 255, unique = True)
 
     #User Role
     is_active   = models.BooleanField(
@@ -49,7 +61,25 @@ class User(AbstractBaseUser):
                      "Can nominate roles to other users.")
     )
 
-    date_joined = models.DateTimeField(default = timezone.now)
+    is_superuser = models.BooleanField(
+        default = False,
+        help_text = ("Designated whether user is the owner of the site. "
+                     "Can nominate admins.")
+    )
+
+    date_joined = models.DateTimeField(auto_now_add = True)
+    last_login  = models.DateTimeField(auto_now = True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+    objects = AccountManager()
+
+    def __str__(self):
+        return self.username
+
+    def has_perm(self, perm, obj = None):
+        return self.is_superuser
+
+    def has_module_perms(self, app_label):
+        return self.is_superuser

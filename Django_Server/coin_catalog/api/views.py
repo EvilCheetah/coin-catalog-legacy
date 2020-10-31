@@ -5,8 +5,7 @@ from rest_framework.response import Response
 import coin_catalog.models as CoinModel
 import coin_catalog.api.serializers.list_serializers as CoinListSerializer
 import coin_catalog.api.serializers.instance_serializers as CoinInstanceSerializer
-import coin_catalog.api.filters as CoinFilter
-import coin_catalog.api.view_logic as ViewSetLogic
+import coin_catalog.services.view_logic as ViewSetLogic
 
 
 ##-------------------Model Based View Sets-------------------##
@@ -16,7 +15,6 @@ These ViewSets are designated for pure model output
 class RegionViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.Region.objects.all()
     serializer_class = CoinListSerializer.RegionSerializer
-    # filterset_class  = CoinFilter.RegionFilter
 
     def get_queryset(self):
         return ViewSetLogic.get_region_queryset(self.request)
@@ -47,7 +45,6 @@ class CountryViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.Category.objects.all()
     serializer_class = CoinListSerializer.CategorySerialier
-    filterset_class  = CoinFilter.CategoryFilter
 
     def get_queryset(self):
         return ViewSetLogic.get_category_queryset(self.request)
@@ -63,7 +60,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class CollectionViewSet(viewsets.ModelViewSet):
     queryset         = CoinModel.Collection.objects.all()
     serializer_class = CoinListSerializer.CollectionSerializer
-    filterset_class  = CoinFilter.CollectionFilter
 
     def get_queryset(self):
         return ViewSetLogic.get_collection_queryset(self.request)

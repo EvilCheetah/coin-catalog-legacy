@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 import coin_catalog.models as CoinModel
-import coin_catalog.api.serializers.serializers_logic as Logic
+import coin_catalog.services.serializers_logic as Logic
 
 
 ##---------------------------Model Serializers---------------------------##
