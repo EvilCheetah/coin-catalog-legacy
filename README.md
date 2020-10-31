@@ -22,7 +22,7 @@
 
 ## All Commands in List
 	git clone https://github.com/EvilCheetah/CoinCatalog.git
-	python -m venv ENV_NAME
+	python3 -m venv ENV_NAME
 	source ENV_NAME/bin/activate
 	cd server/
 	pip install -r requirements.txt
