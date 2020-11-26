@@ -1,16 +1,15 @@
-from django.db.models import Q
 from rest_framework.response import Response
 
 import coin_catalog.models as CoinModel
 import coin_catalog.services.exceptions as Exception
 import coin_catalog.api.serializers.list_serializers as CoinListSerializer
 
-CHAR_SPLIT_CHAR = ','
+SPLIT_CHAR = ','
 
 
 ##----------------------Private Functions----------------------##
 def _split_string(item: str) -> list:
-    return item.split(CHAR_SPLIT_CHAR)
+    return item.split(SPLIT_CHAR)
 
 
 ##-----------------------Range Functions-----------------------##
@@ -145,22 +144,16 @@ def _get_queryset_based_on_coin_style(request, queryset):
 ############################################################################
 
 
-
-def get_object_instance(primary_key, model_, serializer_, request):
-    context = {'request': request}
-    queryset = model_.objects.filter(pk = primary_key)
-    serializer = serializer_(queryset, many = True, context = context)
-    return serializer.data
-
-
 ##----------------------Queryset Functions----------------------##
 def get_region_queryset(request):
+    queryset    = CoinModel.Region.objects.all()
+
     region_name = request.query_params.get('region')
 
     if region_name:
-        return CoinModel.Region.objects.filter(name__in = _split_string(region_name))
+        queryset = queryset.filter(name__in = _split_string(region_name))
 
-    return CoinModel.Region.objects.all()
+    return queryset
 
 
 def get_country_queryset(request):
