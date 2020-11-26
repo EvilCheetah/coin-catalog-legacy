@@ -1,11 +1,17 @@
-from django.shortcuts import render
+#REST imports
 from rest_framework import viewsets
 from rest_framework.response import Response
 
+#Model Imports
 import coin_catalog.models as CoinModel
+
+#Serializer Imports
 import coin_catalog.api.serializers.list_serializers as CoinListSerializer
 import coin_catalog.api.serializers.instance_serializers as CoinInstanceSerializer
-import coin_catalog.services.view_logic as ViewSetLogic
+
+#Services Imports
+import coin_catalog.services.view_logic.instance_logic as InstanceResponse
+import coin_catalog.services.view_logic.list_logic as ListResponse
 
 
 ##-------------------Model Based View Sets-------------------##
@@ -17,14 +23,15 @@ class RegionViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.RegionSerializer
 
     def get_queryset(self):
-        return ViewSetLogic.get_region_queryset(self.request)
+        return ListResponse.get_region_queryset(self.request)
 
     def retrieve(self, request, pk = None):
-        return Response(ViewSetLogic.get_object_instance(
-                                primary_key = pk,
-                                model_      = CoinModel.Region,
-                                serializer_ = CoinInstanceSerializer.RegionSerializer,
-                                request     = self.request))
+        return InstanceResponse.get_object_instance(
+                    primary_key = pk,
+                    model_      = CoinModel.Region,
+                    serializer_ = CoinInstanceSerializer.RegionSerializer,
+                    request     = self.request
+               )
 
 
 class CountryViewSet(viewsets.ModelViewSet):
@@ -32,14 +39,15 @@ class CountryViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.CountrySerializer
 
     def get_queryset(self):
-        return ViewSetLogic.get_country_queryset(self.request)
+        return ListResponse.get_country_queryset(self.request)
 
     def retrieve(self, request, pk = None):
-        return Response(ViewSetLogic.get_object_instance(
-                                primary_key = pk,
-                                model_      = CoinModel.Country,
-                                serializer_ = CoinInstanceSerializer.CountrySerializer,
-                                request     = self.request))
+        return InstanceResponse.get_object_instance(
+                    primary_key = pk,
+                    model_      = CoinModel.Country,
+                    serializer_ = CoinInstanceSerializer.CountrySerializer,
+                    request     = self.request
+               )
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -47,14 +55,15 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.CategorySerialier
 
     def get_queryset(self):
-        return ViewSetLogic.get_category_queryset(self.request)
+        return ListResponse.get_category_queryset(self.request)
 
     def retrieve(self, request, pk = None):
-        return Response(ViewSetLogic.get_object_instance(
-                                primary_key = pk,
-                                model_      = CoinModel.Category,
-                                serializer_ = CoinInstanceSerializer.CategorySerializer,
-                                request     = self.request))
+        return InstanceResponse.get_object_instance(
+                    primary_key = pk,
+                    model_      = CoinModel.Category,
+                    serializer_ = CoinInstanceSerializer.CategorySerializer,
+                    request     = self.request
+               )
 
 
 class CollectionViewSet(viewsets.ModelViewSet):
@@ -62,14 +71,15 @@ class CollectionViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.CollectionSerializer
 
     def get_queryset(self):
-        return ViewSetLogic.get_collection_queryset(self.request)
+        return ListResponse.get_collection_queryset(self.request)
 
     def retrieve(self, request, pk = None):
-        return Response(ViewSetLogic.get_object_instance(
-                                primary_key = pk,
-                                model_      = CoinModel.Collection,
-                                serializer_ = CoinInstanceSerializer.CollectionSerializer,
-                                request     = self.request))
+        return InstanceResponse.get_object_instance(
+                    primary_key = pk,
+                    model_      = CoinModel.Collection,
+                    serializer_ = CoinInstanceSerializer.CollectionSerializer,
+                    request     = self.request
+               )
 
 
 class CurrencyViewSet(viewsets.ModelViewSet):
@@ -87,9 +97,9 @@ class MintedByViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.MintedBySerializer
 
 
-class AuthorNameViewSet(viewsets.ModelViewSet):
-    queryset         = CoinModel.AuthorName.objects.all()
-    serializer_class = CoinListSerializer.AuthorNameSerializer
+class DesignerNameViewSet(viewsets.ModelViewSet):
+    queryset         = CoinModel.DesignerName.objects.all()
+    serializer_class = CoinListSerializer.DesignerNameSerializer
 
 
 class SculptorNameViewSet(viewsets.ModelViewSet):
@@ -122,14 +132,15 @@ class CoinFamilyViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.CoinFamilySerializer
 
     def get_queryset(self):
-        return ViewSetLogic.get_coin_family_queryset(self.request)
+        return ListResponse.get_coin_family_queryset(self.request)
 
     def retrieve(self, request, pk = None):
-        return Response(ViewSetLogic.get_object_instance(
-                                primary_key = pk,
-                                model_      = CoinModel.CoinFamily,
-                                serializer_ = CoinInstanceSerializer.CoinFamilySerializer,
-                                request     = self.request))
+        return InstanceResponse.get_object_instance(
+                    primary_key = pk,
+                    model_      = CoinModel.CoinFamily,
+                    serializer_ = CoinInstanceSerializer.CoinFamilySerializer,
+                    request     = self.request
+               )
 
 
 class CoinStyleViewSet(viewsets.ModelViewSet):
@@ -137,14 +148,15 @@ class CoinStyleViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.CoinStyleSerializer
 
     def get_queryset(self):
-        return ViewSetLogic.get_coin_style_queryset(self.request)
+        return ListResponse.get_coin_style_queryset(self.request)
 
     def retrieve(self, request, pk = None):
-        return Response(ViewSetLogic.get_object_instance(
-                                primary_key = pk,
-                                model_      = CoinModel.CoinStyle,
-                                serializer_ = CoinInstanceSerializer.CoinStyleSerializer,
-                                request     = self.request))
+        return InstanceResponse.get_object_instance(
+                    primary_key = pk,
+                    model_      = CoinModel.CoinStyle,
+                    serializer_ = CoinInstanceSerializer.CoinStyleSerializer,
+                    request     = self.request
+               )
 
 
 class SubStyleViewSet(viewsets.ModelViewSet):
@@ -152,7 +164,7 @@ class SubStyleViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.SubStyleSerializer
 
     def get_queryset(self):
-        return ViewSetLogic.get_sub_style_queryset(self.request)
+        return ListResponse.get_sub_style_queryset(self.request)
 
 
 class NoteViewSet(viewsets.ModelViewSet):
@@ -160,7 +172,7 @@ class NoteViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.NoteSerializer
 
     def get_queryset(self):
-        return ViewSetLogic.get_note_queryset(self.request)
+        return ListResponse.get_note_queryset(self.request)
 
 
 class SideOfCoinViewSet(viewsets.ModelViewSet):
@@ -168,12 +180,12 @@ class SideOfCoinViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.SideOfCoinSerializer
 
 
-class CoinAuthorViewSet(viewsets.ModelViewSet):
-    queryset         = CoinModel.CoinAuthor.objects.all()
-    serializer_class = CoinListSerializer.CoinAllAuthorsSerializer
+class CoinDesignerViewSet(viewsets.ModelViewSet):
+    queryset         = CoinModel.CoinDesigner.objects.all()
+    serializer_class = CoinListSerializer.CoinAllDesignersSerializer
 
     def get_queryset(self):
-        return ViewSetLogic.get_coin_author_queryset(self.request)
+        return ListResponse.get_coin_author_queryset(self.request)
 
 
 class CoinSculptorViewSet(viewsets.ModelViewSet):
@@ -181,7 +193,7 @@ class CoinSculptorViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.CoinAllSculptorsSerializer
 
     def get_queryset(self):
-        return ViewSetLogic.get_coin_sculptor_queryset(self.request)
+        return ListResponse.get_coin_sculptor_queryset(self.request)
 
 
 class ImageViewSet(viewsets.ModelViewSet):
@@ -189,7 +201,7 @@ class ImageViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.ImageSerializer
 
     def get_queryset(self):
-        return ViewSetLogic.get_image_queryset(self.request)
+        return ListResponse.get_image_queryset(self.request)
 
 
 ##--------------------PreLoaded View Sets--------------------##
@@ -204,11 +216,12 @@ class PreLoadedCoinFamilyViewSet(viewsets.ReadOnlyModelViewSet):
         return None
 
     def retrieve(self, request, pk = None):
-        return Response(ViewSetLogic.get_object_instance(
-                                primary_key = pk,
-                                model_      = CoinModel.CoinFamily,
-                                serializer_ = CoinInstanceSerializer.PreLoadedCoinFamilySerializer,
-                                request     = self.request))
+        return InstanceResponse.get_object_instance(
+                    primary_key = pk,
+                    model_      = CoinModel.CoinFamily,
+                    serializer_ = CoinInstanceSerializer.PreLoadedCoinFamilySerializer,
+                    request     = self.request
+               )
 
 
 class PreLoadedCoinStyleViewSet(viewsets.ReadOnlyModelViewSet):
@@ -218,11 +231,12 @@ class PreLoadedCoinStyleViewSet(viewsets.ReadOnlyModelViewSet):
         return None
 
     def retrieve(self, request, pk = None):
-        return Response(ViewSetLogic.get_object_instance(
-                                primary_key = pk,
-                                model_      = CoinModel.CoinStyle,
-                                serializer_ = CoinInstanceSerializer.PreLoadedCoinStyleSerializer,
-                                request     = self.request))
+        return InstanceResponse.get_object_instance(
+                    primary_key = pk,
+                    model_      = CoinModel.CoinStyle,
+                    serializer_ = CoinInstanceSerializer.PreLoadedCoinStyleSerializer,
+                    request     = self.request
+               )
 
 
 class FullInfoCoinViewSet(viewsets.ReadOnlyModelViewSet):
@@ -231,4 +245,12 @@ class FullInfoCoinViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CoinInstanceSerializer.FullInfoCoinSerializer
 
     def get_queryset(self):
-        return ViewSetLogic.get_full_info_coin_queryset(self.request)
+        return ListResponse.get_full_info_coin_queryset(self.request)
+
+    def retrieve(self, request, pk = None):
+        return InstanceResponse.get_object_instance(
+                    primary_key = pk,
+                    model_      = CoinModel.CoinStyle,
+                    serializer_ = CoinInstanceSerializer.FullInfoCoinSerializer,
+                    request     = self.request
+               )

@@ -70,9 +70,9 @@ class MintedBySerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
-class AuthorNameSerializer(serializers.ModelSerializer):
+class DesignerNameSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = CoinModel.AuthorName
+        model  = CoinModel.DesignerName
         fields = ['id', 'name']
 
 
@@ -114,12 +114,7 @@ class CoinFamilySerializer(serializers.ModelSerializer):
         fields = ['id',
                   'collection',
                   'name',
-                  #creators
-                  #'authors', 'sculptors',
-                  'minted_by',
-                  'total_coins',
-                  ##Displays the list of IDs of CoinStyle
-                  #'coin_style_list'
+                  'total_coins'
                   ]
 
     def get_number_of_coins(self, coin_family_object):
@@ -132,7 +127,8 @@ class CoinStyleSerializer(serializers.ModelSerializer):
         fields = ['id',
                   #ancestors
                   ##'region', 'country', 'category', 'collection',
-                  'coin_family',
+                  'coin_family', 'additional_name',
+                  'minted_by'
                   #basic info
                   'year',
                   ##'coin_name',
@@ -143,7 +139,6 @@ class CoinStyleSerializer(serializers.ModelSerializer):
                   'material',  'standard',
                   'mintage',
 
-                  'additional_name',
                   #physical properties
                   'km_number',
                   'is_rare',  'is_substyle',
@@ -172,16 +167,16 @@ class SideOfCoinSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
-class CoinAuthorSerializer(serializers.ModelSerializer):
+class CoinDesignerSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = CoinModel.CoinAuthor
+        model  = CoinModel.CoinDesigner
         fields = ['author', 'side']
 
 
-class CoinAllAuthorsSerializer(serializers.ModelSerializer):
+class CoinAllDesignersSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = CoinModel.CoinAuthor
-        fields = ['id', 'coin_family', 'author', 'side']
+        model  = CoinModel.CoinDesigner
+        fields = ['id', 'coin_family', 'side', 'designer']
 
 
 class CoinSculptorSerializer(serializers.ModelSerializer):
@@ -193,13 +188,13 @@ class CoinSculptorSerializer(serializers.ModelSerializer):
 class CoinAllSculptorsSerializer(serializers.ModelSerializer):
     class Meta:
         model  = CoinModel.CoinSculptor
-        fields = ['id', 'coin_family', 'sculptor', 'side']
+        fields = ['id', 'coin_family', 'side', 'sculptor']
 
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model  = CoinModel.Image
-        fields = ['id', 'coin_style', 'side', 'path']
+        fields = ['id', 'coin_style', 'side', 'image']
 
 
 ##-------------------Preloaded Coin Serializers for CoinFamily-------------------##
