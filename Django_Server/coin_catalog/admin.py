@@ -13,12 +13,12 @@ class CountryAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display  = ['id', 'region', 'country', 'name']
+    list_display  = ['id', 'region_name', 'country', 'name']
     search_fields = ['name']
 
 
 class CollectionAdmin(admin.ModelAdmin):
-    list_display  = ['id', 'region', 'country', 'category_name', 'name']
+    list_display  = ['id', 'region_name', 'country_name', 'category_name', 'name']
     search_fields = ['name']
 
 
@@ -36,7 +36,7 @@ class MintedByAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-class AuthorNameAdmin(admin.ModelAdmin):
+class DesignerNameAdmin(admin.ModelAdmin):
     list_display  = ['id', 'name']
     search_fields = ['name']
 
@@ -67,12 +67,12 @@ class ShapeAdmin(admin.ModelAdmin):
 
 
 class CoinFamilyAdmin(admin.ModelAdmin):
-    list_display  = ['id', 'region', 'country', 'category_name', 'collection_name', 'name']
+    list_display  = ['id', 'region_name', 'country_name', 'category_name', 'collection_name', 'name']
     search_fields = ['name']
 
 
 class CoinStyleAdmin(admin.ModelAdmin):
-    list_display  = ['id', 'country', 'year', 'coin_family_name', 'additional_name',
+    list_display  = ['id', 'country_name', 'coin_family_name', 'additional_name', 'year', 'minted_by',
                      'km_number', 'denomination',  'material', 'standard', 'quality']
     search_fields = ['additional_name']
 
@@ -89,16 +89,16 @@ class SideOfCoinAdmin(admin.ModelAdmin):
     list_display  = ['id', 'name']
 
 
-class CoinAuthorAdmin(admin.ModelAdmin):
-    list_display = ['id', 'coin_family', 'author', 'side']
+class CoinDesignerAdmin(admin.ModelAdmin):
+    list_display = ['id', 'coin_style', 'side', 'designer']
 
 
 class CoinSculptorAdmin(admin.ModelAdmin):
-    list_display = ['id', 'coin_family', 'sculptor', 'side']
+    list_display = ['id', 'coin_style', 'side', 'sculptor']
 
 
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ['id', 'coin_style', 'side', 'path']
+    list_display = ['id', 'coin_style', 'side', 'image']
 
 
 admin.site.register(CoinModel.Region,          RegionAdmin)
@@ -108,7 +108,7 @@ admin.site.register(CoinModel.Collection,      CollectionAdmin)
 admin.site.register(CoinModel.Currency,        CurrencyAdmin)
 admin.site.register(CoinModel.CountryCurrency, CountryCurrencyAdmin)
 admin.site.register(CoinModel.MintedBy,        MintedByAdmin)
-admin.site.register(CoinModel.AuthorName,      AuthorNameAdmin)
+admin.site.register(CoinModel.DesignerName,    DesignerNameAdmin)
 admin.site.register(CoinModel.SculptorName,    SculptorNameAdmin)
 admin.site.register(CoinModel.Material,        MaterialAdmin)
 admin.site.register(CoinModel.Quality,         QualityAdmin)
@@ -118,6 +118,6 @@ admin.site.register(CoinModel.CoinFamily,      CoinFamilyAdmin)
 admin.site.register(CoinModel.CoinStyle,       CoinStyleAdmin)
 admin.site.register(CoinModel.Note,            NoteAdmin)
 admin.site.register(CoinModel.SideOfCoin,      SideOfCoinAdmin)
-admin.site.register(CoinModel.CoinAuthor,      CoinAuthorAdmin)
+admin.site.register(CoinModel.CoinDesigner,    CoinDesignerAdmin)
 admin.site.register(CoinModel.CoinSculptor,    CoinSculptorAdmin)
 admin.site.register(CoinModel.Image,           ImageAdmin)
