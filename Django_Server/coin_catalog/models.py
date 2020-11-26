@@ -34,11 +34,18 @@ class Country(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def region_name(self):
+        return self.region.name
+
 
 class Category(models.Model):
     """
     country - Reference to Country Table
     name    - Category Name, e.g. History and Culture, Myths and etc.
+
+    Note:
+        - '@property' attributes are created for AdminPanel
     """
 
     country = models.ForeignKey(Country, related_name = 'category_list', on_delete = models.CASCADE)
@@ -53,14 +60,21 @@ class Category(models.Model):
         return (self.country.name + ' > ' + self.name)
 
     @property
-    def region(self):
-        return self.country.region.name
+    def region_name(self):
+        return self.country.region_name
+
+    @property
+    def country_name(self):
+        return self.country.name
 
 
 class Collection(models.Model):
     """
     category - Reference to Category Table
     name     - Collection (SubCategory), e.g. Saints, Greek Gods and etc.
+
+    Note:
+        - '@property' attributes are created for AdminPanel
     """
 
     category = models.ForeignKey(Category, related_name = 'collection_list', on_delete = models.CASCADE)
@@ -75,17 +89,16 @@ class Collection(models.Model):
         return (self.category.name + ' > ' + self.name)
 
     @property
-    def region(self):
-        return self.category.region
+    def region_name(self):
+        return self.category.region_name
 
     @property
-    def country(self):
-        return self.category.country.name
+    def country_name(self):
+        return self.category.country_name
 
     @property
     def category_name(self):
         return self.category.name
-
 
 
 ##---------------Currency Information---------------##
@@ -121,6 +134,10 @@ class CountryCurrency(models.Model):
     def __str__(self):
         return (self.country.name + ': ' + self.currency.name)
 
+    @property
+    def currency_name(self):
+        return self.currency.name
+
 
 ##------------------MintedBy Information------------------##
 class MintedBy(models.Model):
@@ -138,7 +155,7 @@ class MintedBy(models.Model):
         return self.name
 
 
-class AuthorName(models.Model):
+class DesignerName(models.Model):
     """
     name - Single name of Author or Designer of Coin
     """
@@ -146,8 +163,8 @@ class AuthorName(models.Model):
     name = models.CharField(max_length = 255, unique = True)
 
     class Meta:
-        db_table            = 'coin_author_name'
-        verbose_name_plural = 'Authors\' Name'
+        db_table            = 'coin_designer_name'
+        verbose_name_plural = 'Designers\' Name'
 
     def __str__(self):
         return self.name
@@ -171,7 +188,7 @@ class SculptorName(models.Model):
 ##----------------Base Information----------------##
 class Material(models.Model):
     """
-    name - Name of Material, e.g. Gold, Silver, Cooper-Nickel and etc.
+    name - Name of Material, e.g. Gold, Silver, Copper-Nickel and etc.
     """
 
     name = models.CharField(max_length = 255, unique = True)
@@ -239,13 +256,13 @@ class CoinFamily(models.Model):
     collection - Reference to Collection Table
     name       - Name of Coin or set of coins, e.g. Porthos, Mercury, Libra and etc.
     mintedBy   - Reference to MintedBy Table
+
+    Note:
+        - '@property' attributes are created for AdminPanel
     """
 
     collection = models.ForeignKey(Collection, related_name = 'coin_family_list', on_delete = models.CASCADE)
     name       = models.CharField(max_length = 255)
-    minted_by  = models.ForeignKey(MintedBy, on_delete = models.CASCADE,
-                                   blank = True, default = "")
-
 
     class Meta:
         db_table            = 'coin_family'
@@ -256,12 +273,12 @@ class CoinFamily(models.Model):
         return self.name
 
     @property
-    def region(self):
-        return self.collection.region
+    def region_name(self):
+        return self.collection.region_name
 
     @property
-    def country(self):
-        return self.collection.country
+    def country_name(self):
+        return self.collection.country_name
 
     @property
     def category_name(self):
@@ -272,12 +289,15 @@ class CoinFamily(models.Model):
         return self.collection.name
 
 
+
 class CoinStyle(models.Model):
     """
     Holds the information of different styles of the coin with same names
 
+    coin_family           - Reference to CoinFamily Table
+    additional_name       - Additional Name(Postfix), e.g. 25 Years Anniversary and etc.
+    minted_by             - Reference to MintedBy Table
     year                  - Put into Circulation
-    coin_family           - Reference to Coin Table
     denomination_value    - Value of "Worth of Coin" in local currency
     denomination_currency - Reference to CountryCurrency Table, Actutual Name of Currency
     shape                 - Reference to Shape Table
@@ -286,7 +306,6 @@ class CoinStyle(models.Model):
     material              - Reference to Material Table
     standard              - Standard of the Material(Fineness), e.g. 925/1000, 999/1000 and etc.
     mintage               - Amount of coins minted, e.g. 20k, 500 and etc.
-    additional_name       - Additional Name(Postfix), e.g. 25 Years Anniversary and etc.
     km_number             - KM(Krause-Mishler) catalog number
     is_rare               - To indicate if coin can be viewed under a subscription mode.
     is_substyle           - To indicate that the coin is the Child(substyle) of different coin
@@ -308,9 +327,16 @@ class CoinStyle(models.Model):
         - SubStyle State
         - KM Number
         - Additional Name
+
+    Notes:
+        - Minted_By may differ from CoinStyle to CoinStyle (ex. https://bit.ly/3m8hlFX)
+        - '@property' attributes are created for AdminPanel
     """
 
     coin_family           = models.ForeignKey(CoinFamily, related_name = 'coin_style_list', on_delete = models.CASCADE)
+    additional_name       = models.CharField(max_length = 255, blank = True, default = "")
+    minted_by             = models.ForeignKey(MintedBy, on_delete = models.CASCADE,
+                                              blank = True, default = "")
 
     year                  = models.IntegerField()
     denomination_value    = models.FloatField()
@@ -322,7 +348,6 @@ class CoinStyle(models.Model):
     standard              = models.DecimalField(max_digits = 5, decimal_places = 2)
     mintage               = models.IntegerField()
 
-    additional_name       = models.CharField(max_length = 255, blank = True, default = "")
     km_number             = models.CharField(max_length = 255, blank = True, default = "")
 
     is_rare               = models.BooleanField()
@@ -351,8 +376,20 @@ class CoinStyle(models.Model):
                 str(self.standard))
 
     @property
-    def country(self):
-        return self.coin_family.country
+    def region_name(self):
+        return self.coin_family.region_name
+
+    @property
+    def country_name(self):
+        return self.coin_family.country_name
+
+    @property
+    def category_name(self):
+        return self.coin_family.category_name
+
+    @property
+    def collection_name(self):
+        return self.coin_family.collection_name
 
     @property
     def coin_family_name(self):
@@ -360,7 +397,7 @@ class CoinStyle(models.Model):
 
     @property
     def denomination(self):
-        return (str(self.denomination_value) + ' ' + self.denomination_currency.currency.name)
+        return (str(self.denomination_value) + ' ' + self.denomination_currency.currency_name)
 
 
 class SubStyle(models.Model):
@@ -406,7 +443,7 @@ class Note(models.Model):
 ##------------------Visual Information------------------##
 class SideOfCoin(models.Model):
     """
-    Holds the name of side for Image Table
+    Holds the name of side for Images, Designers and Sculptors
     name - name of side, e.g. Front(Obverse), Back(Reverse), Edge and etc.
     """
 
@@ -420,41 +457,49 @@ class SideOfCoin(models.Model):
         return self.name
 
 
-class CoinAuthor(models.Model):
+class CoinDesigner(models.Model):
     """
     Holds the name of author or a list of authors of a single coin(family of coins)
 
-    coin_family - Reference to Coin Table
-    author      - Reference to AuthorName Table
-    side        - Reference to SideOfCoin Table
+    coin_style - Reference to CoinStyle Table
+    side       - Reference to SideOfCoin Table
+    designer   - Reference to DesignerName Table
+
+    Note:
+        - Designers in single CoinFamily may differ from CoinStyle
+          to CoinStyle, used CoinStyle instead of CoinFamily
     """
 
-    coin_family = models.ForeignKey(CoinFamily, on_delete = models.CASCADE)
-    author      = models.ForeignKey(AuthorName, on_delete = models.CASCADE)
-    side        = models.ForeignKey(SideOfCoin, on_delete = models.CASCADE)
+    coin_style = models.ForeignKey(CoinStyle,    on_delete = models.CASCADE)
+    side       = models.ForeignKey(SideOfCoin,   on_delete = models.CASCADE)
+    designer   = models.ForeignKey(DesignerName, on_delete = models.CASCADE)
 
     class Meta:
         db_table            = 'coin_authors'
-        unique_together     = ['coin_family', 'author', 'side']
-        verbose_name_plural = 'Coin Style Authors'
+        unique_together     = ['coin_style', 'designer', 'side']
+        verbose_name_plural = 'Coin Style Designers'
 
 
 class CoinSculptor(models.Model):
     """
     Holds the name of sculptor or a list of sculptors of a single coin(family of coins)
 
-    coin_family - Reference to Coin Table
-    sculptor    - Reference to SculptorName Table
-    side        - Reference to SideOfCoin Table
+    coin_style - Reference to CoinStyle
+    side       - Reference to SideOfCoin Table
+    sculptor   - Reference to SculptorName Table
+
+    Note:
+        - Sculptors in single CoinFamily may differ from CoinStyle
+          to CoinStyle, used CoinStyle instead of CoinFamily
     """
 
-    coin_family = models.ForeignKey(CoinFamily,   on_delete = models.CASCADE)
-    sculptor    = models.ForeignKey(SculptorName, on_delete = models.CASCADE)
-    side        = models.ForeignKey(SideOfCoin,   on_delete = models.CASCADE)
+    coin_style = models.ForeignKey(CoinStyle,    on_delete = models.CASCADE)
+    side       = models.ForeignKey(SideOfCoin,   on_delete = models.CASCADE)
+    sculptor   = models.ForeignKey(SculptorName, on_delete = models.CASCADE)
 
     class Meta:
         db_table            = 'coin_sculptors'
-        unique_together     = ['coin_family', 'sculptor', 'side']
+        unique_together     = ['coin_style', 'sculptor', 'side']
         verbose_name_plural = 'Coin Style Sulptors'
 
 
@@ -464,14 +509,14 @@ class Image(models.Model):
 
     coin_style - Reference to CoinStyle Table
     side       - Reference to SideOfCoin
-    path       - Path to image
+    image       - Path to image
     """
 
     coin_style = models.ForeignKey(CoinStyle,  on_delete = models.CASCADE)
     side       = models.ForeignKey(SideOfCoin, on_delete = models.CASCADE)
-    path       = models.CharField(max_length = 255, unique = True)
+    image      = models.ImageField(upload_to = 'coin_images/')
 
     class Meta:
         db_table            = 'coin_image'
-        unique_together     = ['coin_style', 'side', 'path']
+        unique_together     = ['coin_style', 'side', 'image']
         verbose_name_plural = 'Images'
