@@ -117,13 +117,13 @@ class SideOfCoinSerializer(serializers.ModelSerializer):
 class CoinAllDesignersSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Coin.CoinDesigner
-        fields = ['id', 'coin_family', 'side', 'designer']
+        fields = ['id', 'coin_style', 'side', 'designer']
 
 
 class CoinAllSculptorsSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Coin.CoinSculptor
-        fields = ['id', 'coin_family', 'side', 'sculptor']
+        fields = ['id', 'coin_style', 'side', 'sculptor']
 
 
 class ImageSerializer(serializers.ModelSerializer):
