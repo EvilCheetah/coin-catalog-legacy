@@ -13,6 +13,6 @@ migrations/
 *.sqlite3
 
 
-#Ignore images in scrapper
+#Ignore images in static folder
 static/images/coin_images/*
-static/images/coin_images/README.md
+!static/images/coin_images/README.md
