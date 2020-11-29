@@ -10,6 +10,5 @@ router.register('accounts', views.UserViewSet, basename = 'user-view-set')
 
 
 urlpatterns = [
-    path('',         include(router.urls)),
-    path('register/', views.registration, name = 'registering_user')
+    path('', include(router.urls)),
 ]
