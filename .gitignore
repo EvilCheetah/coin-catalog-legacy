@@ -14,5 +14,5 @@ migrations/
 
 
 #Ignore images in scrapper
-scrapper/img/*
-!scrapper/img/README.md
+static/images/coin_images/*
+static/images/coin_images/README.md
