@@ -280,8 +280,8 @@ class FullInfoCoinSerializer(serializers.ModelSerializer):
     edge                  = serializers.SerializerMethodField('get_edge')
     material              = serializers.SerializerMethodField('get_material')
     substyle_of           = serializers.SerializerMethodField('get_substyle')
-    #designers             = serializers.SerializerMethodField('get_designers')
-    #sculptors             = serializers.SerializerMethodField('get_sculptors')
+    designers             = serializers.SerializerMethodField('get_designers')
+    sculptors             = serializers.SerializerMethodField('get_sculptors')
     notes                 = serializers.SerializerMethodField('get_notes')
     minted_by             = serializers.SerializerMethodField('get_minted_by')
     images                = serializers.SerializerMethodField('get_images')
@@ -306,7 +306,7 @@ class FullInfoCoinSerializer(serializers.ModelSerializer):
                   'substyle_of',
                   ##'is_rare',  'is_substyle',
                   #creators and additional information
-                  #'designers', 'sculptors',
+                  'designers', 'sculptors',
                   'notes',
                   'minted_by', 'images'
                   ]
