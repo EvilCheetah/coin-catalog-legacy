@@ -14,5 +14,5 @@ migrations/
 
 
 #Ignore images in static folder
-static/images/coin_images/*
-!static/images/coin_images/README.md
+Django_Server/static/images/coin_images/*
+!Django_Server/static/images/coin_images/README.md
