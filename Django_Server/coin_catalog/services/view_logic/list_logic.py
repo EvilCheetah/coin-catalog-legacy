@@ -122,15 +122,6 @@ def _get_thickness_range_queryset(queryset, thickness_gte_limit, thickness_lte_l
 
 
 ##--------------------Descendants-Dedicated Functions--------------------##
-def _get_queryset_based_on_coin_family(request, queryset):
-    coin_family = request.query_params.get('coin_family')
-
-    if ( coin_family ):
-        queryset = queryset.filter(coin_family_id = coin_family)
-
-    return queryset
-
-
 def _get_queryset_based_on_coin_style(request, queryset):
     coin_style = request.query_params.get('coin_style')
 
@@ -220,7 +211,6 @@ def get_coin_family_queryset(request):
     country_id       = request.query_params.get('country')
     category_id      = request.query_params.get('category')
     collection_id    = request.query_params.get('collection')
-    minted_by_id     = request.query_params.get('minted_by')
 
     if region_id:
         queryset = queryset.filter(collection__category__country__region__id__in = _split_string(region_id))
@@ -233,9 +223,6 @@ def get_coin_family_queryset(request):
 
     if collection_id:
         queryset = queryset.filter(collection__id__in = _split_string(collection_id))
-
-    if minted_by_id:
-        queryset = queryset.filter(minted_by__id__in = _split_string(minted_by_id))
 
     return queryset
 
@@ -316,7 +303,7 @@ def get_coin_style_queryset(request):
 
     if minted_by_id:
         try:
-            queryset = queryset.filter(coin_family__minted_by__id__in = _split_string(minted_by_id))
+            queryset = queryset.filter(minted_by__id__in = _split_string(minted_by_id))
         except ValueError:
             Exception.type_error_for_list_parameter('minted_by')
 
@@ -387,16 +374,16 @@ def get_note_queryset(request):
     return _get_queryset_based_on_coin_style(request, queryset)
 
 
-def get_coin_author_queryset(request):
-    queryset = CoinModel.CoinAuthor.objects.all()
+def get_coin_designer_queryset(request):
+    queryset = CoinModel.CoinDesigner.objects.all()
 
-    return _get_queryset_based_on_coin_family(request, queryset)
+    return _get_queryset_based_on_coin_style(request, queryset)
 
 
 def get_coin_sculptor_queryset(request):
     queryset = CoinModel.CoinSculptor.objects.all()
 
-    return _get_queryset_based_on_coin_family(request, queryset)
+    return _get_queryset_based_on_coin_style(request, queryset)
 
 
 def get_image_queryset(request):
@@ -458,7 +445,7 @@ def get_full_info_coin_queryset(request):
     if collection_id:
         queryset = queryset.filter(coin_family__collection__name__in = _split_string(collection_id))
     if minted_by_id:
-        queryset = queryset.filter(coin_family__minted_by__name__in = _split_string(minted_by_id))
+        queryset = queryset.filter(minted_by__name__in = _split_string(minted_by_id))
 
     #Standard Information Search
     if (year_gte_limit or year_lte_limit):

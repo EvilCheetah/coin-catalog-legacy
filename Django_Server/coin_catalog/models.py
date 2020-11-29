@@ -475,7 +475,7 @@ class CoinDesigner(models.Model):
     designer   = models.ForeignKey(DesignerName, on_delete = models.CASCADE)
 
     class Meta:
-        db_table            = 'coin_authors'
+        db_table            = 'coin_designers'
         unique_together     = ['coin_style', 'designer', 'side']
         verbose_name_plural = 'Coin Style Designers'
 

@@ -185,7 +185,7 @@ class CoinDesignerViewSet(viewsets.ModelViewSet):
     serializer_class = CoinListSerializer.CoinAllDesignersSerializer
 
     def get_queryset(self):
-        return ListResponse.get_coin_author_queryset(self.request)
+        return ListResponse.get_coin_designer_queryset(self.request)
 
 
 class CoinSculptorViewSet(viewsets.ModelViewSet):

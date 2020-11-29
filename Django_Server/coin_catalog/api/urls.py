@@ -15,7 +15,7 @@ router.register('collection',       views.CollectionViewSet,            basename
 router.register('currency',         views.CurrencyViewSet,              basename = 'currency-model')
 router.register('country_currency', views.CountryCurrencyViewSet,       basename = 'country_currency-model')
 router.register('minted_by',        views.MintedByViewSet,              basename = 'minted_by-model')
-router.register('author_name',      views.DesignerNameViewSet,           basename = 'desinger_name-model')
+router.register('designer_name',    views.DesignerNameViewSet,          basename = 'desinger_name-model')
 router.register('sculptor_name',    views.SculptorNameViewSet,          basename = 'sculptor_name-model')
 router.register('material',         views.MaterialViewSet,              basename = 'material-model')
 router.register('quality',          views.QualityViewSet,               basename = 'quality-model')
