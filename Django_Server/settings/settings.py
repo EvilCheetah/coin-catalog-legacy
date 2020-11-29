@@ -40,13 +40,22 @@ INSTALLED_APPS = [
 
     #REST FRAMEWORK Libraries
     'rest_framework',
-    'django_filters',
+    'rest_framework.authtoken',
+    'djoser',
     'corsheaders',
 
     #Apps
     'accounts',
     'coin_catalog',
 ]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication'
+    ]
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -132,6 +141,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+MEDIA_URL  = '/media/'
 
 
 CORS_ORIGIN_WHITELIST = [
