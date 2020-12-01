@@ -14,5 +14,7 @@ migrations/
 
 
 #Ignore images in scrapper
-scrapper/img/*
+*.gif
+*.png
+*.jpg
 !scrapper/img/README.md
