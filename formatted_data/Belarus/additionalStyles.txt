@@ -1,0 +1,30 @@
+1
+	/coinsbanknotes/images/516
+100
+	/coinsbanknotes/images/1773
+	/coinsbanknotes/images/1774
+	/coinsbanknotes/images/1775
+102
+	/coinsbanknotes/images/1605
+215
+	/coinsbanknotes/images/2355
+219
+	/coinsbanknotes/images/2354
+226
+	/coinsbanknotes/images/2926
+227
+	/coinsbanknotes/images/2927
+228
+	/coinsbanknotes/images/2928
+230
+	/coinsbanknotes/images/2929
+231
+	/coinsbanknotes/images/2930
+232
+	/coinsbanknotes/images/2931
+237
+	/coinsbanknotes/images/3261
+238
+	/coinsbanknotes/images/3259
+240
+	/coinsbanknotes/images/3260
