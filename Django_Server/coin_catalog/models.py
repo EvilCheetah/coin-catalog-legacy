@@ -7,10 +7,11 @@ class Region(models.Model):
     name - Region Name, e.g. Europe, North America and etc.
     """
 
-    name = models.CharField(max_length = 20, unique = True)
+    name = models.CharField(max_length = 20)
 
     class Meta:
         db_table            = 'coin_region'
+        unique_together     = ['name']
         verbose_name_plural = 'Regions'
 
     def __str__(self):
@@ -107,10 +108,11 @@ class Currency(models.Model):
     name - Name of the Currency
     """
 
-    name = models.CharField(max_length = 255, unique = True)
+    name = models.CharField(max_length = 255)
 
     class Meta:
         db_table            = 'coin_currrency'
+        unique_together     = ['name']
         verbose_name_plural = 'Currencies'
 
     def __str__(self):
@@ -145,10 +147,11 @@ class MintedBy(models.Model):
     name - Name of Mint(Origin)
     """
 
-    name = models.CharField(max_length = 255, unique = True)
+    name = models.CharField(max_length = 255)
 
     class Meta:
         db_table            = 'coin_minted_by'
+        unique_together     = ['name']
         verbose_name_plural = 'Minted By'
 
     def __str__(self):
@@ -160,10 +163,11 @@ class DesignerName(models.Model):
     name - Single name of Author or Designer of Coin
     """
 
-    name = models.CharField(max_length = 255, unique = True)
+    name = models.CharField(max_length = 255)
 
     class Meta:
         db_table            = 'coin_designer_name'
+        unique_together     = ['name']
         verbose_name_plural = 'Designers\' Name'
 
     def __str__(self):
@@ -175,10 +179,11 @@ class SculptorName(models.Model):
     name - Single name of Sculptor or 3D Designer of Coin
     """
 
-    name = models.CharField(max_length = 255, unique = True)
+    name = models.CharField(max_length = 255)
 
     class Meta:
         db_table            = 'coin_sculptor_name'
+        unique_together     = ['name']
         verbose_name_plural = 'Sculptors\' Name'
 
     def __str__(self):
@@ -191,10 +196,11 @@ class Material(models.Model):
     name - Name of Material, e.g. Gold, Silver, Copper-Nickel and etc.
     """
 
-    name = models.CharField(max_length = 255, unique = True)
+    name = models.CharField(max_length = 255)
 
     class Meta:
         db_table            = 'coin_material'
+        unique_together     = ['name']
         verbose_name_plural = 'Materials'
 
     def __str__(self):
@@ -206,10 +212,11 @@ class Quality(models.Model):
     name - Name of Quality, e.g. Brilliant–Uncirculated, Proof, Uncirculated and etc.
     """
 
-    name = models.CharField(max_length = 255, unique = True)
+    name = models.CharField(max_length = 255)
 
     class Meta:
         db_table            = 'coin_quality'
+        unique_together     = ['name']
         verbose_name_plural = 'Qualities'
 
     def __str__(self):
@@ -221,10 +228,11 @@ class Edge(models.Model):
     name - Style of edge, e.g. reeded, corrugated and etc.
     """
 
-    name = models.CharField(max_length = 255, unique = True)
+    name = models.CharField(max_length = 255)
 
     class Meta:
         db_table            = 'coin_edge'
+        unique_together     = ['name']
         verbose_name_plural = 'Edge Styles'
 
     def __str__(self):
@@ -237,10 +245,11 @@ class Shape(models.Model):
     name - Name of Shape, e.g. Round, Square, Oval and etc.
     """
 
-    name = models.CharField(max_length = 255, unique = True)
+    name = models.CharField(max_length = 255)
 
     class Meta:
         db_table            = 'coin_shape'
+        unique_together     = ['name']
         verbose_name_plural = 'Shapes'
 
     def __str__(self):
@@ -287,7 +296,6 @@ class CoinFamily(models.Model):
     @property
     def collection_name(self):
         return self.collection.name
-
 
 
 class CoinStyle(models.Model):
@@ -447,10 +455,11 @@ class SideOfCoin(models.Model):
     name - name of side, e.g. Front(Obverse), Back(Reverse), Edge and etc.
     """
 
-    name = models.CharField(max_length = 255, unique = True)
+    name = models.CharField(max_length = 255)
 
     class Meta:
         db_table            = 'coin_side'
+        unique_together     = ['name']
         verbose_name_plural = 'Coin Sides'
 
     def __str__(self):
