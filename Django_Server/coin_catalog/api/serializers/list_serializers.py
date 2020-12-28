@@ -1,132 +1,154 @@
 from rest_framework import serializers
 
-import coin_catalog.models as Coin
+import coin_catalog.models as CoinModel
+
 
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.Region
-        fields = ['id', 'name']
+        model      = CoinModel.Region
+        fields     = ['id', 'name']
+        validators = []
 
 
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.Country
-        fields = ['id', 'region', 'name']
+        model      = CoinModel.Country
+        fields     = ['id', 'region', 'name']
+        validators = []
 
 
-class CategorySerialier(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.Category
-        fields = ['id', 'country', 'name']
+        model      = CoinModel.Category
+        fields     = ['id', 'country', 'name']
+        validators = []
 
 
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.Collection
-        fields = ['id', 'category', 'name']
+        model      = CoinModel.Collection
+        fields     = ['id', 'category', 'name']
+        validators = []
 
 
 class CurrencySerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.Currency
-        fields = ['id', 'name']
+        model      = CoinModel.Currency
+        fields     = ['id', 'name']
+        validators = []
 
 
 class CountryCurrencySerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.CountryCurrency
-        fields = ['id', 'country', 'currency']
+        model      = CoinModel.CountryCurrency
+        fields     = ['id', 'country', 'currency']
+        validators = []
 
 
 class MintedBySerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.MintedBy
-        fields = ['id', 'name']
+        model      = CoinModel.MintedBy
+        fields     = ['id', 'name']
+        validators = []
 
 
 class DesignerNameSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.DesignerName
-        fields = ['id', 'name']
+        model      = CoinModel.DesignerName
+        fields     = ['id', 'name']
+        validators = []
 
 
 class SculptorNameSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.SculptorName
-        fields = ['id', 'name']
+        model      = CoinModel.SculptorName
+        fields     = ['id', 'name']
+        validators = []
 
 
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.Material
-        fields = ['id', 'name']
+        model      = CoinModel.Material
+        fields     = ['id', 'name']
+        validators = []
 
 
 class QualitySerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.Quality
-        fields = ['id', 'name']
+        model      = CoinModel.Quality
+        fields     = ['id', 'name']
+        validators = []
 
 
 class EdgeSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.Edge
-        fields = ['id', 'name']
+        model      = CoinModel.Edge
+        fields     = ['id', 'name']
+        validators = []
 
 
 class ShapeSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.Shape
-        fields = ['id', 'name']
+        model      = CoinModel.Shape
+        fields     = ['id', 'name']
+        validators = []
 
 
 class CoinFamilySerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.CoinFamily
-        fields = ['id', 'collection', 'name']
+        model      = CoinModel.CoinFamily
+        fields     = ['id', 'collection', 'name']
+        validators = []
 
 
 class CoinStyleSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.CoinStyle
-        fields = ['id',
-                  'coin_family', 'additional_name',
-                  'minted_by',   'year',
-                  'km_number',   'quality',
-                  'material',    'standard']
+        model      = CoinModel.CoinStyle
+        fields     = ['id',
+                      'coin_family', 'additional_name',
+                      'minted_by',   'year',
+                      'km_number',   'quality',
+                      'material',    'standard']
+        validators = []
 
 
 class SubStyleSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.SubStyle
-        fields = ['substyle_coin', 'parent_coin']
+        model      = CoinModel.SubStyle
+        fields     = ['substyle_coin', 'parent_coin']
+        validators = []
 
 
 class NoteSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.Note
-        fields = ['id', 'coin_style', 'description']
+        model      = CoinModel.Note
+        fields     = ['id', 'coin_style', 'description']
+        validators = []
 
 
 class SideOfCoinSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.SideOfCoin
-        fields = ['id', 'name']
+        model      = CoinModel.SideOfCoin
+        fields     = ['id', 'name']
+        validators = []
 
 
 class CoinAllDesignersSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.CoinDesigner
-        fields = ['id', 'coin_style', 'side', 'designer']
+        model      = CoinModel.CoinDesigner
+        fields     = ['id', 'coin_style', 'side', 'designer']
+        validators = []
 
 
 class CoinAllSculptorsSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.CoinSculptor
-        fields = ['id', 'coin_style', 'side', 'sculptor']
+        model      = CoinModel.CoinSculptor
+        fields     = ['id', 'coin_style', 'side', 'sculptor']
+        validators = []
 
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model  = Coin.Image
-        fields = ['id', 'coin_style', 'side', 'image']
+        model      = CoinModel.Image
+        fields     = ['id', 'coin_style', 'side', 'image']
+        validators = []
