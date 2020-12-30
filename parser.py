@@ -10,7 +10,7 @@ import json
 
 
 PATH_TO_FILE = 'formatted_data/Belarus/formatted.json'
-IMAGE_PATH   = 'formatted_data/Belarus/img'
+IMAGE_PATH   = 'formatted_data/Belarus/'
 API_URLS = {
     'region':           'http://localhost:8000/api/catalog/region/',
     'country':          'http://localhost:8000/api/catalog/country/',
@@ -133,7 +133,7 @@ class Coin:
             # ('SIDE_NAME', 'ARRAY_OF_DESIGNERS')
             #
             # e.g ('Side', [Designers])
-            for side, designers in coin['authors']
+            for side, designers in coin['authors'].items()
             # Second 'for' loop splits array into single item:
             # ('SIDE_NAME', DESIGNER)
             for designer in designers
@@ -149,7 +149,7 @@ class Coin:
             # ('SIDE_NAME', 'ARRAY_OF_SCULPTORS')
             #
             # e.g ('Side', [Sculptors])
-            for side, designers in coin['sculptors']
+            for side, designers in coin['sculptors'].items()
             # Second 'for' loop splits array into single item:
             # ('SIDE_NAME', SCULPTOR)
             for sculptor in sculptors
@@ -161,7 +161,7 @@ class Coin:
                 'side_name':     side,
                 'path_to_image': image_path
             }
-            for side, image_path in coin['images']
+            for side, image_path in coin['images'].items()
         ]
 
 
@@ -513,15 +513,12 @@ def _send_images(coin: 'Coin'):
 
         data = {
             'coin_style':   coin.coin_style['id'],
-            'side':         sculptor['side_id']
+            'side':         image['side_id']
         }
 
         with open( (image_path + image['path_to_image']), 'rb') as fin:
-            file = {
-                'image': fin
-            }
-
-        requests.post(API_URLS['image'], data = data, files = file)
+            file = {'image': fin}
+            requests.post(API_URLS['image'], data = data, files = file)
 
 
 
