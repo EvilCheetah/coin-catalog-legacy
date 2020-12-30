@@ -52,6 +52,18 @@ class CollectionSerializer(serializers.ModelSerializer):
         return Logic.get_number_of_coins_from_collection(collection_object.id)
 
 
+class CurrencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model      = CoinModel.Currency
+        fields     = ['id', 'name']
+
+
+class CountryCurrencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model      = CoinModel.CountryCurrency
+        fields     = ['id', 'country', 'currency']
+
+
 class MintedBySerializer(serializers.ModelSerializer):
     class Meta:
         model  = CoinModel.MintedBy
@@ -129,7 +141,7 @@ class CoinStyleSerializer(serializers.ModelSerializer):
 
                   #physical properties
                   'km_number',
-                  'is_rare',  'is_substyle',
+                  'is_substyle',
                   'weight',   'length', 'width', 'thickness',
                   #creators and additional information
                   ##'authors', 'sculptors', 'notes',
@@ -215,7 +227,7 @@ class CoinStyleSerializerForPreloadedCoinFamily(serializers.ModelSerializer):
                   'shape', 'quality', 'edge', 'material', 'standard',
                   'mintage',
                   'km_number',
-                  'is_rare', 'substyle_of',
+                  'substyle_of',
                   'weight', 'length', 'width', 'thickness',
                   'notes', 'images'
                   ]
@@ -248,7 +260,6 @@ class PreLoadedCoinStyleSerializer(serializers.ModelSerializer):
                   'shape', 'quality', 'edge', 'material', 'standard',
                   'mintage',
                   'km_number',
-                  'is_rare',
                   'substyles',
                   'weight', 'length', 'width', 'thickness',
                   'notes', 'images']
