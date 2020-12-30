@@ -329,7 +329,8 @@ class CoinStyle(models.Model):
         - CoinFamilyID (Primary Name)
         - Material
         - Material Standard
-        - Denomination
+        - Denomination Value
+        - Denomination Currency
         - Shape
         - Quality
         - SubStyle State
@@ -358,8 +359,7 @@ class CoinStyle(models.Model):
 
     km_number             = models.CharField(max_length = 255, blank = True, default = "")
 
-    is_rare               = models.BooleanField()
-    is_substyle           = models.BooleanField()
+    is_substyle           = models.BooleanField(default = False)
 
     weight                = models.DecimalField(max_digits = 11, decimal_places = 2)
     length                = models.DecimalField(max_digits = 11, decimal_places = 2)
@@ -368,12 +368,12 @@ class CoinStyle(models.Model):
 
     class Meta:
         db_table            = 'coin_style'
-        unique_together     = ['year',         'coin_family',
+        unique_together     = ['coin_family', 'additional_name',
+                               'year',
+                               'denomination_value', 'denomination_currency',
                                'shape',        'quality',
                                'material',     'standard',
-                               'denomination_value', 'denomination_currency',
-                               'is_substyle',
-                               'km_number',    'additional_name']
+                               'is_substyle',  'km_number']
         verbose_name_plural = 'Coin Styles'
 
     def __str__(self):
