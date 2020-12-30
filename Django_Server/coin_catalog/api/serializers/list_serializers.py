@@ -104,11 +104,13 @@ class CoinFamilySerializer(serializers.ModelSerializer):
 class CoinStyleSerializer(serializers.ModelSerializer):
     class Meta:
         model      = CoinModel.CoinStyle
-        fields     = ['id',
-                      'coin_family', 'additional_name',
-                      'minted_by',   'year',
-                      'km_number',   'quality',
-                      'material',    'standard']
+        fields     = ['id', 'coin_family', 'additional_name',
+                      'minted_by', 'year',
+                      'denomination_value', 'denomination_currency',
+                      'shape', 'quality', 'edge',
+                      'material', 'standard', 'mintage',
+                      'km_number', 'is_substyle',
+                      'weight', 'length', 'width', 'thickness']
         validators = []
 
 
@@ -117,6 +119,12 @@ class SubStyleSerializer(serializers.ModelSerializer):
         model      = CoinModel.SubStyle
         fields     = ['substyle_coin', 'parent_coin']
         validators = []
+        # Removes the check for One-To-One Field in CREATE Method
+        extra_kwargs = {
+            "substyle_coin": {
+                "validators": [],
+            },
+        }
 
 
 class NoteSerializer(serializers.ModelSerializer):
