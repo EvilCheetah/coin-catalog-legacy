@@ -17,4 +17,5 @@ migrations/
 *.gif
 *.png
 *.jpg
+*.zip
 !scrapper/img/README.md
