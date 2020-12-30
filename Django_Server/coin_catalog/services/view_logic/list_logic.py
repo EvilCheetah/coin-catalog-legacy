@@ -204,6 +204,60 @@ def get_collection_queryset(request):
     return queryset
 
 
+def get_currency_queryset(request):
+    queryset = CoinModel.Currency.objects.all()
+
+    return queryset
+
+
+def get_country_currency_queryset(request):
+    queryset = CoinModel.CountryCurrency.objects.all()
+
+    return queryset
+
+
+def get_minted_by_queryset(request):
+    queryset = CoinModel.MintedBy.objects.all()
+
+    return queryset
+
+
+def get_designer_name_queryset(request):
+    queryset = CoinModel.DesignerName.objects.all()
+
+    return queryset
+
+
+def get_sculptor_name_queryset(request):
+    queryset = CoinModel.SculptorName.objects.all()
+
+    return queryset
+
+
+def get_material_queryset(request):
+    queryset = CoinModel.Material.objects.all()
+
+    return queryset
+
+
+def get_quality_queryset(request):
+    queryset = CoinModel.Quality.objects.all()
+
+    return queryset
+
+
+def get_edge_queryset(request):
+    queryset = CoinModel.Edge.objects.all()
+
+    return queryset
+
+
+def get_shape_queryset(request):
+    queryset = CoinModel.Shape.objects.all()
+
+    return queryset
+
+
 def get_coin_family_queryset(request):
     queryset = CoinModel.CoinFamily.objects.all()
 
@@ -364,6 +418,12 @@ def get_sub_style_queryset(request):
 
     if parent_style_id:
         return queryset.filter(parent_coin = parent_style_id)
+
+    return queryset
+
+
+def get_side_of_coin_queryset(request):
+    queryset = CoinModel.SideOfCoin.objects.all()
 
     return queryset
 
