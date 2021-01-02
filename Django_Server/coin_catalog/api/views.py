@@ -4,7 +4,11 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.parsers import FileUploadParser
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import (
+    IsAuthenticated,
+    IsAdminUser
+)
 
 #Model Imports
 import coin_catalog.models as CoinModel
@@ -19,11 +23,42 @@ import coin_catalog.services.view_logic.list_logic as List
 import coin_catalog.services.view_logic.post_logic as Post
 
 
+class BaseModelViewSet(viewsets.ModelViewSet):
+    """
+        BaseModelViewSet is created for the permission purposes,
+        in order to clutter up the ViewSets with 'get_permissions'
+        method and set general permission for each method in ViewSet
+
+        Methods:
+            - 'create'      - Staff Users only
+            - 'list'        - Authenticated Users only
+            - 'retrieve'    - Authenticated Users only
+            - 'update'      - Staff Users only
+            - 'destroy'     - Staff Users only
+
+        Future Update:
+            - 'destroy'     - Admin Users only
+    """
+    permission_classes_by_action = {
+        'create':   [IsAdminUser],
+        'list':     [IsAuthenticated],
+        'retrieve': [IsAuthenticated],
+        'update':   [IsAdminUser],
+        'destroy':  [IsAdminUser],
+    }
+
+    def get_permissions(self):
+        try:
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]
+
+
 ##-------------------Model Based View Sets-------------------##
 """
 These ViewSets are designated for pure model output
 """
-class RegionViewSet(viewsets.ModelViewSet):
+class RegionViewSet(BaseModelViewSet):
     """
     This ViewSet is used to handle the actions for 'Region' Model
     """
@@ -46,7 +81,7 @@ class RegionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class CountryViewSet(viewsets.ModelViewSet):
+class CountryViewSet(BaseModelViewSet):
     queryset         = CoinModel.Country.objects.all()
     serializer_class = CoinListSerializer.CountrySerializer
 
@@ -66,7 +101,7 @@ class CountryViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(BaseModelViewSet):
     queryset         = CoinModel.Category.objects.all()
     serializer_class = CoinListSerializer.CategorySerializer
 
@@ -86,7 +121,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class CollectionViewSet(viewsets.ModelViewSet):
+class CollectionViewSet(BaseModelViewSet):
     queryset         = CoinModel.Collection.objects.all()
     serializer_class = CoinListSerializer.CollectionSerializer
 
@@ -106,7 +141,7 @@ class CollectionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class CurrencyViewSet(viewsets.ModelViewSet):
+class CurrencyViewSet(BaseModelViewSet):
     queryset         = CoinModel.Currency.objects.all()
     serializer_class = CoinListSerializer.CurrencySerializer
 
@@ -126,7 +161,7 @@ class CurrencyViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class CountryCurrencyViewSet(viewsets.ModelViewSet):
+class CountryCurrencyViewSet(BaseModelViewSet):
     queryset         = CoinModel.CountryCurrency.objects.all()
     serializer_class = CoinListSerializer.CountryCurrencySerializer
 
@@ -146,7 +181,7 @@ class CountryCurrencyViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class MintedByViewSet(viewsets.ModelViewSet):
+class MintedByViewSet(BaseModelViewSet):
     queryset         = CoinModel.MintedBy.objects.all()
     serializer_class = CoinListSerializer.MintedBySerializer
 
@@ -166,7 +201,7 @@ class MintedByViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class DesignerNameViewSet(viewsets.ModelViewSet):
+class DesignerNameViewSet(BaseModelViewSet):
     queryset         = CoinModel.DesignerName.objects.all()
     serializer_class = CoinListSerializer.DesignerNameSerializer
 
@@ -186,7 +221,7 @@ class DesignerNameViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class SculptorNameViewSet(viewsets.ModelViewSet):
+class SculptorNameViewSet(BaseModelViewSet):
     queryset         = CoinModel.SculptorName.objects.all()
     serializer_class = CoinListSerializer.SculptorNameSerializer
 
@@ -206,7 +241,7 @@ class SculptorNameViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class MaterialViewSet(viewsets.ModelViewSet):
+class MaterialViewSet(BaseModelViewSet):
     queryset         = CoinModel.Material.objects.all()
     serializer_class = CoinListSerializer.MaterialSerializer
 
@@ -226,7 +261,7 @@ class MaterialViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class QualityViewSet(viewsets.ModelViewSet):
+class QualityViewSet(BaseModelViewSet):
     queryset         = CoinModel.Quality.objects.all()
     serializer_class = CoinListSerializer.QualitySerializer
 
@@ -246,7 +281,7 @@ class QualityViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class EdgeViewSet(viewsets.ModelViewSet):
+class EdgeViewSet(BaseModelViewSet):
     queryset         = CoinModel.Edge.objects.all()
     serializer_class = CoinListSerializer.EdgeSerializer
 
@@ -266,7 +301,7 @@ class EdgeViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class ShapeViewSet(viewsets.ModelViewSet):
+class ShapeViewSet(BaseModelViewSet):
     queryset         = CoinModel.Shape.objects.all()
     serializer_class = CoinListSerializer.ShapeSerializer
 
@@ -286,7 +321,7 @@ class ShapeViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class CoinFamilyViewSet(viewsets.ModelViewSet):
+class CoinFamilyViewSet(BaseModelViewSet):
     queryset         = CoinModel.CoinFamily.objects.all()
     serializer_class = CoinListSerializer.CoinFamilySerializer
 
@@ -306,7 +341,7 @@ class CoinFamilyViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class CoinStyleViewSet(viewsets.ModelViewSet):
+class CoinStyleViewSet(BaseModelViewSet):
     queryset         = CoinModel.CoinStyle.objects.all()
     serializer_class = CoinListSerializer.CoinStyleSerializer
 
@@ -326,7 +361,7 @@ class CoinStyleViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class SubStyleViewSet(viewsets.ModelViewSet):
+class SubStyleViewSet(BaseModelViewSet):
     queryset         = CoinModel.SubStyle.objects.all()
     serializer_class = CoinListSerializer.SubStyleSerializer
 
@@ -346,7 +381,7 @@ class SubStyleViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class NoteViewSet(viewsets.ModelViewSet):
+class NoteViewSet(BaseModelViewSet):
     queryset         = CoinModel.Note.objects.all()
     serializer_class = CoinListSerializer.NoteSerializer
 
@@ -366,7 +401,7 @@ class NoteViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class SideOfCoinViewSet(viewsets.ModelViewSet):
+class SideOfCoinViewSet(BaseModelViewSet):
     queryset         = CoinModel.SideOfCoin.objects.all()
     serializer_class = CoinListSerializer.SideOfCoinSerializer
 
@@ -386,7 +421,7 @@ class SideOfCoinViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class CoinDesignerViewSet(viewsets.ModelViewSet):
+class CoinDesignerViewSet(BaseModelViewSet):
     queryset         = CoinModel.CoinDesigner.objects.all()
     serializer_class = CoinListSerializer.CoinAllDesignersSerializer
 
@@ -406,7 +441,7 @@ class CoinDesignerViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class CoinSculptorViewSet(viewsets.ModelViewSet):
+class CoinSculptorViewSet(BaseModelViewSet):
     queryset         = CoinModel.CoinSculptor.objects.all()
     serializer_class = CoinListSerializer.CoinAllSculptorsSerializer
 
@@ -425,7 +460,7 @@ class CoinSculptorViewSet(viewsets.ModelViewSet):
         serializer = CoinInstanceSerializer.CoinAllSculptorsSerializer(sculptor)
         return Response(serializer.data)
 
-class ImageViewSet(viewsets.ModelViewSet):
+class ImageViewSet(BaseModelViewSet):
     queryset         = CoinModel.Image.objects.all()
     serializer_class = CoinListSerializer.ImageSerializer
 
