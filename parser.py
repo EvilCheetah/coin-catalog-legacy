@@ -8,9 +8,13 @@ import os
 import requests
 import json
 
+TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjEwMDI0Njc4LCJqdGkiOiJiNjJiZGNkMjYxMDg0ZGIxOTJlZmYyMWRlNmVlZWY4NCIsInVzZXJfaWQiOjF9.qd5msrt--u9h4y3ILjFXBmyfkvD14lGapb78mZsMUvI'
 
 PATH_TO_FILE = 'formatted_data/Belarus/formatted.json'
 IMAGE_PATH   = 'formatted_data/Belarus/'
+HEADERS      = {
+    'Authorization': 'JWT ' + TOKEN
+}
 API_URLS = {
     'region':           'http://localhost:8000/api/catalog/region/',
     'country':          'http://localhost:8000/api/catalog/country/',
@@ -165,6 +169,14 @@ class Coin:
         ]
 
 
+def _send_request(URL, data, files = None):
+    """
+        Sends the POST request using Authentication token
+        specified in TOKEN variable
+    """
+    return requests.post(URL, data = data, headers = HEADERS, files = files)
+
+
 def _find_coin_with_specified_id(coins: list, id: int):
     """
         Loops over the array of all coins in file
@@ -185,7 +197,7 @@ def _send_region(coin: 'Coin'):
     """
     data = {'name': coin.region['name']}
 
-    r = requests.post(API_URLS['region'], data = data)
+    r = _send_request(API_URLS['region'], data = data)
     coin.region['id'] = ( r.json() )['id']
 
 
@@ -199,7 +211,7 @@ def _send_country(coin: 'Coin'):
         'name':   coin.country['name']
         }
 
-    r = requests.post(API_URLS['country'], data = data)
+    r = _send_request(API_URLS['country'], data = data)
     coin.country['id'] = ( r.json() )['id']
 
 
@@ -213,7 +225,7 @@ def _send_category(coin: 'Coin'):
         'name':    coin.category['name']
         }
 
-    r = requests.post(API_URLS['category'], data = data)
+    r = _send_request(API_URLS['category'], data = data)
     coin.category['id'] = ( r.json() )['id']
 
 
@@ -229,7 +241,7 @@ def _send_collection(coin: 'Coin'):
         'name':     coin.collection['name'] if coin.collection['name'] else 'N/A'
         }
 
-    r = requests.post(API_URLS['collection'], data = data)
+    r = _send_request(API_URLS['collection'], data = data)
     coin.collection['id'] = ( r.json() )['id']
 
 
@@ -243,7 +255,7 @@ def _send_currency_name(coin: 'Coin'):
         'name': coin.denomination['currency_name']
         }
 
-    r = requests.post(API_URLS['currency'], data = data)
+    r = _send_request(API_URLS['currency'], data = data)
     coin.denomination['id'] = ( r.json() )['id']
 
 
@@ -258,7 +270,7 @@ def _send_country_currency(coin: 'Coin'):
         'currency': coin.denomination['id']
         }
 
-    r = requests.post(API_URLS['country_currency'], data = data)
+    r = _send_request(API_URLS['country_currency'], data = data)
     coin.denomination['country_currency'] = ( r.json() )['id']
 
 
@@ -272,7 +284,7 @@ def _send_minted_by(coin: 'Coin'):
         'name': coin.minted_by['name']
         }
 
-    r = requests.post(API_URLS['minted_by'], data = data)
+    r = _send_request(API_URLS['minted_by'], data = data)
     coin.minted_by['id'] = ( r.json() )['id']
 
 
@@ -285,7 +297,7 @@ def _send_designer_name(designer: dict):
         'name': designer['name']
     }
 
-    r = requests.post(API_URLS['designer_name'], data = data)
+    r = _send_request(API_URLS['designer_name'], data = data)
     designer['id'] = ( r.json() )['id']
 
 
@@ -298,7 +310,7 @@ def _send_sculptor_name(sculptor: dict):
         'name': sculptor['name']
     }
 
-    r = requests.post(API_URLS['sculptor_name'], data = data)
+    r = _send_request(API_URLS['sculptor_name'], data = data)
     sculptor['id'] = ( r.json() )['id']
 
 
@@ -312,7 +324,7 @@ def _send_material(coin: 'Coin'):
         'name': coin.material['name']
         }
 
-    r = requests.post(API_URLS['material'], data = data)
+    r = _send_request(API_URLS['material'], data = data)
     coin.material['id'] = ( r.json() )['id']
 
 
@@ -326,7 +338,7 @@ def _send_quality(coin: 'Coin'):
         'name': coin.quality['name']
         }
 
-    r = requests.post(API_URLS['quality'], data = data)
+    r = _send_request(API_URLS['quality'], data = data)
     coin.quality['id'] = ( r.json() )['id']
 
 
@@ -340,7 +352,7 @@ def _send_edge(coin: 'Coin'):
         'name': coin.edge['name']
         }
 
-    r = requests.post(API_URLS['edge'], data = data)
+    r = _send_request(API_URLS['edge'], data = data)
     coin.edge['id'] = ( r.json() )['id']
 
 
@@ -354,7 +366,7 @@ def _send_shape(coin: 'Coin'):
         'name': coin.shape['name']
         }
 
-    r = requests.post(API_URLS['shape'], data = data)
+    r = _send_request(API_URLS['shape'], data = data)
     coin.shape['id'] = ( r.json() )['id']
 
 
@@ -369,7 +381,7 @@ def _send_coin_family(coin: 'Coin'):
         'name':       coin.coin_family['name']
         }
 
-    r = requests.post(API_URLS['coin_family'], data = data)
+    r = _send_request(API_URLS['coin_family'], data = data)
     coin.coin_family['id'] = ( r.json() )['id']
 
 
@@ -379,7 +391,7 @@ def _send_substyle_connector(coin: 'Coin'):
         'parent_coin':      coin.coin_style['absolute_parent_style_id']
     }
 
-    r = requests.post(API_URLS['sub_style'], data = data)
+    r = _send_request(API_URLS['sub_style'], data = data)
 
 
 def _send_coin_style(coin: 'Coin', coins: list):
@@ -411,7 +423,7 @@ def _send_coin_style(coin: 'Coin', coins: list):
         'is_substyle':           coin.coin_style['is_substyle']
         }
 
-    r = requests.post(API_URLS['coin_style'], data = data)
+    r = _send_request(API_URLS['coin_style'], data = data)
     coin.coin_style['id'] = ( r.json() )['id']
 
     if coin.coin_style['is_substyle']:
@@ -434,7 +446,7 @@ def _send_notes(coin: 'Coin'):
             'coin_style':   coin.coin_style['id'],
             'description':  note
         }
-        requests.post(API_URLS['note'], data = data)
+        _send_request(API_URLS['note'], data = data)
 
 
 def _send_coin_side_name(coin_snippet: dict):
@@ -447,7 +459,7 @@ def _send_coin_side_name(coin_snippet: dict):
         'name': coin_snippet['side_name']
     }
 
-    r = requests.post(API_URLS['side_of_coin'], data = data)
+    r = _send_request(API_URLS['side_of_coin'], data = data)
     coin_snippet['side_id'] = ( r.json() )['id']
 
 
@@ -470,7 +482,7 @@ def _send_designers(coin: 'Coin'):
             'side':         designer['side_id'],
             'designer':     designer['id']
         }
-        requests.post(API_URLS['coin_designer'], data = data)
+        _send_request(API_URLS['coin_designer'], data = data)
 
 
 def _send_sculptors(coin: 'Coin'):
@@ -493,7 +505,7 @@ def _send_sculptors(coin: 'Coin'):
             'side':         sculptor['side_id'],
             'sculptor':     sculptor['id']
         }
-        requests.post(API_URLS['coin_sculptor'], data = data)
+        _send_request(API_URLS['coin_sculptor'], data = data)
 
 
 def _send_images(coin: 'Coin'):
@@ -518,7 +530,7 @@ def _send_images(coin: 'Coin'):
 
         with open( (image_path + image['path_to_image']), 'rb') as fin:
             file = {'image': fin}
-            requests.post(API_URLS['image'], data = data, files = file)
+            _send_request(API_URLS['image'], data = data, files = file)
 
 
 
