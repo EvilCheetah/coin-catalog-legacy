@@ -431,25 +431,45 @@ def get_side_of_coin_queryset(request):
 def get_note_queryset(request):
     queryset = CoinModel.Note.objects.all()
 
-    return _get_queryset_based_on_coin_style(request, queryset)
+    coin_style_id = request.query_params.get('coin_style')
+
+    if coin_style_id:
+        queryset = queryset.filter(coin_style_id = coin_style_id)
+
+    return _get_queryset_based_on_coin_style(request, queryset.order_by('id'))
 
 
 def get_coin_designer_queryset(request):
     queryset = CoinModel.CoinDesigner.objects.all()
 
-    return _get_queryset_based_on_coin_style(request, queryset)
+    coin_style_id = request.query_params.get('coin_style')
+
+    if coin_style_id:
+        queryset = queryset.filter(coin_style_id = coin_style_id)
+
+    return _get_queryset_based_on_coin_style(request, queryset.order_by('id'))
 
 
 def get_coin_sculptor_queryset(request):
     queryset = CoinModel.CoinSculptor.objects.all()
 
-    return _get_queryset_based_on_coin_style(request, queryset)
+    coin_style_id = request.query_params.get('coin_style')
+
+    if coin_style_id:
+        queryset = queryset.filter(coin_style_id = coin_style_id)
+
+    return _get_queryset_based_on_coin_style(request, queryset.order_by('id'))
 
 
 def get_image_queryset(request):
     queryset = CoinModel.Image.objects.all()
 
-    return _get_queryset_based_on_coin_style(request, queryset)
+    coin_style_id = request.query_params.get('coin_style')
+
+    if coin_style_id:
+        queryset = queryset.filter(coin_style_id = coin_style_id)
+
+    return _get_queryset_based_on_coin_style(request, queryset.order_by('id'))
 
 
 def get_full_info_coin_queryset(request):
