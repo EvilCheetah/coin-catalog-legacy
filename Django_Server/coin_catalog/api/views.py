@@ -5,8 +5,9 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import permission_classes
-from rest_framework.permissions import (
+from accounts.permissions import (
     IsAuthenticated,
+    IsStaffUser,
     IsAdminUser
 )
 
@@ -34,16 +35,13 @@ class BaseModelViewSet(viewsets.ModelViewSet):
             - 'list'        - Authenticated Users only
             - 'retrieve'    - Authenticated Users only
             - 'update'      - Staff Users only
-            - 'destroy'     - Staff Users only
-
-        Future Update:
             - 'destroy'     - Admin Users only
     """
     permission_classes_by_action = {
-        'create':   [IsAdminUser],
+        'create':   [IsStaffUser],
         'list':     [IsAuthenticated],
         'retrieve': [IsAuthenticated],
-        'update':   [IsAdminUser],
+        'update':   [IsStaffUser],
         'destroy':  [IsAdminUser],
     }
 
