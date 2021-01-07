@@ -12,7 +12,6 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('admin/',       admin.site.urls),
-    #path('api/account/', include('accounts.urls')),
     path('api/catalog/', include('coin_catalog.urls')),
 
     path('auth/',        include('djoser.urls')),
