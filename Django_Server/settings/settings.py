@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     #Apps
-    #'accounts',
+    'accounts',
     'coin_catalog',
 ]
 
@@ -74,8 +74,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'settings.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+AUTH_USER_MODEL = 'accounts.Account'
 
 
 DATABASES = {
@@ -139,7 +138,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'accounts.permissions.AllowAny',
     ]
 }
 
