@@ -1,6 +1,7 @@
+# Django Imports
 from django.shortcuts import get_object_or_404
 
-#REST imports
+# REST Imports
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
@@ -11,17 +12,23 @@ from accounts.permissions import (
     IsAdminUser
 )
 
-#Model Imports
+# Model Imports
 import coin_catalog.models as CoinModel
 
-#Serializer Imports
+# Serializer Imports
 import coin_catalog.api.serializers.list_serializers as CoinListSerializer
 import coin_catalog.api.serializers.instance_serializers as CoinInstanceSerializer
 
-#Services Imports
+# Services Imports
 import coin_catalog.services.view_logic.instance_logic as Instance
 import coin_catalog.services.view_logic.list_logic as List
 import coin_catalog.services.view_logic.post_logic as Post
+
+# Pagination Imports
+from coin_catalog.api.pagination import (
+    StandardResultsSetPagination,
+    InformationResultsSetPagination
+)
 
 
 class BaseModelViewSet(viewsets.ModelViewSet):
@@ -69,8 +76,9 @@ class RegionViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_region_queryset(request)
-        serializer = CoinListSerializer.RegionSerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.RegionSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.Region.objects.all()
@@ -89,8 +97,9 @@ class CountryViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_country_queryset(request)
-        serializer = CoinListSerializer.CountrySerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.CountrySerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.Country.objects.all()
@@ -109,8 +118,9 @@ class CategoryViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_category_queryset(request)
-        serializer = CoinListSerializer.CategorySerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.CategorySerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.Category.objects.all()
@@ -129,8 +139,9 @@ class CollectionViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_collection_queryset(request)
-        serializer = CoinListSerializer.CollectionSerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.CollectionSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.Collection.objects.all()
@@ -149,8 +160,9 @@ class CurrencyViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_currency_queryset(request)
-        serializer = CoinListSerializer.CurrencySerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.CurrencySerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset = CoinModel.Currency.objects.all()
@@ -169,8 +181,9 @@ class CountryCurrencyViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_country_currency_queryset(request)
-        serializer = CoinListSerializer.CountryCurrencySerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.CountryCurrencySerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset         = CoinModel.CountryCurrency.objects.all()
@@ -189,8 +202,9 @@ class MintedByViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_minted_by_queryset(request)
-        serializer = CoinListSerializer.MintedBySerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.MintedBySerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.MintedBy.objects.all()
@@ -209,8 +223,9 @@ class DesignerNameViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_designer_name_queryset(request)
-        serializer = CoinListSerializer.DesignerNameSerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.DesignerNameSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset      = CoinModel.DesignerName.objects.all()
@@ -229,8 +244,9 @@ class SculptorNameViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_sculptor_name_queryset(request)
-        serializer = CoinListSerializer.SculptorNameSerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.SculptorNameSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset      = CoinModel.SculptorName.objects.all()
@@ -249,8 +265,9 @@ class MaterialViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_material_queryset(request)
-        serializer = CoinListSerializer.MaterialSerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.MaterialSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.Material.objects.all()
@@ -269,8 +286,9 @@ class QualityViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_quality_queryset(request)
-        serializer = CoinListSerializer.QualitySerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.QualitySerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.Quality.objects.all()
@@ -289,8 +307,9 @@ class EdgeViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_edge_queryset(request)
-        serializer = CoinListSerializer.EdgeSerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.EdgeSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.Edge.objects.all()
@@ -309,8 +328,9 @@ class ShapeViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_shape_queryset(request)
-        serializer = CoinListSerializer.ShapeSerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.ShapeSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.Shape.objects.all()
@@ -329,8 +349,9 @@ class CoinFamilyViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_coin_family_queryset(request)
-        serializer = CoinListSerializer.CoinFamilySerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.CoinFamilySerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset    = CoinModel.CoinFamily.objects.all()
@@ -348,9 +369,10 @@ class CoinStyleViewSet(BaseModelViewSet):
         return Response(response_data, status = status)
 
     def list(self, request):
-        queryset = List.get_coin_style_queryset(request)
-        serializer = CoinListSerializer.CoinStyleSerializer(queryset, many = True)
-        return Response(serializer.data)
+        queryset   = List.get_coin_style_queryset(request)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.CoinStyleSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.CoinStyle.objects.all()
@@ -369,8 +391,9 @@ class SubStyleViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_sub_style_queryset(request)
-        serializer = CoinListSerializer.SubStyleSerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.SubStyleSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.SubStyle.objects.all()
@@ -389,8 +412,9 @@ class NoteViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_note_queryset(request)
-        serializer = CoinListSerializer.NoteSerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.NoteSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.Note.objects.all()
@@ -409,8 +433,9 @@ class SideOfCoinViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_side_of_coin_queryset(request)
-        serializer = CoinListSerializer.SideOfCoinSerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.SideOfCoinSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset     = CoinModel.SideOfCoin.objects.all()
@@ -429,8 +454,9 @@ class CoinDesignerViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_coin_designer_queryset(request)
-        serializer = CoinListSerializer.CoinAllDesignersSerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.CoinAllDesignersSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.CoinDesigner.objects.all()
@@ -449,14 +475,16 @@ class CoinSculptorViewSet(BaseModelViewSet):
 
     def list(self, request):
         queryset   = List.get_coin_sculptor_queryset(request)
-        serializer = CoinListSerializer.CoinAllSculptorsSerializer(queryset, many = True)
-        return Response(serializer.data)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.CoinAllSculptorsSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.CoinSculptor.objects.all()
         sculptor   = get_object_or_404(queryset, pk = pk)
         serializer = CoinInstanceSerializer.CoinAllSculptorsSerializer(sculptor)
         return Response(serializer.data)
+
 
 class ImageViewSet(BaseModelViewSet):
     queryset         = CoinModel.Image.objects.all()
@@ -467,9 +495,10 @@ class ImageViewSet(BaseModelViewSet):
         return Response(response_data, status = status)
 
     def list(self, request):
-        queryset   = List.get_image_queryset(self.request)
-        serializer = CoinListSerializer.ImageSerializer(queryset, many = True)
-        return Response(serializer.data)
+        queryset   = List.get_image_queryset(request)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinListSerializer.ImageSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset   = CoinModel.Image.objects.all()
@@ -511,11 +540,13 @@ class PreLoadedCoinStyleViewSet(viewsets.ReadOnlyModelViewSet):
 
 class FullInfoCoinViewSet(viewsets.ReadOnlyModelViewSet):
     queryset         = CoinModel.CoinStyle.objects.all()
-    #Has the same serializer for Instance and List
     serializer_class = CoinInstanceSerializer.FullInfoCoinSerializer
 
-    def get_queryset(self):
-        return List.get_full_info_coin_queryset(self.request)
+    def list(self, request):
+        queryset   = List.get_full_info_coin_queryset(request)
+        page       = self.paginate_queryset(queryset)
+        serializer = CoinInstanceSerializer.FullInfoCoinSerializer(page, many = True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk = None):
         queryset    = CoinModel.CoinStyle.objects.all()
