@@ -1,18 +1,21 @@
-#Ignore environment
+# Ignore environment
 venv/
 scrapper_env/
 catalog_env/
 
 
-#Ignore compiled Py files
+# Ignore compiled Py files
 __pycache__/
 
 
-#Ignore database files
+# Ignore database files
 migrations/
 *.sqlite3
 
 
-#Ignore images in static folder
+# Ignore Environment files
+.env
+
+# Ignore images in static folder
 Django_Server/static/images/coin_images/*
 !Django_Server/static/images/coin_images/README.md
