@@ -143,9 +143,8 @@ class CoinStyleSerializer(serializers.ModelSerializer):
                   'km_number',
                   'is_substyle',
                   'weight',   'length', 'width', 'thickness',
-                  #creators and additional information
-                  ##'authors', 'sculptors', 'notes',
-                  ##'minted_by', 'images'
+
+                  'date_created', 'last_edited'
                   ]
 
 
@@ -319,7 +318,8 @@ class FullInfoCoinSerializer(serializers.ModelSerializer):
                   #creators and additional information
                   'designers', 'sculptors',
                   'notes',
-                  'minted_by', 'images'
+                  'minted_by', 'images',
+                  'date_created', 'last_edited'
                   ]
 
     def get_region(self, coin_style_object):

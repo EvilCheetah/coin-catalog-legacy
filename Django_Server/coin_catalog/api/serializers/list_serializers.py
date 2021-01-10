@@ -110,7 +110,8 @@ class CoinStyleSerializer(serializers.ModelSerializer):
                       'shape', 'quality', 'edge',
                       'material', 'standard', 'mintage',
                       'km_number', 'is_substyle',
-                      'weight', 'length', 'width', 'thickness']
+                      'weight', 'length', 'width', 'thickness',
+                      'date_created', 'last_edited']
         validators = []
 
 
