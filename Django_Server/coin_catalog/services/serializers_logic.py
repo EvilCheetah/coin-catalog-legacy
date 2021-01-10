@@ -1,6 +1,9 @@
+from collections import defaultdict
+
 import coin_catalog.models as CoinModel
 from coin_catalog.api.serializers import list_serializers as CoinListSerializer
 from coin_catalog.api.serializers import instance_serializers as CoinInstanceSerializer
+
 
 ##-------------------Local Functions-------------------##
 def _is_list(object):
@@ -156,37 +159,61 @@ def get_substyle_status_from_coin_style(coin_style_object):
 
 ##-------------------Get Authors Functions-------------------##
 """
-These functions are designated to return a list of 'authors' name based on
+These function is designated to return a dict of 'designers' name based on
 specified object
+
+Returns the <type 'dict'> in following format:
+{
+    "side_name_1": ['designer_1', 'designer_2', ...],
+    "side_name_1": ['designer_1', 'designer_2', ...]
+    ...
+}
 """
 def get_designers_from_coin_style(coin_style_object):
-    return [
-        {
-            'side': coin_designer_object.side.name,
-            'name': coin_designer_object.designer.name
-        }
-        for coin_designer_object in
-        CoinModel.CoinDesigner.objects.filter(coin_style_id = coin_style_object.id)
-    ]
+    designers = defaultdict( list )
+
+    queryset = CoinModel.CoinDesigner.objects.filter(coin_style_id = coin_style_object.id)
+
+    for side, designer in ( queryset.values_list('side__name', 'designer__name') ):
+        designers[side].append(designer)
+
+    return designers
 
 
 ##-------------------Get Sculptors Functions-------------------##
 """
-These functions are designated to return a list of 'sculptors' name based on
+These function is designated to return a dict of 'sculptors' name based on
 specified object
+
+Returns the <type 'dict'> in following format:
+{
+    "side_name_1": ['sculptor_1', 'sculptor_2', ...],
+    "side_name_1": ['sculptor_1', 'sculptor_2', ...]
+    ...
+}
 """
 def get_sculptors_from_coin_style(coin_style_object):
-    return [
-            {
-                'side': coin_sculptor_object.side.name,
-                'name': coin_sculptor_object.sculptor.name
-            }
+    sculptors = defaultdict( list )
 
-            for coin_sculptor_object in
-            CoinModel.CoinSculptor.objects.filter(coin_style_id = coin_style_object.id)
-        ]
+    queryset = CoinModel.CoinSculptor.objects.filter(coin_style_id = coin_style_object.id)
+
+    for side, sculptor in ( queryset.values_list('side__name', 'sculptor__name') ):
+        sculptors[side].append(sculptor)
+
+    return sculptors
 
 
+"""
+These function is designated to return an array of 'notes' based on
+specified object
+
+Returns the <type 'list'> in following format:
+[
+    'Note_text_1...',
+    'Note_text_2...',
+    ...
+]
+"""
 def get_notes_from_coin_style(coin_style_object):
     return [
         note.description
@@ -204,7 +231,7 @@ def get_minted_by_from_coin_style(coin_style_object):
     return coin_style_object.minted_by.name
 
 
-##
+##-------------------------Get Images-------------------------##
 """
 These functions are designated to return a list of 'images' name based on
 coin style object
