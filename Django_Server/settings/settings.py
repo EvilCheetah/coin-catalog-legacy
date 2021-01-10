@@ -1,4 +1,5 @@
 import os
+import environ
 from datetime import timedelta
 
 
@@ -6,11 +7,14 @@ from datetime import timedelta
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
+# Read .env file
+env = environ.Env()
+environ.Env.read_env()
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'amn1bsnx69_9(cv(&-4*dsu_5_w01n*x$&mw-1jz=1se=#m&yn'
+SECRET_KEY = env.str('SECRET_KEY')
+STRIPE_KEY = env.str('STRIPE_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -53,7 +57,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'settings.urls'
+
 
 TEMPLATES = [
     {
@@ -70,6 +76,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'settings.wsgi.application'
 
@@ -109,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = env.str('TIME_ZONE')
 
 USE_I18N = True
 
@@ -139,12 +146,13 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'accounts.permissions.AllowAny',
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'coin_catalog.api.pagination.StandardResultsSetPagination'
 }
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=4),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
