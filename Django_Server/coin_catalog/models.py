@@ -366,6 +366,9 @@ class CoinStyle(models.Model):
     width                 = models.DecimalField(max_digits = 11, decimal_places = 2)
     thickness             = models.DecimalField(max_digits = 11, decimal_places = 2)
 
+    date_created = models.DateTimeField(auto_now_add = True)
+    last_edited  = models.DateTimeField(auto_now = True)
+
     class Meta:
         db_table            = 'coin_style'
         unique_together     = ['coin_family', 'additional_name',
