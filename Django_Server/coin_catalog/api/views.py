@@ -27,7 +27,8 @@ import coin_catalog.services.view_logic.post_logic as Post
 # Pagination Imports
 from coin_catalog.api.pagination import (
     StandardResultsSetPagination,
-    InformationResultsSetPagination
+    InformationResultsSetPagination,
+    FullInformationResultsSetPagination
 )
 
 
@@ -69,6 +70,7 @@ class RegionViewSet(BaseModelViewSet):
     """
     queryset         = CoinModel.Region.objects.all()
     serializer_class = CoinListSerializer.RegionSerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_region_viewset(request)
@@ -90,6 +92,7 @@ class RegionViewSet(BaseModelViewSet):
 class CountryViewSet(BaseModelViewSet):
     queryset         = CoinModel.Country.objects.all()
     serializer_class = CoinListSerializer.CountrySerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_country_viewset(request)
@@ -111,6 +114,7 @@ class CountryViewSet(BaseModelViewSet):
 class CategoryViewSet(BaseModelViewSet):
     queryset         = CoinModel.Category.objects.all()
     serializer_class = CoinListSerializer.CategorySerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_category_viewset(request)
@@ -132,6 +136,7 @@ class CategoryViewSet(BaseModelViewSet):
 class CollectionViewSet(BaseModelViewSet):
     queryset         = CoinModel.Collection.objects.all()
     serializer_class = CoinListSerializer.CollectionSerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_collection_viewset(request)
@@ -153,6 +158,7 @@ class CollectionViewSet(BaseModelViewSet):
 class CurrencyViewSet(BaseModelViewSet):
     queryset         = CoinModel.Currency.objects.all()
     serializer_class = CoinListSerializer.CurrencySerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_currency_viewset(request)
@@ -174,6 +180,7 @@ class CurrencyViewSet(BaseModelViewSet):
 class CountryCurrencyViewSet(BaseModelViewSet):
     queryset         = CoinModel.CountryCurrency.objects.all()
     serializer_class = CoinListSerializer.CountryCurrencySerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_country_currency_viewset(request)
@@ -195,6 +202,7 @@ class CountryCurrencyViewSet(BaseModelViewSet):
 class MintedByViewSet(BaseModelViewSet):
     queryset         = CoinModel.MintedBy.objects.all()
     serializer_class = CoinListSerializer.MintedBySerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_minted_by_viewset(request)
@@ -216,6 +224,7 @@ class MintedByViewSet(BaseModelViewSet):
 class DesignerNameViewSet(BaseModelViewSet):
     queryset         = CoinModel.DesignerName.objects.all()
     serializer_class = CoinListSerializer.DesignerNameSerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_designer_name_viewset(request)
@@ -237,6 +246,7 @@ class DesignerNameViewSet(BaseModelViewSet):
 class SculptorNameViewSet(BaseModelViewSet):
     queryset         = CoinModel.SculptorName.objects.all()
     serializer_class = CoinListSerializer.SculptorNameSerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_sculptor_name_viewset(request)
@@ -258,6 +268,7 @@ class SculptorNameViewSet(BaseModelViewSet):
 class MaterialViewSet(BaseModelViewSet):
     queryset         = CoinModel.Material.objects.all()
     serializer_class = CoinListSerializer.MaterialSerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_material_viewset(request)
@@ -279,6 +290,7 @@ class MaterialViewSet(BaseModelViewSet):
 class QualityViewSet(BaseModelViewSet):
     queryset         = CoinModel.Quality.objects.all()
     serializer_class = CoinListSerializer.QualitySerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_quality_viewset(request)
@@ -300,6 +312,7 @@ class QualityViewSet(BaseModelViewSet):
 class EdgeViewSet(BaseModelViewSet):
     queryset         = CoinModel.Edge.objects.all()
     serializer_class = CoinListSerializer.EdgeSerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_edge_viewset(request)
@@ -321,6 +334,7 @@ class EdgeViewSet(BaseModelViewSet):
 class ShapeViewSet(BaseModelViewSet):
     queryset         = CoinModel.Shape.objects.all()
     serializer_class = CoinListSerializer.ShapeSerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_shape_viewset(request)
@@ -342,6 +356,7 @@ class ShapeViewSet(BaseModelViewSet):
 class CoinFamilyViewSet(BaseModelViewSet):
     queryset         = CoinModel.CoinFamily.objects.all()
     serializer_class = CoinListSerializer.CoinFamilySerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_coin_family_viewset(request)
@@ -384,6 +399,7 @@ class CoinStyleViewSet(BaseModelViewSet):
 class SubStyleViewSet(BaseModelViewSet):
     queryset         = CoinModel.SubStyle.objects.all()
     serializer_class = CoinListSerializer.SubStyleSerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_sub_style_viewset(request)
@@ -405,6 +421,7 @@ class SubStyleViewSet(BaseModelViewSet):
 class NoteViewSet(BaseModelViewSet):
     queryset         = CoinModel.Note.objects.all()
     serializer_class = CoinListSerializer.NoteSerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_note_viewset(request)
@@ -426,6 +443,7 @@ class NoteViewSet(BaseModelViewSet):
 class SideOfCoinViewSet(BaseModelViewSet):
     queryset         = CoinModel.SideOfCoin.objects.all()
     serializer_class = CoinListSerializer.SideOfCoinSerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_side_of_coin_viewset(request)
@@ -447,6 +465,7 @@ class SideOfCoinViewSet(BaseModelViewSet):
 class CoinDesignerViewSet(BaseModelViewSet):
     queryset         = CoinModel.CoinDesigner.objects.all()
     serializer_class = CoinListSerializer.CoinAllDesignersSerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_coin_designer_viewset(request)
@@ -468,6 +487,7 @@ class CoinDesignerViewSet(BaseModelViewSet):
 class CoinSculptorViewSet(BaseModelViewSet):
     queryset         = CoinModel.CoinSculptor.objects.all()
     serializer_class = CoinListSerializer.CoinAllSculptorsSerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_coin_sculptor_viewset(request)
@@ -489,6 +509,7 @@ class CoinSculptorViewSet(BaseModelViewSet):
 class ImageViewSet(BaseModelViewSet):
     queryset         = CoinModel.Image.objects.all()
     serializer_class = CoinListSerializer.ImageSerializer
+    pagination_class = InformationResultsSetPagination
 
     def create(self, request):
         response_data, status = Post.get_response_for_post_request_for_image_viewset(request)
@@ -539,8 +560,47 @@ class PreLoadedCoinStyleViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class FullInfoCoinViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+        This ViewSet is designated to output fully rendered CoinStyle Model
+
+        List:
+            = Pagination:
+                - Minimum Items per page: 10
+                - Maximum Items per page: 100
+
+            = Accepts following queries for Filtering:
+                - page_size     - an 'int' in range [10, 100]
+                - region        - a 'list' of 'str' of names of regions
+                - country       - a 'list' of 'str' of names of countries
+                - category      - a 'list' of 'str' of names of categories
+                - collections   - a 'list' of 'str' of names of collections
+                - coin_family   - a 'list' of 'str' of names of coin families
+                - minted_by     - a 'list' of 'str' of names of mints
+                - shape         - a 'list' of 'str' of names of shapes
+                - quality       - a 'list' of 'str' of names of mint qualities
+                - material      - a 'list' of 'str' of names of materials
+                - standard_min  - a 'float' of standard minimum value
+                - standard_max  - a 'float' of standard maximum value
+                - year_min      - an 'int' of year minimum value
+                - year_max      - an 'int' of year maximum value
+                - denomination  - is either:
+                    # SINGLE denomination_value AND SINGLE denomination_currency
+                    OR
+                    # a 'list' of denomination_currencies
+                - mintage_min   - an 'int' of mintage minimum value
+                - mintage_max   - an 'int' of mintage maximum  value
+                - weight_min    - an 'int' of weight minimum value
+                - weight_max    - an 'int' of weight maximum  value
+                - length_min    - an 'int' of length minimum value
+                - length_max    - an 'int' of length maximum  value
+                - width_min     - an 'int' of width minimum value
+                - width_max     - an 'int' of width maximum  value
+                - thickness_min - an 'int' of thickness minimum value
+                - thickness_max - an 'int' of thickness maximum  value
+    """
     queryset         = CoinModel.CoinStyle.objects.all()
     serializer_class = CoinInstanceSerializer.FullInfoCoinSerializer
+    pagination_class = FullInformationResultsSetPagination
 
     def list(self, request):
         queryset   = List.get_full_info_coin_queryset(request)
