@@ -22,5 +22,11 @@ def type_error_for_float_range_parameter(filter_field):
 
 def type_error_for_integer_parameter(filter_field):
     raise APIException(detail = {'success': 'false',
-                                 'message': f"'Query Parameter' Error! Expected 'int' in {filter_field} Field"},
+                                 'message': f"'Query Parameter' Error! Expected 'integer' in {filter_field} Field"},
+                       code = 400)
+
+
+def type_error_for_string_parameter(filter_field):
+    raise APIException(detail = {'success': 'false',
+                                 'message': f"'Query Parameter' Error! Expected 'string' in {filter_field} Field"},
                        code = 400)
