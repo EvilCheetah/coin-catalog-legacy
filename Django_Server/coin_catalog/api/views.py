@@ -20,9 +20,11 @@ import coin_catalog.api.serializers.list_serializers as CoinListSerializer
 import coin_catalog.api.serializers.instance_serializers as CoinInstanceSerializer
 
 # Services Imports
-import coin_catalog.services.view_logic.instance_logic as Instance
 import coin_catalog.services.view_logic.list_logic as List
-import coin_catalog.services.view_logic.post_logic as Post
+import coin_catalog.services.view_logic.instance_logic as Instance
+import coin_catalog.services.view_logic.post_logic as Create
+import coin_catalog.services.view_logic.delete_logic as Delete
+import coin_catalog.services.view_logic.update_logic as Update
 
 # Pagination Imports
 from coin_catalog.api.pagination import (
@@ -39,18 +41,57 @@ class BaseModelViewSet(viewsets.ModelViewSet):
         method and set general permission for each method in ViewSet
 
         Methods:
-            - 'create'      - Staff Users only
-            - 'list'        - Authenticated Users only
-            - 'retrieve'    - Authenticated Users only
-            - 'update'      - Staff Users only
-            - 'destroy'     - Admin Users only
+            - 'create'          - Staff Users only
+            - 'destroy'         - Admin Users only
+            - 'list'            - Authenticated Users only
+            - 'partial_update'  - Staff Users only
+            - 'retrieve'        - Authenticated Users only
+            - 'update'          - Staff Users only
     """
+    create_method         = None
+    destroy_method        = None
+    update_method         = None
+    partial_update_method = update_method
+
+    def create(self, request):
+        assert self.create_method is not None, (
+            f"{self.__class__.__name__} should include `create_method` attribute, "
+            "or override `create()` function"
+        )
+        response_data, status = self.create_method.get_response(request)
+        return Response(response_data, status)
+
+    def destroy(self, request, pk):
+        assert self.destroy_method is not None, (
+            f"{self.__class__.__name__} should include `destroy_method` attribute, "
+            "or override `destroy()` function"
+        )
+        response_data, status = self.destroy_method.get_response(pk, request)
+        return Response(response_data, status = status)
+
+    def update(self, request, pk):
+        assert self.update_method is not None, (
+            f"{self.__class__.__name__} should include `update_method` attribute, "
+            "or override `update()` function"
+        )
+        response_data, status = self.update_method.get_response(pk, request)
+        return Response(response_data, status)
+
+    def partial_update(self, request, pk):
+        assert self.partial_update_method is not None, (
+            f"{self.__class__.__name__} should include `partial_update_method` attribute, "
+            "or override `partial_update()` function"
+        )
+        response_data, status = self.partial_update_method.get_response(pk, request, partial = True)
+        return Response(response_data, status)
+
     permission_classes_by_action = {
-        'create':   [IsStaffUser],
-        'list':     [IsAuthenticated],
-        'retrieve': [IsAuthenticated],
-        'update':   [IsStaffUser],
-        'destroy':  [IsAdminUser],
+        'create':           [IsStaffUser],
+        'destroy':          [IsAdminUser],
+        'list':             [IsAuthenticated],
+        'partial_update':   [IsStaffUser],
+        'retrieve':         [IsAuthenticated],
+        'update':           [IsStaffUser],
     }
 
     def get_permissions(self):
@@ -66,15 +107,16 @@ These ViewSets are designated for pure model output
 """
 class RegionViewSet(BaseModelViewSet):
     """
-    This ViewSet is used to handle the actions for 'Region' Model
+        This ViewSet is used to handle the actions for 'Region' Model
     """
     queryset         = CoinModel.Region.objects.all()
     serializer_class = CoinListSerializer.RegionSerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_region_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.RegionPostRequest
+    destroy_method        = Delete.RegionDeleteRequest
+    update_method         = Update.RegionUpdateRequest
+    partial_update_method = Update.RegionUpdateRequest
 
     def list(self, request):
         queryset   = List.get_region_queryset(request)
@@ -94,9 +136,10 @@ class CountryViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.CountrySerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_country_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.CountryPostRequest
+    destroy_method        = Delete.CountryDeleteRequest
+    update_method         = Update.CountryUpdateRequest
+    partial_update_method = Update.CountryUpdateRequest
 
     def list(self, request):
         queryset   = List.get_country_queryset(request)
@@ -116,9 +159,10 @@ class CategoryViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.CategorySerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_category_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.CategoryPostRequest
+    destroy_method        = Delete.CategoryDeleteRequest
+    update_method         = Update.CategoryUpdateRequest
+    partial_update_method = Update.CategoryUpdateRequest
 
     def list(self, request):
         queryset   = List.get_category_queryset(request)
@@ -138,9 +182,10 @@ class CollectionViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.CollectionSerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_collection_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.CollectionPostRequest
+    destroy_method        = Delete.CollectionDeleteRequest
+    update_method         = Update.CollectionUpdateRequest
+    partial_update_method = Update.CollectionUpdateRequest
 
     def list(self, request):
         queryset   = List.get_collection_queryset(request)
@@ -160,9 +205,10 @@ class CurrencyViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.CurrencySerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_currency_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.CurrencyPostRequest
+    destroy_method        = Delete.CurrencyDeleteRequest
+    update_method         = Update.CurrencyUpdateRequest
+    partial_update_method = Update.CurrencyUpdateRequest
 
     def list(self, request):
         queryset   = List.get_currency_queryset(request)
@@ -182,9 +228,10 @@ class CountryCurrencyViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.CountryCurrencySerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_country_currency_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.CountryCurrencyPostRequest
+    destroy_method        = Delete.CountryCurrencyDeleteRequest
+    update_method         = Update.CountryCurrencyUpdateRequest
+    partial_update_method = Update.CountryCurrencyUpdateRequest
 
     def list(self, request):
         queryset   = List.get_country_currency_queryset(request)
@@ -204,9 +251,10 @@ class MintedByViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.MintedBySerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_minted_by_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.MintedByPostRequest
+    destroy_method        = Delete.MintedByDeleteRequest
+    update_method         = Update.MintedByUpdateRequest
+    partial_update_method = Update.MintedByUpdateRequest
 
     def list(self, request):
         queryset   = List.get_minted_by_queryset(request)
@@ -226,9 +274,10 @@ class DesignerNameViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.DesignerNameSerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_designer_name_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.DesingerNamePostRequest
+    destroy_method        = Delete.DesignerNameDeleteRequest
+    update_method         = Update.DesignerNameUpdateRequest
+    partial_update_method = Update.DesignerNameUpdateRequest
 
     def list(self, request):
         queryset   = List.get_designer_name_queryset(request)
@@ -248,9 +297,10 @@ class SculptorNameViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.SculptorNameSerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_sculptor_name_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.SculptorNamePostRequest
+    destroy_method        = Delete.SculptorNameDeleteRequest
+    update_method         = Update.SculptorNameUpdateRequest
+    partial_update_method = Update.SculptorNameUpdateRequest
 
     def list(self, request):
         queryset   = List.get_sculptor_name_queryset(request)
@@ -270,9 +320,10 @@ class MaterialViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.MaterialSerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_material_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.MaterialPostRequest
+    destroy_method        = Delete.MaterialDeleteRequest
+    update_method         = Update.MaterialUpdateRequest
+    partial_update_method = Update.MaterialUpdateRequest
 
     def list(self, request):
         queryset   = List.get_material_queryset(request)
@@ -292,9 +343,10 @@ class QualityViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.QualitySerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_quality_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.QualityPostRequest
+    destroy_method        = Delete.QualityDeleteRequest
+    update_method         = Update.QualityUpdateRequest
+    partial_update_method = Update.QualityUpdateRequest
 
     def list(self, request):
         queryset   = List.get_quality_queryset(request)
@@ -314,9 +366,10 @@ class EdgeViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.EdgeSerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_edge_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.EdgePostRequest
+    destroy_method        = Delete.EdgeDeleteRequest
+    update_method         = Update.EdgeUpdateRequest
+    partial_update_method = Update.EdgeUpdateRequest
 
     def list(self, request):
         queryset   = List.get_edge_queryset(request)
@@ -336,9 +389,10 @@ class ShapeViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.ShapeSerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_shape_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.ShapePostRequest
+    destroy_method        = Delete.ShapeDeleteRequest
+    update_method         = Update.ShapeUpdateRequest
+    partial_update_method = Update.ShapeUpdateRequest
 
     def list(self, request):
         queryset   = List.get_shape_queryset(request)
@@ -358,9 +412,10 @@ class CoinFamilyViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.CoinFamilySerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_coin_family_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.CoinFamilyPostRequest
+    destroy_method        = Delete.CoinFamilyDeleteRequest
+    update_method         = Update.CoinFamilyUpdateRequest
+    partial_update_method = Update.CoinFamilyUpdateRequest
 
     def list(self, request):
         queryset   = List.get_coin_family_queryset(request)
@@ -379,9 +434,10 @@ class CoinStyleViewSet(BaseModelViewSet):
     queryset         = CoinModel.CoinStyle.objects.all()
     serializer_class = CoinListSerializer.CoinStyleSerializer
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_coin_style_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.CoinStylePostRequest
+    destroy_method        = Delete.CoinStyleDeleteRequest
+    update_method         = Update.CoinStyleUpdateRequest
+    partial_update_method = Update.CoinStyleUpdateRequest
 
     def list(self, request):
         queryset   = List.get_coin_style_queryset(request)
@@ -401,9 +457,10 @@ class SubStyleViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.SubStyleSerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_sub_style_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.SubStylePostRequest
+    destroy_method        = Delete.SubStyleDeleteRequest
+    update_method         = Update.SubStyleUpdateRequest
+    partial_update_method = Update.SubStyleUpdateRequest
 
     def list(self, request):
         queryset   = List.get_sub_style_queryset(request)
@@ -423,9 +480,10 @@ class NoteViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.NoteSerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_note_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.NotePostRequest
+    destroy_method        = Delete.NoteDeleteRequest
+    update_method         = Update.NoteUpdateRequest
+    partial_update_method = Update.NoteUpdateRequest
 
     def list(self, request):
         queryset   = List.get_note_queryset(request)
@@ -445,9 +503,10 @@ class SideOfCoinViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.SideOfCoinSerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_side_of_coin_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.SideOfCoinPostRequest
+    destroy_method        = Delete.SideOfCoinDeleteRequest
+    update_method         = Update.SideOfCoinUpdateRequest
+    partial_update_method = Update.SideOfCoinUpdateRequest
 
     def list(self, request):
         queryset   = List.get_side_of_coin_queryset(request)
@@ -467,9 +526,10 @@ class CoinDesignerViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.CoinAllDesignersSerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_coin_designer_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.CoinDesignerPostRequest
+    destroy_method        = Delete.CoinDesignerDeleteRequest
+    update_method         = Update.CoinDesignerUpdateRequest
+    partial_update_method = Update.CoinDesignerUpdateRequest
 
     def list(self, request):
         queryset   = List.get_coin_designer_queryset(request)
@@ -489,9 +549,10 @@ class CoinSculptorViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.CoinAllSculptorsSerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_coin_sculptor_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.CoinSculptorPostRequest
+    destroy_method        = Delete.CoinSculptorDeleteRequest
+    update_method         = Update.CoinSculptorUpdateRequest
+    partial_update_method = Update.CoinSculptorUpdateRequest
 
     def list(self, request):
         queryset   = List.get_coin_sculptor_queryset(request)
@@ -511,9 +572,10 @@ class ImageViewSet(BaseModelViewSet):
     serializer_class = CoinListSerializer.ImageSerializer
     pagination_class = InformationResultsSetPagination
 
-    def create(self, request):
-        response_data, status = Post.get_response_for_post_request_for_image_viewset(request)
-        return Response(response_data, status = status)
+    create_method         = Create.ImagePostRequest
+    destroy_method        = Delete.ImageDeleteRequest
+    update_method         = Update.ImageUpdateRequest
+    partial_update_method = Update.ImageUpdateRequest
 
     def list(self, request):
         queryset   = List.get_image_queryset(request)
