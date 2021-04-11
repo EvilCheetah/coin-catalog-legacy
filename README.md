@@ -15,10 +15,15 @@
 	`pip install -r requirements.txt`  
 6. Change directory to **Django_Server/**:  
 	`cd Django_Server/`
-7. Make migrations for the coin_catalog app:  
+7. Create '.env' file and fillout the following fields:  
+	`PROJECT_SECRET_KEY`  
+	`TIME_ZONE`  
+8. Make migrations for the coin_catalog app:  
 	`python manage.py makemigrations accounts`  
 	`python manage.py makemigrations coin_catalog`  
 	`python manage.py migrate`
+9. Create SuperUser:  
+	`python manage.py createsuperuser`  
 
 ## All Commands in List
 	git clone https://github.com/EvilCheetah/CoinCatalog.git
