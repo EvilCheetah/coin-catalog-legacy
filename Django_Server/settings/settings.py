@@ -13,13 +13,13 @@ environ.Env.read_env()
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str('SECRET_KEY')
-STRIPE_KEY = env.str('STRIPE_KEY')
+SECRET_KEY = env.str('PROJECT_SECRET_KEY')
+#STRIPE_KEY = env.str('STRIPE_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,9 +40,12 @@ INSTALLED_APPS = [
     'djoser',
     'corsheaders',
 
+    'services',
+
     #Apps
     'accounts',
     'coin_catalog',
+    #'coin_price_history'
 ]
 
 
@@ -147,7 +150,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'accounts.permissions.AllowAny',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'coin_catalog.api.pagination.StandardResultsSetPagination'
+    'DEFAULT_PAGINATION_CLASS': 'services.pagination.StandardResultsSetPagination'
 }
 
 

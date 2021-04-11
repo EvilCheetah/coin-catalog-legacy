@@ -2,10 +2,9 @@
 from django.shortcuts import get_object_or_404
 
 # REST Imports
-from rest_framework import viewsets
 from rest_framework import status
+from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework.decorators import permission_classes
 from accounts.permissions import (
     IsAuthenticated,
     IsStaffUser,
@@ -27,7 +26,7 @@ import coin_catalog.services.view_logic.delete_logic as Delete
 import coin_catalog.services.view_logic.update_logic as Update
 
 # Pagination Imports
-from coin_catalog.api.pagination import (
+from services.pagination import (
     StandardResultsSetPagination,
     InformationResultsSetPagination,
     FullInformationResultsSetPagination
@@ -36,9 +35,12 @@ from coin_catalog.api.pagination import (
 
 class BaseModelViewSet(viewsets.ModelViewSet):
     """
-        BaseModelViewSet is created for the permission purposes,
-        in order to clutter up the ViewSets with 'get_permissions'
-        method and set general permission for each method in ViewSet
+        BaseModelViewSet is created for:
+            1) Handle the requests methods(PUT, POST, PATCH, DELETE)
+
+            2) Permission purposes, in order to clutter up the
+                ViewSets with 'get_permissions' method and set
+                general permission for each method in ViewSet
 
         Methods:
             - 'create'          - Staff Users only

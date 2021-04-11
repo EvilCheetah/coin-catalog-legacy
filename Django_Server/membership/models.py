@@ -1,5 +1,7 @@
 from django.db import models
-from accounts.models import Account
+from django.contrib.auth import get_user_model
+
+USER = get_user_model()
 
 
 class Membership(models.Model):
@@ -27,22 +29,20 @@ class Membership(models.Model):
                                  plan at the end of the period
         membership_plan_type   - Holds the value of user membership type
     """
-    class Plan(models.IntegerChoices):
-        """
-        Enum Class for Different memberships
-        """
-        BASIC    = 1
-        ADVANCED = 2
-        BUSINESS = 3
-        STAFF    = 4
+    PLAN = [
+        (1, 'Basic'),
+        (2, 'Advanced'),
+        (3, 'Business'),
+        (4, 'Staff')
+    ]
 
-    account                = models.OneToOneField(Account, on_delete = models.CASCADE)
+    account                = models.OneToOneField(USER, on_delete = models.CASCADE)
     stripe_id              = models.CharField(max_length = 255)
     stripe_subscription_id = models.CharField(max_length = 255)
     cancel_at_period_end   = models.BooleanField(default = False)
     membership_plan_type   = models.IntegerField(
         choices = Plan.choices,
-        default = Plan.BASIC
+        default = 1
     )
 
     class Meta:

@@ -21,7 +21,7 @@ def _get_response_data(queryset, serializer_class, request, primary_key, partial
     """
     object = get_object_or_404(queryset, pk = primary_key)
 
-    serializer = serializer_class(object, data = request.data, files = request.FILES, partial = partial)
+    serializer = serializer_class(object, data = request.data, partial = partial)
     serializer.is_valid(raise_exception = True)
 
     serializer.save()
