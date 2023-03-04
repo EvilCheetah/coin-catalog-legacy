@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/http-gateway/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/http-gateway/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/http-gateway",
+  "projects": {
+    "http-gateway": {
+      "type": "application",
+      "root": "apps/http-gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/http-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/http-gateway/tsconfig.app.json"
+      }
+    },
+    "commemorative-coins": {
+      "type": "application",
+      "root": "apps/commemorative-coins",
+      "entryFile": "main",
+      "sourceRoot": "apps/commemorative-coins/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/commemorative-coins/tsconfig.app.json"
+      }
+    }
+  }
+}
