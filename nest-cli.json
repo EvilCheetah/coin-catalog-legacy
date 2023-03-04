@@ -27,6 +27,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/commemorative-coins/tsconfig.app.json"
       }
+    },
+    "modules": {
+      "type": "library",
+      "root": "libs/modules",
+      "entryFile": "index",
+      "sourceRoot": "libs/modules/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/modules/tsconfig.lib.json"
+      }
     }
   }
 }
