@@ -76,7 +76,8 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@/modules(|/.*)$": "<rootDir>/libs/modules/src/$1"
+      "^@/modules(|/.*)$": "<rootDir>/libs/modules/src/$1",
+      "^@/constants(|/.*)$": "<rootDir>/libs/constants/src/$1"
     }
   }
 }

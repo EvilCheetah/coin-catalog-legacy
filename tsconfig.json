@@ -23,6 +23,12 @@
       ],
       "@/modules/*": [
         "libs/modules/src/*"
+      ],
+      "@/constants": [
+        "libs/constants/src"
+      ],
+      "@/constants/*": [
+        "libs/constants/src/*"
       ]
     }
   }
