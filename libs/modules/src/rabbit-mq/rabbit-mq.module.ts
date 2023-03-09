@@ -1,5 +1,6 @@
-import { DynamicModule } from "@nestjs/common";
 import { Module } from "@nestjs/common";
+import { DynamicModule } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { ClientsModule } from "@nestjs/microservices";
 
 import { RabbitMQOptions } from "./rabbit-mq.options";
@@ -8,6 +9,7 @@ import { get_queue_details } from './config/get-queue.config'
 
 
 @Module({
+    imports:   [ConfigModule],
     providers: [RabbitMQService],
     exports:   [RabbitMQService]
 })
