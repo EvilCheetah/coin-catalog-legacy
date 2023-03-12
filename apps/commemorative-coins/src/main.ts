@@ -1,6 +1,7 @@
-import { ServiceName } from '@/constants';
-import { RabbitMQService } from '@/modules';
 import { NestFactory } from '@nestjs/core';
+
+import { Services } from '@/constants';
+import { RabbitMQService } from '@/modules';
 import { CommemorativeCoinsModule } from './commemorative-coins.module';
 
 
@@ -10,7 +11,7 @@ async function bootstrap()
 
     const rmq_microservice = app.get<RabbitMQService>(RabbitMQService);
     app.connectMicroservice(
-        rmq_microservice.get_config(ServiceName.CommemorativeCoinsService)
+        rmq_microservice.get_config(Services.CommemorativeCoinsService)
     );
 
     await app.startAllMicroservices();
