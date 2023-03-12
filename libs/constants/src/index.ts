@@ -1,1 +1,1 @@
-export * from './service/service-name.constant'
+export * from './service/service-names.constant'
