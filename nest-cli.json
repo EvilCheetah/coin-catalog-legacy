@@ -54,6 +54,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/iam/tsconfig.app.json"
       }
+    },
+    "validation": {
+      "type": "library",
+      "root": "libs/validation",
+      "entryFile": "index",
+      "sourceRoot": "libs/validation/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/validation/tsconfig.lib.json"
+      }
     }
   }
 }

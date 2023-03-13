@@ -29,6 +29,12 @@
       ],
       "@/constants/*": [
         "libs/constants/src/*"
+      ],
+      "@/validation": [
+        "libs/validation/src"
+      ],
+      "@/validation/*": [
+        "libs/validation/src/*"
       ]
     }
   }
