@@ -8,6 +8,7 @@ import { GeolocationModule } from './geo-location/geo-location.module';
     imports: [
         ConfigModule.forRoot({
             envFilePath: './environment/.env',
+            expandVariables: true
         }),
         RabbitMQModule,
 
