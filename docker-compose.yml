@@ -1,7 +1,18 @@
 services:
+  commemorative-coins:
+    container_name: commemorative-coins-service
+    build:
+      context: .
+      dockerfile: ./apps/commemorative-coins/Dockerfile
+      target: production
+    environment:
+      - RABBIT_MQ_URI=${RABBIT_MQ_URI}
+    depends_on:
+      - rabbitmq
+
   rabbitmq:
       image: rabbitmq:management
       container_name: rabbit-mq
       ports:
-        - 5672:5672
+        - ${RABBIT_MQ_PORT}:5672
         - 15672:15672
