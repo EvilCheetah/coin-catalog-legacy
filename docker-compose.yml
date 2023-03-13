@@ -1,14 +1,31 @@
 services:
   commemorative-coins:
-    container_name: commemorative-coins-service
+    container_name: coins-service
     build:
       context: .
       dockerfile: ./apps/commemorative-coins/Dockerfile
       target: production
     environment:
       - RABBIT_MQ_URI=${RABBIT_MQ_URI}
+      - DB_HOST=coins-db
+      - DB_PORT=${COINS_DB_PORT}
+      - DB_USERNAME=${COINS_DB_USERNAME}
+      - DB_PASSWORD=${COINS_DB_PASSWORD}
+      - DB_DATABASE=${COINS_DB_DATABASE}
     depends_on:
       - rabbitmq
+      - commemorative-coins-db
+
+  commemorative-coins-db:
+    image: postgres:alpine
+    container_name: coins-db
+    restart: always
+    ports:
+      - ${COINS_DB_PORT}:5432
+    environment:
+      - POSTGRES_USER=${COINS_DB_USERNAME}
+      - POSTGRES_PASSWORD=${COINS_DB_PASSWORD}
+      - POSTGRES_DB=${COINS_DB_DATABASE}
 
   rabbitmq:
       image: rabbitmq:management
