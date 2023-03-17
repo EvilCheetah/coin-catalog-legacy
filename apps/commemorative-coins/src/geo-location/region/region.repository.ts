@@ -41,11 +41,11 @@ export class RegionRepository
         return region;
     }
 
-    async update(region_id: number, updateRegionDTO: UpdateRegionDTO): Promise<Region>
+    async update({region_id, ...data}: UpdateRegionDTO): Promise<Region>
     {
         const region = await this.find_one(region_id);
 
-        wrap(region).assign(updateRegionDTO);
+        wrap(region).assign(data);
         await this.regionRepository.persistAndFlush(region);
 
         return region;
