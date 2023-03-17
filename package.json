@@ -94,7 +94,8 @@
       "^@/modules(|/.*)$": "<rootDir>/libs/modules/src/$1",
       "^@/constants(|/.*)$": "<rootDir>/libs/constants/src/$1",
       "^@/validation(|/.*)$": "<rootDir>/libs/validation/src/$1",
-      "^@/interfaces(|/.*)$": "<rootDir>/libs/interfaces/src/$1"
+      "^@/interfaces(|/.*)$": "<rootDir>/libs/interfaces/src/$1",
+      "^@/contracts(|/.*)$": "<rootDir>/libs/contracts/src/$1"
     }
   }
 }

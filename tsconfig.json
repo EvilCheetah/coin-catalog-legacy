@@ -41,6 +41,12 @@
       ],
       "@/interfaces/*": [
         "libs/interfaces/src/*"
+      ],
+      "@/contracts": [
+        "libs/contracts/src"
+      ],
+      "@/contracts/*": [
+        "libs/contracts/src/*"
       ]
     }
   }
