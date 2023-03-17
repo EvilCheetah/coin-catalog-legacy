@@ -35,6 +35,12 @@
       ],
       "@/validation/*": [
         "libs/validation/src/*"
+      ],
+      "@/interfaces": [
+        "libs/interfaces/src"
+      ],
+      "@/interfaces/*": [
+        "libs/interfaces/src/*"
       ]
     }
   }
