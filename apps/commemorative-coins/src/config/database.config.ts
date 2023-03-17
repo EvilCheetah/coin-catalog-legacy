@@ -1,6 +1,7 @@
 import { MikroOrmModuleAsyncOptions } from "@mikro-orm/nestjs";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 
+import { Region } from "../geo-location/region/entities/region.entity";
 
 
 export function get_db_config(): MikroOrmModuleAsyncOptions
@@ -14,7 +15,9 @@ export function get_db_config(): MikroOrmModuleAsyncOptions
             user:     config.get<string>('DB_USERNAME'),
             password: config.get<string>('DB_PASSWORD'),
             dbName:   config.get<string>('DB_DATABASE'),
-            entities: []
+            entities: [
+                Region
+            ]
         }),
         imports: [ConfigModule],
         inject:  [ConfigService]
