@@ -1,19 +1,18 @@
+import * as dotenv from 'dotenv';
 import { defineConfig } from "@mikro-orm/core";
-import { ConfigService } from "@nestjs/config";
-
 import { Region } from "./src/geo-location/region/entities/region.entity";
 
 
-const config = new ConfigService();
+dotenv.config({ path: 'apps/commemorative-coins/environment/.env' })
 
 
 export default defineConfig({
     type:    'postgresql',
-    host:     config.get<string>('DB_HOST'),
-    port:     config.get<number>('DB_PORT'),
-    user:     config.get<string>('DB_USERNAME'),
-    password: config.get<string>('DB_PASSWORD'),
-    dbName:   config.get<string>('DB_DATABASE'),
+    host:     process.env.DB_HOST,
+    port:    +process.env.DB_PORT,
+    user:     process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    dbName:   process.env.DB_DATABASE,
     entities: [
         Region
     ]
