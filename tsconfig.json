@@ -47,6 +47,12 @@
       ],
       "@/contracts/*": [
         "libs/contracts/src/*"
+      ],
+      "@/dtos": [
+        "libs/dtos/src"
+      ],
+      "@/dtos/*": [
+        "libs/dtos/src/*"
       ]
     }
   }
