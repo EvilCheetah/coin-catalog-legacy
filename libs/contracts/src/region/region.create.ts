@@ -1,10 +1,12 @@
 import { CreateRegionDTO } from "@/dtos";
+import { IRegion } from "@/interfaces";
+
 
 export namespace RegionCreate
 {
-    export const topic    = 'region.create.command';
+    export const topic   = 'region.create.command';
 
-    export const Request  = CreateRegionDTO;
+    export type Request  = CreateRegionDTO;
 
-    export const Response = {}
+    export type Response = IRegion;
 }
