@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 
 import { Services } from '@/constants';
 import { RabbitMQService } from '@/modules';
@@ -8,6 +9,8 @@ import { CommemorativeCoinsModule } from './commemorative-coins.module';
 async function bootstrap()
 {
     const app = await NestFactory.create(CommemorativeCoinsModule);
+
+    app.useGlobalPipes(new ValidationPipe());
 
     const rmq_microservice = app.get<RabbitMQService>(RabbitMQService);
     app.connectMicroservice(
