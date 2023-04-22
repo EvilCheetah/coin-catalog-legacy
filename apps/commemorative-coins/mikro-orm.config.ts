@@ -15,5 +15,8 @@ export default defineConfig({
     dbName:   process.env.DB_DATABASE,
     entities: [
         Region
-    ]
+    ],
+    migrations: {
+        pathTs: './apps/commemorative-coins/migrations'
+    }
 });
