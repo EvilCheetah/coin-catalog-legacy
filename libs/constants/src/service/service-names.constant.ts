@@ -1,8 +1,8 @@
 export namespace Services
 {
-    export const HttpGateway               = 'HTTP_GATEWAY'
+    export const HttpGateway               = 'http-gateway'
 
-    export const CommemorativeCoinsService = 'COMMEMORATIVE_COINS';
+    export const CommemorativeCoinsService = 'commemorative-coins';
 
-    export const IamService                = 'IAM'
+    export const IamService                = 'iam'
 }
