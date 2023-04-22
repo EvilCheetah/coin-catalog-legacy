@@ -1,10 +1,26 @@
 services:
+  http-gateway:
+    container_name: http-gateway
+    build:
+      context: .
+      dockerfile: ./apps/http-gateway/Dockerfile
+      target: build
+    command: pnpm run start:dev http-gateway
+    ports:
+      - '3000:3000'
+    environment:
+      - RABBIT_MQ_URI=${RABBIT_MQ_URI}
+    depends_on:
+      - commemorative-coins
+      - rabbitmq
+
   commemorative-coins:
     container_name: coins-service
     build:
       context: .
       dockerfile: ./apps/commemorative-coins/Dockerfile
-      target: production
+      target: build
+    command: pnpm run start:dev commemorative-coins
     environment:
       - RABBIT_MQ_URI=${RABBIT_MQ_URI}
       - DB_HOST=coins-db
@@ -21,7 +37,7 @@ services:
     container_name: coins-db
     restart: always
     ports:
-      - ${COINS_DB_PORT}:5432
+      - '${COINS_DB_PORT}:5432'
     environment:
       - POSTGRES_USER=${COINS_DB_USERNAME}
       - POSTGRES_PASSWORD=${COINS_DB_PASSWORD}
@@ -29,7 +45,7 @@ services:
 
   rabbitmq:
       image: rabbitmq:management
-      container_name: rabbit-mq
+      container_name: rabbitmq
       ports:
-        - ${RABBIT_MQ_PORT}:5672
+        - 5672:5672
         - 15672:15672
