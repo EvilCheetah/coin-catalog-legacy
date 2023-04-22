@@ -6,10 +6,6 @@
 # Build dependencies
 node_modules
 
-# Environment 
-environment
-.env
-
 # Other
 .eslintrc.js
 .prettierrc
