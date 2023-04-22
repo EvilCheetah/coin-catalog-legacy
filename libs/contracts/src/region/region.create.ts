@@ -1,12 +1,12 @@
 import { CreateRegionDTO } from "@/dtos";
-import { IRegion } from "@/interfaces";
+import { Region } from "apps/commemorative-coins/src/geo-location/region/entities/region.entity";
 
 
 export namespace RegionCreate
 {
-    export const topic   = 'region.create.command';
+    export const topic    = 'region.create.command';
 
-    export type Request  = CreateRegionDTO;
+    export class Request extends CreateRegionDTO {};
 
-    export type Response = IRegion;
+    export class Response extends Region {};
 }
