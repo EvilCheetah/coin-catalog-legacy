@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Inject, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Inject, Logger, Patch, Post } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
+import { lastValueFrom } from 'rxjs';
 
 import { Services } from '@/constants';
 import { RegionCreate } from '@/contracts';
@@ -8,9 +9,11 @@ import { RegionCreate } from '@/contracts';
 @Controller('regions')
 export class RegionController
 {
+    private readonly logger = new Logger(RegionController.name)
+    
     constructor(
         @Inject(Services.CommemorativeCoinsService)
-        private readonly rabbitMQ: ClientProxy
+        private readonly rabbitMQ: ClientProxy,
     ) {}
 
     @Post()
@@ -19,7 +22,7 @@ export class RegionController
         data: RegionCreate.Request
     )
     {
-        return this.rabbitMQ.send<RegionCreate.Response, RegionCreate.Request>(
+        return this.rabbitMQ.send<RegionCreate.Response>(
             RegionCreate.topic, data
         );
     }
