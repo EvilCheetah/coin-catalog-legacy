@@ -10,8 +10,6 @@ async function bootstrap()
 {
     const app = await NestFactory.create(CommemorativeCoinsModule);
 
-    app.useGlobalPipes(new ValidationPipe());
-
     const rmq_microservice = app.get<RabbitMQService>(RabbitMQService);
     app.connectMicroservice(
         rmq_microservice.get_config(Services.CommemorativeCoinsService)
