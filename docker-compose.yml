@@ -1,36 +1,36 @@
 services:
-  http-gateway:
-    container_name: http-gateway
-    build:
-      context: .
-      dockerfile: ./apps/http-gateway/Dockerfile
-      target: build
-    command: pnpm run start:dev http-gateway
-    ports:
-      - '3000:3000'
-    environment:
-      - RABBIT_MQ_URI=${RABBIT_MQ_URI}
-    depends_on:
-      - commemorative-coins
-      - rabbitmq
+  # http-gateway:
+  #   container_name: http-gateway
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/http-gateway/Dockerfile
+  #     target: build
+  #   command: pnpm run start:dev http-gateway
+  #   ports:
+  #     - '3000:3000'
+  #   environment:
+  #     - RABBIT_MQ_URI=${RABBIT_MQ_URI}
+  #   depends_on:
+  #     - commemorative-coins
+  #     - rabbitmq
 
-  commemorative-coins:
-    container_name: coins-service
-    build:
-      context: .
-      dockerfile: ./apps/commemorative-coins/Dockerfile
-      target: build
-    command: pnpm run start:dev commemorative-coins
-    environment:
-      - RABBIT_MQ_URI=${RABBIT_MQ_URI}
-      - DB_HOST=coins-db
-      - DB_PORT=${COINS_DB_PORT}
-      - DB_USERNAME=${COINS_DB_USERNAME}
-      - DB_PASSWORD=${COINS_DB_PASSWORD}
-      - DB_DATABASE=${COINS_DB_DATABASE}
-    depends_on:
-      - rabbitmq
-      - commemorative-coins-db
+  # commemorative-coins:
+  #   container_name: coins-service
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/commemorative-coins/Dockerfile
+  #     target: build
+  #   command: pnpm run start:dev commemorative-coins
+  #   environment:
+  #     - RABBIT_MQ_URI=${RABBIT_MQ_URI}
+  #     - DB_HOST=coins-db
+  #     - DB_PORT=${COINS_DB_PORT}
+  #     - DB_USERNAME=${COINS_DB_USERNAME}
+  #     - DB_PASSWORD=${COINS_DB_PASSWORD}
+  #     - DB_DATABASE=${COINS_DB_DATABASE}
+  #   depends_on:
+  #     - rabbitmq
+  #     - commemorative-coins-db
 
   commemorative-coins-db:
     image: postgres:alpine
