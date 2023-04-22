@@ -11,6 +11,7 @@ import { GeolocationModule } from './geo-location/geo-location.module';
 @Module({
     imports: [
         ConfigModule.forRoot({
+            envFilePath: './apps/commemorative-coins/environment/.env',
             validationSchema,
             expandVariables: true
         }),
