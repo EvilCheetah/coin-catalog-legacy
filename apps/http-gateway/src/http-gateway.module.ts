@@ -7,7 +7,10 @@ import { RegionController } from './controllers/region.controller';
 
 @Module({
     imports: [
-        ConfigModule.forRoot({ expandVariables: true }),
+        ConfigModule.forRoot({
+            envFilePath: './apps/http-gateway/environment/.env',
+            expandVariables: true
+        }),
         RabbitMQModule.register({ name: Services.CommemorativeCoinsService })
     ],
     controllers: [
