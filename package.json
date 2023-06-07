@@ -1,14 +1,12 @@
 {
   "name": "coin-catalog-api",
   "author": "Eugene Moshchyn",
-
   "description": "Coin Catalog API",
   "keywords": [],
-  
   "version": "1.0.0",
   "license": "UNLICENSED",
-
-  "scripts": {
-    
+  "scripts": {},
+  "devDependencies": {
+    "turbo": "^1.10.2"
   }
 }
