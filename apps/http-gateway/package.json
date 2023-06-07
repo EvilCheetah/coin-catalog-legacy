@@ -1,8 +1,8 @@
 {
   "name": "http-gateway",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "HTTP Gateway Service",
+  "author": "Eugene Moshchyn",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
