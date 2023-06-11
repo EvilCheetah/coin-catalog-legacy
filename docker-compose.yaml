@@ -1,0 +1,16 @@
+services:
+    coins-database:
+        image: postgres:alpine
+        container_name: coins-database
+        restart: always
+        env_file:
+            - ./apps/database/coins-database/environment/.env
+        ports:
+            - 5432:5432
+
+    rabbit-mq:
+        image: rabbitmq:management
+        container_name: rabbit-mq
+        ports:
+            - 5672:5672
+            - 15672:15672
